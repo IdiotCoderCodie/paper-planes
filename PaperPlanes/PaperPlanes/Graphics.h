@@ -4,7 +4,8 @@
 class Graphics
 {
 public:
-	Graphics(/*HWND hwnd*/);
+	Graphics(int screenWidth, int screenHeight, HWND hwnd);
+
 	~Graphics(void);
 
 	bool IsInitialized();
@@ -13,10 +14,11 @@ public:
 
 // Private Functions
 private:
-	Graphics(const Graphics& other) {};
+    Graphics(const Graphics&);
+    Graphics& operator=(const Graphics&);
 
 // Private Data Members
 private:
-	D3D* m_d3d;
+	D3D m_d3d;
 	// SceneManager m_sceneMgr;
 };
