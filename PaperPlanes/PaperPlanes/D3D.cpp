@@ -2,7 +2,7 @@
 
 
 D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen) :
-    m_initialized(InitializeD3D(screenWidth, screenHeight, vsync, hwnd, fullscreen)),
+    m_initialized(false),
     m_vsyncEnabled(vsync),
     m_videoCardMemory(),
     m_videoCardDesc(),
@@ -16,6 +16,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
     m_depthStencilView(0),
     m_rasterState(0)
 {
+    m_initialized = InitializeD3D(screenWidth, screenHeight, vsync, hwnd, fullscreen);
 }
 
 

@@ -77,6 +77,7 @@ bool DXWindow::Frame()
     if(m_InputMgr->IsKeyDown(VK_ESCAPE))
         return false;
 
+    return m_Graphics->Frame();
     //return m_Graphics->Frame();
     return true;
 }

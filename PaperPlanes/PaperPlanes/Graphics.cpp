@@ -19,6 +19,9 @@ bool Graphics::IsInitialized()
 
 bool Graphics::Frame()
 {
+    m_d3d.BeginScene(1.0f, 0.2f, 0.2f, 0.1f);
+
+    m_d3d.EndScene();
     //// GET TIME
     //currTime = GetTime()
     //float timeElapsed = prevTime - currTime;
