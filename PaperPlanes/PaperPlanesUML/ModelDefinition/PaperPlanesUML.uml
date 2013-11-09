@@ -465,7 +465,88 @@
         name="SceneManager"
         isAbstract="false"
         isLeaf="false"
-        isActiveClass="false" />
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="c11ce7d1-d6ac-4a79-9914-20677f8b1fa5"
+            isDerived="false"
+            sourceEndRoleName="SceneManager"
+            targetEndRoleName="D3D"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="601ef33e-5a6f-441c-8c4d-befc5b8d4157"
+              LastKnownName="D3D"
+              LastKnownLocation="PaperPlanesUML.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="20cb044e-494a-4a8f-bc09-215d04b8a7be"
+                  name="SceneManager"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="fc29d566-800b-4ee2-826f-c43e136932b8"
+                  name="D3D"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="b7483ca1-9bf3-4e63-b48f-b9f7bd87112d"
+            isDerived="false"
+            sourceEndRoleName="SceneManager"
+            targetEndRoleName="Scene1"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="0c6a2809-5965-4daa-b259-bf9a1c91b982"
+              LastKnownName="Scene"
+              LastKnownLocation="PaperPlanesUML.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="95fd78f5-b03f-4c4e-b207-f597692eb326"
+                  name="SceneManager"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1ec884b9-c9f0-4152-adc0-e90e05d7d714"
+                  name="Scene1"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
       <class
@@ -546,49 +627,6 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
-        <appliedStereotypesInternal>
-          <stereotypeInstance
-            Id="cee762c0-8136-4d99-b836-055626ac9805"
-            name="class"
-            profile="CSharpProfile">
-            <propertyInstances>
-              <stereotypeInstanceHasPropertyInstances
-                Id="15542d78-b551-49f5-9ce4-083ba1e464cf">
-                <propertyInstance
-                  Id="1dae7cb0-cdc1-4cb7-82f2-f29ec4c6c880"
-                  name="ClrAttributes" />
-              </stereotypeInstanceHasPropertyInstances>
-              <stereotypeInstanceHasPropertyInstances
-                Id="a9c97e85-0afc-4c34-ae9d-9f0b4850f9a0">
-                <propertyInstance
-                  Id="383ad84b-fe3b-444c-bed2-90c6bfb31b7d"
-                  name="IsPartial"
-                  value="false" />
-              </stereotypeInstanceHasPropertyInstances>
-              <stereotypeInstanceHasPropertyInstances
-                Id="b90b4bc4-61cf-4e75-9d5d-5998613b3116">
-                <propertyInstance
-                  Id="aeae55c4-51af-46e5-8bf3-19af12b04b80"
-                  name="IsStatic"
-                  value="false" />
-              </stereotypeInstanceHasPropertyInstances>
-              <stereotypeInstanceHasPropertyInstances
-                Id="5feb1e07-b9fa-4b01-8f93-90a0349f98b8">
-                <propertyInstance
-                  Id="ee38c6df-6961-47f1-91fd-d8fbd8443401"
-                  name="IsUnsafe"
-                  value="false" />
-              </stereotypeInstanceHasPropertyInstances>
-              <stereotypeInstanceHasPropertyInstances
-                Id="954b7758-e624-4aeb-ba51-ee13aecd279d">
-                <propertyInstance
-                  Id="c21446e8-67d1-4b2e-955e-f40aedc34acb"
-                  name="PackageVisibility"
-                  value="internal" />
-              </stereotypeInstanceHasPropertyInstances>
-            </propertyInstances>
-          </stereotypeInstance>
-        </appliedStereotypesInternal>
         <targetEnds>
           <association
             Id="4d24c837-d6ff-4519-a095-dde37da69520"
@@ -865,6 +903,162 @@
           </association>
         </targetEnds>
       </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="3327ce52-8d85-449f-8d5b-16222692720d"
+        name="Class2"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="c2baaea7-bc21-487d-9d11-df155f4917df"
+        LastKnownName="Package1"
+        LastKnownLocation="Package_1554.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="503c0d94-b8e5-4222-87ef-c011af7ea4e3"
+        name="Class3"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="14ba8a98-7b85-4820-a39c-671a88122cfa"
+        name="Entity"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="70455773-12f4-4e20-ba78-7be5cd38871b"
+            isDerived="false"
+            sourceEndRoleName="Entity"
+            targetEndRoleName="Component"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="a139cfa8-9d38-479d-b33f-755cbd685986"
+              LastKnownName="Component"
+              LastKnownLocation="PaperPlanesUML.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="f68de8fa-089f-4e0f-942c-c529d1a021b1"
+                  name="Entity"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="35d30a12-559b-4627-9fd0-3d34f614b1de"
+                  name="Component"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false">
+                  <lowerValueInternal>
+                    <literalString
+                      Id="6829cb54-a273-4c83-a107-628d565fd923"
+                      name="Lower"
+                      value="1" />
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString
+                      Id="34a33942-c614-4486-9c02-8e72754b6ad4"
+                      name="Upper"
+                      value="*" />
+                  </upperValueInternal>
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="0c6a2809-5965-4daa-b259-bf9a1c91b982"
+        name="Scene"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="fb4ecd19-1f31-4454-b419-4e62289a3233"
+            isDerived="false"
+            sourceEndRoleName="Scene"
+            targetEndRoleName="Entity"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="14ba8a98-7b85-4820-a39c-671a88122cfa"
+              LastKnownName="Entity"
+              LastKnownLocation="PaperPlanesUML.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="edd993b3-f5be-49b4-af20-a2bb0c00aa06"
+                  name="Scene"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="ec1cec38-094c-458b-8571-a38fabb2bc19"
+                  name="Entity"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false">
+                  <lowerValueInternal>
+                    <literalString
+                      Id="2a462e90-4206-4ea1-a303-d82f8d9c54bd"
+                      name="Lower"
+                      value="1" />
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString
+                      Id="706093c9-17fd-416e-a6a6-20b94c94f6cd"
+                      name="Upper"
+                      value="*" />
+                  </upperValueInternal>
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="a139cfa8-9d38-479d-b33f-755cbd685986"
+        name="Component"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
     </packageHasNamedElement>
   </packagedElements>
   <primitiveType

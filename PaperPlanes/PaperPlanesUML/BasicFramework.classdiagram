@@ -156,6 +156,40 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="4f3a5745-5d15-485a-b1fb-750c273a1275" name="SceneManager" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="e9ec9f5d-cc57-455d-b650-0b856cd75d0d" />
+        <targetEnds>
+          <association Id="376bffdc-41dd-4b12-bf33-20366dac68b1" isDerived="false" sourceEndRoleName="SceneManager" targetEndRoleName="D3D" isLeaf="false" isAbstract="false">
+            <classMoniker Id="d0e0b5d0-e47c-4b4c-b30d-c182f3c79b12" LastKnownName="D3D" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="d93c6e43-8ecf-4d89-939b-efd3b35b13b1" name="SceneManager" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="20cb044e-494a-4a8f-bc09-215d04b8a7be" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="039fd972-7806-495f-9433-e771025f405d" name="D3D" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="fc29d566-800b-4ee2-826f-c43e136932b8" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="c11ce7d1-d6ac-4a79-9914-20677f8b1fa5" />
+          </association>
+          <association Id="73daec1c-8a4b-4138-bb86-889f6ac71c56" isDerived="false" sourceEndRoleName="SceneManager" targetEndRoleName="Scene1" isLeaf="false" isAbstract="false">
+            <classMoniker Id="a8457af1-db13-4cdd-8cca-7ec3f6ea998d" LastKnownName="Scene" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="2a941fa7-7604-4c25-acfb-be8153d10b20" name="SceneManager" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="95fd78f5-b03f-4c4e-b207-f597692eb326" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="03af69ff-454c-41e1-bfd1-502aec636e6b" name="Scene1" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="1ec884b9-c9f0-4152-adc0-e90e05d7d714" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="b7483ca1-9bf3-4e63-b48f-b9f7bd87112d" />
+          </association>
+        </targetEnds>
       </class>
     </logicalClassDesignerModelHasTypes>
     <logicalClassDesignerModelHasTypes>
@@ -195,6 +229,77 @@
             <elementDefinition Id="c99ead45-9368-456e-ad0f-434a96978e73" />
           </association>
         </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="ab0bde06-9cca-4374-9b51-c615cc01c4f5" name="Entity" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="14ba8a98-7b85-4820-a39c-671a88122cfa" />
+        <targetEnds>
+          <association Id="0217cbfa-9b65-4de5-82f6-e6f931f3aae6" isDerived="false" sourceEndRoleName="Entity" targetEndRoleName="Component" isLeaf="false" isAbstract="false">
+            <classMoniker Id="6e14a006-d9c0-425d-8d07-6a2e13b2a507" LastKnownName="Component" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="fe69e882-365f-4dc3-b1ff-564f96a1ae1b" name="Entity" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="f68de8fa-089f-4e0f-942c-c529d1a021b1" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="23f1db65-f086-41da-84a7-b5cd0bc508db" name="Component" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="52a9bdd9-0344-481f-8bcc-3aa1689e1ae8" name="Lower" value="1">
+                      <elementDefinition Id="6829cb54-a273-4c83-a107-628d565fd923" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="83ed6eb8-083b-4a71-94b8-fa7020313eff" name="Upper" value="*">
+                      <elementDefinition Id="34a33942-c614-4486-9c02-8e72754b6ad4" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="35d30a12-559b-4627-9fd0-3d34f614b1de" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="70455773-12f4-4e20-ba78-7be5cd38871b" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="a8457af1-db13-4cdd-8cca-7ec3f6ea998d" name="Scene" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="0c6a2809-5965-4daa-b259-bf9a1c91b982" />
+        <targetEnds>
+          <association Id="f0e45b43-2b98-47fc-9838-ff1d4900e49e" isDerived="false" sourceEndRoleName="Scene" targetEndRoleName="Entity" isLeaf="false" isAbstract="false">
+            <classMoniker Id="ab0bde06-9cca-4374-9b51-c615cc01c4f5" LastKnownName="Entity" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="85ec440c-59c2-4c6c-878f-08175f52c8ab" name="Scene" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="edd993b3-f5be-49b4-af20-a2bb0c00aa06" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="a04f7b55-17c7-46f7-a6b3-ebaf12d556d8" name="Entity" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="c5f1b708-d429-427c-b0c2-1ad8f9b2c05b" name="Lower" value="1">
+                      <elementDefinition Id="2a462e90-4206-4ea1-a303-d82f8d9c54bd" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="6bc8a283-577a-4905-be3a-a1c7ed63f85c" name="Upper" value="*">
+                      <elementDefinition Id="706093c9-17fd-416e-a6a6-20b94c94f6cd" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="ec1cec38-094c-458b-8571-a38fabb2bc19" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="fb4ecd19-1f31-4454-b419-4e62289a3233" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="6e14a006-d9c0-425d-8d07-6a2e13b2a507" name="Component" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="a139cfa8-9d38-479d-b33f-755cbd685986" />
       </class>
     </logicalClassDesignerModelHasTypes>
   </packagedElements>

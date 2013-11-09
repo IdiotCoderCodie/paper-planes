@@ -17,8 +17,8 @@ public:
     ~D3D(void);
 
 private:
-    D3D(const D3D&) {};
-    D3D& operator=(const D3D&) {};
+    D3D(const D3D&);
+    D3D& operator=(const D3D&);
 
     bool InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen);
     void Shutdown();

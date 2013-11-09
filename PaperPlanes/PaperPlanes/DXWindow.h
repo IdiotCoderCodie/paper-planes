@@ -18,8 +18,8 @@ public:
     // Private Functions
 private:
     // Private Copy and Assignment Constructors.
-    DXWindow(const DXWindow&) {};
-    DXWindow& operator=(const DXWindow&) {};
+    DXWindow(const DXWindow&);
+    DXWindow& operator=(const DXWindow&);
 
     bool Initialize();
     bool InitializeWindow(int& screenWidth, int& screenHeight);
