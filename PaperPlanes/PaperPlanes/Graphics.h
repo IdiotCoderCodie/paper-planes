@@ -1,6 +1,8 @@
 #pragma once
 #include "D3D.h"
 
+#include "Scenes/SceneManager.h"
+
 class Graphics
 {
 public:
@@ -20,5 +22,5 @@ private:
 // Private Data Members
 private:
 	D3D m_d3d;
-	// SceneManager m_sceneMgr;
+	SceneManager m_sceneMgr;
 };
