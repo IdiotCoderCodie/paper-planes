@@ -1,5 +1,8 @@
 #include "DXWindow.h"
 #include <map>
+#include <fstream>
+
+#define WINCONFIG_FILENAME "window_config.txt"
 
 DXWindow::DXWindow(void) :	
     m_applicationName(),
@@ -9,12 +12,13 @@ DXWindow::DXWindow(void) :
     m_Graphics(0)
 {
     int screenWidth, screenHeight;
+    bool fullscreen;
 
-    if(InitializeWindow(screenWidth, screenHeight))
+    if(InitializeWindow(screenWidth, screenHeight, fullscreen))
     {
         m_InputMgr = new InputManager;
 
-        m_Graphics = new Graphics(screenWidth, screenHeight, m_hwnd);
+        m_Graphics = new Graphics(screenWidth, screenHeight, m_hwnd, fullscreen);
     }	
 }
 
@@ -103,7 +107,7 @@ LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, L
 }
 
 
-bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight)
+bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight, bool& fullscreen)
 {
     // Set external pointer to this object.
     ApplicationHandle = this;
@@ -111,7 +115,52 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight)
     // Get the instance of the application
     m_hinstance = GetModuleHandle(NULL);
 
-    m_applicationName = L"Paper Planet";
+    //----------------------------------------------------------------------------------------------
+    // Load window config settings.
+    std::ifstream fin;
+    fin.open(WINCONFIG_FILENAME);
+
+    if(fin.fail())
+    {// Failed to open config file.
+        return false;
+        assert(true);
+    }
+    
+    std::string line;
+    while(std::getline(fin, line))
+    {
+        int eq = line.find('=');
+        std::string key     = line.substr(0, eq);
+        std::string value   = line.substr(eq+1);
+        if(key.compare("AppName") == 0)
+        {
+            // FAILED ATTEMPT AT CONVERTING TO WIDE STRING. URGH. IT WORKED BUT WINDOWS DOESN'T LIKE
+            // Convert to wide string. First get the length needed, then create the wstring, then 
+            // convert the data form value to the wstring appWString.
+            /*size_t reqLength = ::MultiByteToWideChar(CP_UTF8, 0, value.c_str(), (int)value.length(), 0, 
+                                                     0 );
+            std::wstring appWString(reqLength, L'\0');
+            ::MultiByteToWideChar(CP_UTF8, 0, value.c_str(), (int)value.length(), &appWString[0], 
+                                  (int)value.length() );
+
+            m_applicationName = appWString.c_str();*/
+            m_applicationName = L"Paper Planes";
+        }
+        else if(key.compare("Fullscreen") == 0)
+        {
+            fullscreen = (value.compare("TRUE") == 0 ? true : false);
+        }
+        else if(key.compare("ScreenHeight") == 0)
+        {
+            screenHeight = atoi(value.c_str());
+        }
+        else if(key.compare("ScreenWidth") == 0)
+        {
+            screenWidth = atoi(value.c_str());
+        }
+        
+    }
+    //----------------------------------------------------------------------------------------------
 
     // Setup windows class with default settings.
     WNDCLASSEX wc;
@@ -131,25 +180,37 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight)
     // Register window class.
     RegisterClassEx(&wc);
 
-    // Get the display resolution.
-    screenWidth = GetSystemMetrics(SM_CXSCREEN);
-    screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    int posX, posY;
 
-    // Set to fullscreen.
-    DEVMODE dmScreenSettings;
-    memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
-    dmScreenSettings.dmSize			= sizeof(dmScreenSettings);
-    dmScreenSettings.dmPelsWidth	= (unsigned long)screenWidth;
-    dmScreenSettings.dmPelsHeight	= (unsigned long)screenHeight;
-    dmScreenSettings.dmBitsPerPel	= 32;
-    dmScreenSettings.dmFields		= DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+    if(fullscreen)
+    {
+        // Get the display resolution.
+        screenWidth = GetSystemMetrics(SM_CXSCREEN);
+        screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+        // Set to fullscreen.
+        DEVMODE dmScreenSettings;
+        memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+        dmScreenSettings.dmSize			= sizeof(dmScreenSettings);
+        dmScreenSettings.dmPelsWidth	= (unsigned long)screenWidth;
+        dmScreenSettings.dmPelsHeight	= (unsigned long)screenHeight;
+        dmScreenSettings.dmBitsPerPel	= 32;
+        dmScreenSettings.dmFields		= DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+        ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+
+        posX = posY = 0;
+    }
+    else
+    {
+        posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
+        posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+    }
 
     // Create the window with the settings generated.
     m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
         WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-        0, 0, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
+        posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
 
     // Bring the window up on screen and set to main focus.
     ShowWindow(m_hwnd, SW_SHOW);

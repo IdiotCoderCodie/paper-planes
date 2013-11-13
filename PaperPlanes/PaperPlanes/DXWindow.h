@@ -22,7 +22,7 @@ private:
     DXWindow& operator=(const DXWindow&);
 
     bool Initialize();
-    bool InitializeWindow(int& screenWidth, int& screenHeight);
+    bool InitializeWindow(int& screenWidth, int& screenHeight, bool& fullscreen);
     void ShutdownWindow();
     bool Frame();
 

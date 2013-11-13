@@ -6,7 +6,7 @@
 class Graphics
 {
 public:
-	Graphics(int screenWidth, int screenHeight, HWND hwnd);
+	Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen);
 
 	~Graphics(void);
 
