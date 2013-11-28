@@ -3,7 +3,7 @@
 
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen) 
     :   m_d3d(screenWidth, screenHeight, false, hwnd, fullscreen),
-        m_sceneMgr()
+        m_sceneMgr(m_d3d)
 {
 }
 

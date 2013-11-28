@@ -3,9 +3,10 @@
 #include "SceneManager.h"
 
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(D3D& d3d)
     :   m_ActiveScene(0),
-        m_Scenes()
+        m_Scenes(),
+        m_d3d(d3d)
 {
 }
 
@@ -48,7 +49,7 @@ bool SceneManager::SetActiveScene(Scene* const scene)
 }
 
 
-bool SceneManager::DoesSceneExist(const std::string& sceneName)
+bool SceneManager::DoesSceneExist(const std::string& sceneName) const
 {
     if(m_Scenes.find(sceneName) != m_Scenes.end())
         return true;

@@ -24,7 +24,7 @@ public:
     virtual void Draw(D3D& d3d) {};
 
     void SetParent(Entity& ent)     { m_Parent = &ent; }
-    const Entity& GetParent() const { return *m_Parent; }
+    Entity& GetParent() { return *m_Parent; }
 
 private:
     Entity* m_Parent;

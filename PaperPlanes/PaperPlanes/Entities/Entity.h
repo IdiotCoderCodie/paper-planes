@@ -22,7 +22,7 @@ public:
     ~Entity();
 
 
-    const Scene& GetParent() { return m_Parent; }
+    Scene& GetParent() { return m_Parent; }
 
     const entityId_t GetID() const              { return m_id; }
     void SetID(const entityId_t id)             { m_id = id; }

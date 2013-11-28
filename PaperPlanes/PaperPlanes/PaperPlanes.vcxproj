@@ -92,10 +92,13 @@
     <ClCompile Include="Scenes\SceneManager.cpp" />
     <ClCompile Include="Components\VisualComponent.cpp" />
     <ClCompile Include="Assets\Shaders\Shader.cpp" />
+    <ClCompile Include="Components\VisualMeshComponent.cpp" />
+    <ClCompile Include="Components\StaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="d3d_safe_release.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="InputManager.h" />
@@ -105,6 +108,8 @@
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Components\VisualComponent.h" />
     <ClInclude Include="Assets\Shaders\Shader.h" />
+    <ClInclude Include="Components\VisualMeshComponent.h" />
+    <ClInclude Include="Components\StaticMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt">

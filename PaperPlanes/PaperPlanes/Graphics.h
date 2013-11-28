@@ -16,8 +16,8 @@ public:
 
 // Private Functions
 private:
-    Graphics(const Graphics&);
-    Graphics& operator=(const Graphics&);
+    Graphics(const Graphics& other);
+    Graphics& operator=(const Graphics& other);
 
 // Private Data Members
 private:

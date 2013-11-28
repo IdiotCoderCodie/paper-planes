@@ -8,7 +8,7 @@
 class SceneManager
 {
 public:
-    SceneManager();
+    SceneManager(D3D& d3d);
     ~SceneManager();
 
     // Sets the active scene with name matching "sceneName". 
@@ -18,11 +18,13 @@ public:
     // Returns whether or not it was successful
     bool SetActiveScene(Scene* const scenePtr);
 
-    bool DoesSceneExist(const std::string& sceneName);
+    bool DoesSceneExist(const std::string& sceneName) const;
 
     bool AddScene(Scene* const sceneToAdd);
 
     void ClearScenes();
+
+    D3D& GetD3DInstance() { return m_d3d; }
 
     void Update(double timeElapsed);
 
@@ -32,5 +34,6 @@ private:
     typedef std::map<std::string, Scene*> SceneMap;
     std::map<std::string, Scene*> m_Scenes;
     Scene* m_ActiveScene;
+    D3D& m_d3d;
 };
 

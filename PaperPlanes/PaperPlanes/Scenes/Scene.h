@@ -20,7 +20,7 @@ public:
     //const CameraComponent* GetActiveCamera()                  { return m_ActiveCamera; }
     //void SetActiveCamera(CameraComponent* const newActiveCam) { m_ActiveCamera = newActiveCam; }
 
-
+    SceneManager& GetParent() { return *m_Parent; }
 
     void Update(double time);
 
