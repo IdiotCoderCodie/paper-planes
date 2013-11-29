@@ -118,6 +118,7 @@ bool Shader::SetVertexShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPo
     return true;
 }
 
+
 bool Shader::SetHullShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target)
 {
     ID3D10Blob* shaderBuff = 0;
@@ -138,6 +139,7 @@ bool Shader::SetHullShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoin
 
     return true;
 }
+
 
 bool Shader::SetDomainShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target)
 {
@@ -160,6 +162,7 @@ bool Shader::SetDomainShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPo
     return true;
 }
 
+
 bool Shader::SetGeomShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target)
 {
     ID3D10Blob* shaderBuff = 0;
@@ -181,6 +184,7 @@ bool Shader::SetGeomShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoin
     return true;
 }
 
+
 bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target)
 {
     ID3D10Blob* shaderBuff = 0;
@@ -200,6 +204,85 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
         return false;
 
     return true;
+}
+
+
+bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC samplerDesc)
+{
+    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState);
+    if(FAILED(result))
+        return false;
+
+    return true;
+}
+
+
+void Shader::RenderShader(D3D& d3d, int indexCount)
+{
+    // Set the vertex input layout.
+    if(!m_inputLayout)
+    {
+        assert(true);
+        return;
+    }
+    d3d.GetDeviceContext().IASetInputLayout(m_inputLayout);
+
+    // Set the vertex and pixel shader.
+    if(!m_vertexShader || !m_pixelShader)
+    {
+        assert(true);
+        return;
+    }
+    d3d.GetDeviceContext().VSSetShader(m_vertexShader, NULL, 0);
+    d3d.GetDeviceContext().PSSetShader(m_pixelShader, NULL, 0);
+
+    // Set Hull and Domain shader, need both so only if both exist.
+    if(m_hullShader && m_domainShader)
+    {
+        d3d.GetDeviceContext().HSSetShader(m_hullShader, NULL, 0);
+        d3d.GetDeviceContext().DSSetShader(m_domainShader, NULL, 0);
+    }
+
+    // Set geom shader.
+    if(m_geomShader)
+    {
+        d3d.GetDeviceContext().GSSetShader(m_geomShader, NULL, 0);
+    }
+
+    // Set the sampler state in pixel shader.
+    if(m_sampleState)
+    {
+        d3d.GetDeviceContext().PSSetSamplers(0, 1, &m_sampleState);
+    }
+
+    // Render.
+    d3d.GetDeviceContext().DrawIndexed(indexCount, 0, 0);
+}
+
+
+void Shader::OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shaderFilename) const
+{
+    // Get pointer to the error message text buffer and buffer size.
+    char* compileErrors = (char*)(errMsg->GetBufferPointer());
+    int bufferSize = errMsg->GetBufferSize();
+
+    // Open file to write error to.
+    std::ofstream fout;
+    fout.open("shader-error.txt");
+
+    // Write error.
+    for(int i = 0; i < bufferSize; i++)
+    {
+        fout << compileErrors[i];
+    }
+
+    fout.close();
+
+    d3d_safe_release(errMsg);
+
+    // Show message box to inform user.
+    MessageBox(hwnd, L"Error compiling shader. Check shader-error.txt for message.", shaderFilename,
+               MB_OK);
 }
 
 
@@ -228,37 +311,3 @@ bool Shader::CompileShader(HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* t
     return true;
 }
 
-
-bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC samplerDesc)
-{
-    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState);
-    if(FAILED(result))
-        return false;
-
-    return true;
-}
-
-void Shader::OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shaderFilename) const
-{
-    // Get pointer to the error message text buffer and buffer size.
-    char* compileErrors = (char*)(errMsg->GetBufferPointer());
-    int bufferSize = errMsg->GetBufferSize();
-
-    // Open file to write error to.
-    std::ofstream fout;
-    fout.open("shader-error.txt");
-
-    // Write error.
-    for(int i = 0; i < bufferSize; i++)
-    {
-        fout << compileErrors[i];
-    }
-
-    fout.close();
-
-    d3d_safe_release(errMsg);
-
-    // Show message box to inform user.
-    MessageBox(hwnd, L"Error compiling shader. Check shader-error.txt for message.", shaderFilename,
-               MB_OK);
-}
