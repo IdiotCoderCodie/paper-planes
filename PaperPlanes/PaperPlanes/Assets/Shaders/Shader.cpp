@@ -255,6 +255,173 @@ bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_USAGE usage,
     return true;
 }
 
+//
+//template<class T>
+//bool Shader::SetConstBufferData(D3D& d3d, std::string& id, T* data, int bufferNumber) 
+//{
+//    D3D11_MAPPED_SUBRESOURCE mappedResource;
+//
+//    // Does buffer with match id exist?
+//    if(m_buffers.find(id) == m_buffers.end())
+//        return false;
+//    
+//    HRESULT result;
+//    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+//                                        &mappedResource);
+//    if(FAILED(result))
+//        return false;
+//
+//    T* bufferDataPtr = (T*)mappedResource.pData;
+//
+//    // Copy data into the constant buffer.
+//    *bufferDataPtr = *data;
+//
+//    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+//
+//    return true;
+//}
+
+
+bool Shader::VSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, 
+                                  int bufferNumber) 
+{
+    // Does buffer with match id exist?
+    if(m_buffers.find(id) == m_buffers.end())
+        return false;
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    HRESULT result;
+    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+                                        &mappedResource);
+    if(FAILED(result))
+        return false;
+
+    void* bufferDataPtr = mappedResource.pData;
+
+    // Copy data into the constant buffer.
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+
+    // Set const buffer with updated.
+    d3d.GetDeviceContext().VSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
+bool Shader::HSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, 
+                                  int bufferNumber) 
+{
+    // Does buffer with match id exist?
+    if(m_buffers.find(id) == m_buffers.end())
+        return false;
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    HRESULT result;
+    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+                                        &mappedResource);
+    if(FAILED(result))
+        return false;
+
+    void* bufferDataPtr = mappedResource.pData;
+
+    // Copy data into the constant buffer.
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+
+    // Set const buffer with updated.
+    d3d.GetDeviceContext().HSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
+bool Shader::DSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, 
+                                  int bufferNumber) 
+{
+    // Does buffer with match id exist?
+    if(m_buffers.find(id) == m_buffers.end())
+        return false;
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    HRESULT result;
+    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+                                        &mappedResource);
+    if(FAILED(result))
+        return false;
+
+    void* bufferDataPtr = mappedResource.pData;
+
+    // Copy data into the constant buffer.
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+
+    // Set const buffer with updated.
+    d3d.GetDeviceContext().DSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
+bool Shader::GSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int 
+                                  bufferNumber) 
+{
+    // Does buffer with match id exist?
+    if(m_buffers.find(id) == m_buffers.end())
+        return false;
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    HRESULT result;
+    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+                                        &mappedResource);
+    if(FAILED(result))
+        return false;
+
+    void* bufferDataPtr = mappedResource.pData;
+
+    // Copy data into the constant buffer.
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+
+    // Set const buffer with updated.
+    d3d.GetDeviceContext().GSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
+bool Shader::PSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int 
+                                  bufferNumber) 
+{
+    // Does buffer with match id exist?
+    if(m_buffers.find(id) == m_buffers.end())
+        return false;
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    HRESULT result;
+    result = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, 
+                                        &mappedResource);
+    if(FAILED(result))
+        return false;
+
+    void* bufferDataPtr = mappedResource.pData;
+
+    // Copy data into the constant buffer.
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
+
+    // Set const buffer with updated.
+    d3d.GetDeviceContext().PSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
 
 void Shader::RenderShader(D3D& d3d, int indexCount)
 {

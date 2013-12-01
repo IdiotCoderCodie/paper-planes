@@ -74,6 +74,20 @@ public:
     bool AddBuffer      (D3D& d3d, const std::string& identity, D3D11_USAGE usage, UINT byteWidth, 
                          UINT bindFlags, UINT cpuAccessFlags, UINT miscFlags, UINT byteStride);
 
+    /**
+     * Sets the data of a specified constant buffer. 
+     * bufferNumber is the position of the buffer in the shader file.
+     */
+    //template<class T>
+    //bool SetConstBufferData (D3D& d3d, std::string& id, T* data, int bufferNumber); //glm::mat4& matrix);
+
+    bool VSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    bool HSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    bool DSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    bool GSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    bool PSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    //bool SetShaderParam (D3D& d3d, std::string& id, glm::vec4& vec);
+
 
     void RenderShader   (D3D& d3d, int indexCount);
 
