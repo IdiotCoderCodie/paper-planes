@@ -16,10 +16,10 @@ public:
     // Sets param "out" to the FamilyID of the component.
     virtual void FamilyID(componentId_t& out) const = 0;
     // Sets param "out" to the ComponentID of the component.
-    virtual void ComponentID(componentId_t out) const = 0;
+    virtual void ComponentID(componentId_t& out) const = 0;
 
     // Param "time" signifies time elapsed since the last update call.
-    virtual void Update(double& time) {};
+    virtual void Update(float time) {};
 
     virtual void Draw(D3D& d3d) {};
 

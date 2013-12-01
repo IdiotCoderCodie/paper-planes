@@ -80,14 +80,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Camera\CameraComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Components\Light\LightComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DXWindow.cpp" />
     <ClCompile Include="Math\Frame.cpp" />
+    <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp" />
     <ClCompile Include="Components\VisualComponent.cpp" />
@@ -96,6 +99,7 @@
     <ClCompile Include="Components\StaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Camera\CameraComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="d3d_safe_release.h" />
@@ -103,7 +107,9 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="DXWindow.h" />
+    <ClInclude Include="Components\Light\LightComponent.h" />
     <ClInclude Include="Math\Frame.h" />
+    <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Components\VisualComponent.h" />
