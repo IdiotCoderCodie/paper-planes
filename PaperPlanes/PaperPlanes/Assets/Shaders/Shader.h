@@ -1,4 +1,8 @@
 #pragma once
+#include <vector>
+#include <map>
+#include <string>
+
 #include <D3D11.h>
 
 #include "../../glm/glm.hpp"
@@ -51,11 +55,25 @@ public:
      */
     bool SetPixelShader (D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target);
 
-
     /**
      * Set the shaders sample state using samplerDesc.
      */
-    bool SetSampleState (D3D& d3d, D3D11_SAMPLER_DESC samplerDesc);
+    bool SetSampleState (D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc);
+
+    /**
+     * Creates and adds a buffer using "bufferDesc".
+     * Stores pointer to this buffer in map of buffers, accessible through "identity" key.
+     * Returns whether this action was a success or not.
+     */
+    bool AddBuffer      (D3D& d3d, const std::string& identity, D3D11_BUFFER_DESC& bufferDesc);
+    /**
+     * Creates and adds a buffer using the description parameters given.
+     * Stores pointer to this buffer in map of buffers, accessible through "identity" key.
+     * Returns whether this action was a success or not.
+     */
+    bool AddBuffer      (D3D& d3d, const std::string& identity, D3D11_USAGE usage, UINT byteWidth, 
+                         UINT bindFlags, UINT cpuAccessFlags, UINT miscFlags, UINT byteStride);
+
 
     void RenderShader   (D3D& d3d, int indexCount);
 
@@ -78,6 +96,9 @@ private:
     ID3D11InputLayout*      m_inputLayout;
 
     ID3D11SamplerState*     m_sampleState;
+
+    std::map<std::string, ID3D11Buffer*> m_buffers;
+    //std::vector<ID3D11Buffer*> m_buffers;
 };
 
 template<class T>

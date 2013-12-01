@@ -33,13 +33,19 @@ public:
 
     void Render(D3D& d3d);
 
+    int GetVertexCount() const { return m_vertexCount; }
+    int GetIndexCount() const { return m_indexCount;}
+
+    void SetVertexCount(int vertexCount) { m_vertexCount = vertexCount; }
+    void SetIndexCount(int indexCount) { m_indexCount = indexCount; }
+
 private:
     std::string                 m_filename;
-    std::vector<ModelVertex>    m_modelData;
-    
+    int                         m_vertexCount;
+    int                         m_indexCount;
     ID3D11Buffer*               m_vertexBuffer;
     ID3D11Buffer*               m_indexBuffer;
 
-
+    std::vector<ModelVertex>    m_modelData;
 };
 

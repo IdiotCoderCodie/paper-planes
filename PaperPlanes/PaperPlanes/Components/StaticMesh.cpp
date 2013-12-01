@@ -6,9 +6,11 @@
 
 StaticMesh::StaticMesh(const std::string& filename, D3D& d3d)
     :   m_filename(filename),
-        m_modelData(),
+        m_vertexCount(0),
+        m_indexCount(0),
         m_vertexBuffer(0),
-        m_indexBuffer(0)
+        m_indexBuffer(0),
+        m_modelData()
 {
     LoadObj(filename);
     InitBuffers(d3d);
@@ -107,15 +109,19 @@ bool StaticMesh::LoadObj(const std::string& filename)
         return false;
     }
 
+    // Set the vertex and index counts.
+    m_vertexCount   = m_modelData.size();
+    m_indexCount    = m_vertexCount;
+
     return true;
 }
 
 
 bool StaticMesh::InitBuffers(D3D& d3d)
 {
-    unsigned long vertexCount = m_modelData.size();
-    VertexFormat* vertices = new VertexFormat[vertexCount];
-    unsigned long* indices = new unsigned long[vertexCount];
+
+    VertexFormat* vertices = new VertexFormat[m_vertexCount];
+    unsigned long* indices = new unsigned long[m_vertexCount];
 
     // Convert data from Model type to vertex type.
     // NOTE: Could probably change this, and just get rid of all this, just load straight into 
@@ -133,7 +139,7 @@ bool StaticMesh::InitBuffers(D3D& d3d)
     // Setup description of static vertex buffer.
     D3D11_BUFFER_DESC vertexBufferDesc; 
     vertexBufferDesc.Usage                  = D3D11_USAGE_DEFAULT;
-    vertexBufferDesc.ByteWidth              = sizeof(VertexFormat) * vertexCount;
+    vertexBufferDesc.ByteWidth              = sizeof(VertexFormat) * m_vertexCount;
     vertexBufferDesc.BindFlags              = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags         = 0;
 	vertexBufferDesc.MiscFlags              = 0;
@@ -159,7 +165,7 @@ bool StaticMesh::InitBuffers(D3D& d3d)
     D3D11_BUFFER_DESC indexBufferDesc;
     indexBufferDesc.Usage               = D3D11_USAGE_DEFAULT;
     // vertexCount == indexCount.
-    indexBufferDesc.ByteWidth           = sizeof(unsigned long) * vertexCount; 
+    indexBufferDesc.ByteWidth           = sizeof(unsigned long) * m_vertexCount; 
 	indexBufferDesc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags      = 0;
 	indexBufferDesc.MiscFlags           = 0;

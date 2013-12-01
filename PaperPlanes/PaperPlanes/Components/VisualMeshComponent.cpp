@@ -22,5 +22,10 @@ void VisualMeshComponent::Update(float timeElapsed)
 
 void VisualMeshComponent::Draw(D3D& d3d)
 {
+    m_mesh.Render(d3d);
+    
+    // Set shader parameters before rendering.
+    //m_Shader.SetParam();
+    m_Shader.RenderShader(d3d, m_mesh.GetIndexCount());
     //m_Shader.RenderShader(d3d, m_mesh.GetIndexCount());
 }

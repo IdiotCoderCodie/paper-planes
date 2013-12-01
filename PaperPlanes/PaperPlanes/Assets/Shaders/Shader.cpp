@@ -11,8 +11,13 @@
 Shader::Shader(void) : 
     m_Initialized(false),
     m_vertexShader(0),
+    m_hullShader(0),
+    m_domainShader(0),
+    m_geomShader(0),
     m_pixelShader(0),
-    m_inputLayout(0)
+    m_inputLayout(0),
+    m_sampleState(0),
+    m_buffers()
 {
 }
 
@@ -207,11 +212,45 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
 }
 
 
-bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC samplerDesc)
+bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
 {
     HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState);
     if(FAILED(result))
         return false;
+
+    return true;
+}
+
+
+bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_BUFFER_DESC& bufferDesc)
+{
+    // Attempt to create the buffer.
+    ID3D11Buffer* newBuffer;
+    HRESULT result = d3d.GetDevice().CreateBuffer(&bufferDesc, NULL, &newBuffer);
+
+    if(FAILED(result))
+        return false;
+
+    // If successful, add buffer to buffer map.
+    m_buffers[identity] = newBuffer;
+
+    newBuffer = 0;
+    return true;
+}
+
+
+bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_USAGE usage, UINT byteWidth, 
+                       UINT bindFlags, UINT cpuAccessFlags, UINT miscFlags, UINT byteStride)
+{
+    D3D11_BUFFER_DESC bufferDesc;
+    bufferDesc.Usage                = usage;
+    bufferDesc.ByteWidth            = byteWidth;
+    bufferDesc.BindFlags            = bindFlags;
+    bufferDesc.CPUAccessFlags       = cpuAccessFlags;
+    bufferDesc.MiscFlags            = miscFlags;
+    bufferDesc.StructureByteStride  = byteStride;
+
+    AddBuffer(d3d, identity, bufferDesc);
 
     return true;
 }
