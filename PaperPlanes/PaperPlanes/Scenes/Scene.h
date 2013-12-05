@@ -5,6 +5,8 @@
 #include "../D3D.h"
 #include "../Entities/Entity.h"
 
+class CameraComponent;
+
 class SceneManager;
 
 class Scene
@@ -17,8 +19,8 @@ public:
 
     void AddEntity(Entity* entity);
 
-    //const CameraComponent* GetActiveCamera()                  { return m_ActiveCamera; }
-    //void SetActiveCamera(CameraComponent* const newActiveCam) { m_ActiveCamera = newActiveCam; }
+    const CameraComponent* GetActiveCamera()                  { return m_ActiveCamera; }
+    void SetActiveCamera(CameraComponent* const newActiveCam) { m_ActiveCamera = newActiveCam; }
 
     SceneManager& GetParent() { return *m_Parent; }
 
@@ -31,6 +33,6 @@ private:
     SceneManager* m_Parent;
     std::vector<Entity*> m_Entities;
 
-    // CameraComponent* m_ActiveCamera;
+    CameraComponent* m_ActiveCamera;
 };
 

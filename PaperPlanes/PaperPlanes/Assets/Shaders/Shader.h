@@ -7,7 +7,7 @@
 
 #include "../../glm/glm.hpp"
 #include "../../D3D.h"
-
+#include "../../d3d_safe_release.h"
 
 enum SHADER_TYPE
 {
@@ -24,8 +24,6 @@ public:
     Shader(void);
     ~Shader(void);
 
-    //bool InitShader(D3D& d3d, HWND hwnd, WCHAR* vsFilename, WCHAR* fsFilename);
-
     /**
      * Compiles and then sets the Shaders vertex shader to the shader in "filename".
      * polygonLayout is used to create the input layout of the vertices, and so should match the
@@ -33,7 +31,7 @@ public:
      * Returns whether the action succeeded or not.
      */
     bool SetVertexShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target,
-                         D3D11_INPUT_ELEMENT_DESC polygonLayout[]);
+                         D3D11_INPUT_ELEMENT_DESC polygonLayout[], int numElems);
     /**
      * Compiles shader at "filename" and sets it as this Shader objects hull shader.
      * Returns whether the action succeeded or not.
@@ -79,15 +77,13 @@ public:
      * bufferNumber is the position of the buffer in the shader file.
      */
     //template<class T>
-    //bool SetConstBufferData (D3D& d3d, std::string& id, T* data, int bufferNumber); //glm::mat4& matrix);
+    //bool SetConstBufferData (D3D& d3d, std::string& id, T* data, int bufferNumber); 
 
     bool VSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool HSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool DSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool GSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool PSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
-    //bool SetShaderParam (D3D& d3d, std::string& id, glm::vec4& vec);
-
 
     void RenderShader   (D3D& d3d, int indexCount);
 
@@ -95,7 +91,7 @@ private:
     void OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shaderFilename) const;
 
     bool CompileShader(HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target, 
-                       ID3D10Blob* shaderBuff) const;
+                       ID3D10Blob** shaderBuff) const;
 
 
 private:
@@ -112,15 +108,4 @@ private:
     ID3D11SamplerState*     m_sampleState;
 
     std::map<std::string, ID3D11Buffer*> m_buffers;
-    //std::vector<ID3D11Buffer*> m_buffers;
 };
-
-template<class T>
-void d3d_safe_release(T* obj)
-{
-    if(obj)
-    {
-        obj->Release();
-        obj = 0;
-    }
-}

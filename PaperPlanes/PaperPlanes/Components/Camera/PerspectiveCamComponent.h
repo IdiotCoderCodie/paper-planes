@@ -10,7 +10,7 @@ public:
 
     ~PerspectiveCamComponent(void);
 
-    void ComponentID(componentId_t& out) { out = "PerspectiveCameraComponent"; }
+    void ComponentID(componentId_t& out) const { out = "PerspectiveCameraComponent"; }
 
 private:
     float m_fov;

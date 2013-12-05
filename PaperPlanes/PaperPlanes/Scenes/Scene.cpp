@@ -1,10 +1,11 @@
 #include "Scene.h"
-
+#include "../Components/Camera/CameraComponent.h"
 
 Scene::Scene(const std::string& name, SceneManager* sceneMgr)
     :   m_Name(name),
         m_Parent(sceneMgr),
-        m_Entities()
+        m_Entities(),
+        m_ActiveCamera(0)
 {
 }
 
@@ -34,17 +35,17 @@ void Scene::AddEntity(Entity* ent)
 	//	m_Lights.push_back(static_cast<LightComponent*>(light));
 	//}
 
-	//// If there is not already an active camera component then check if the 
-	//// added entity has a camera component attached to it and add this as the
-	//// active camera.
-	//if(!m_ActiveCameraComponent)
-	//{
-	//	Component* camCheck = objectToAdd->GetComponent("CameraComponent");
-	//	if(camCheck)
-	//	{
-	//		m_ActiveCameraComponent = static_cast<CameraComponent*>(camCheck);
-	//	}
-	//}
+	// If there is not already an active camera component then check if the 
+	// added entity has a camera component attached to it and add this as the
+	// active camera.
+    if(!m_ActiveCamera)
+	{
+		Component* camCheck = ent->GetComponent("CameraComponent");
+		if(camCheck)
+		{
+			m_ActiveCamera = static_cast<CameraComponent*>(camCheck);
+		}
+	}
 }
 
 

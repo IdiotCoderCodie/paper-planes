@@ -123,4 +123,8 @@
   <ItemGroup>
     <Text Include="window_config.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shaders\color_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\color_ps.hlsl" />
+  </ItemGroup>
 </Project>

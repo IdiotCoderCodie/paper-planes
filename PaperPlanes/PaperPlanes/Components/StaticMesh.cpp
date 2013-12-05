@@ -48,8 +48,7 @@ bool StaticMesh::LoadObj(const std::string& filename)
                 // Read in all vertices.
                 glm::vec3 newVert;
                 char c;
-                input >> c >> newVert.x >> newVert.y >> newVert.z; 
-                //sscanf(line.c_str(), "%*c %f %f %f", &x, &y, &z);
+                sscanf(line.c_str(), "%*c %f %f %f", &newVert.x, &newVert.y, &newVert.z);
                 tempVerts.push_back(newVert);
             }
             else if(line[0] == 'v' && line[1] == 'n')
@@ -57,7 +56,8 @@ bool StaticMesh::LoadObj(const std::string& filename)
                 // Read in all normals.
                 glm::vec3 newNorm;
                 char c;
-                input >> c >> c >> newNorm.x >> newNorm.y >> newNorm.z;
+                std::string test; 
+                sscanf(line.c_str(), "%*c%*c %f %f %f", &newNorm.x, &newNorm.y, &newNorm.z);
                 tempNormals.push_back(newNorm);
             }
             else if(line[0] == 'v' && line[1] == 't')
@@ -65,7 +65,7 @@ bool StaticMesh::LoadObj(const std::string& filename)
                 // Read in all texture coords.
                 glm::vec2 newTex;
                 char c;
-                input >> c >> c >> newTex.x >> newTex.y;
+                sscanf(line.c_str(), "%*c%*c %f %f", &newTex.x, &newTex.y);
                 tempUVs.push_back(newTex);
             }
             else if(line[0] == 'f')
@@ -77,23 +77,31 @@ bool StaticMesh::LoadObj(const std::string& filename)
 
                 for(int i = 0; i != 3; i++)
                 {
-                    int v, n, t;
-                    input >> v >> c >> t >> c >> n;
-                    
-                    ModelVertex newModVert;
-                    // Assign vertex positions.
-                    newModVert.x    = tempVerts[v].x; 
-                    newModVert.y    = tempVerts[v].y;
-                    newModVert.z    = tempVerts[v].z;
-                    // Assign texture coords.
-                    newModVert.tu   = tempVerts[t].x;
-                    newModVert.tv   = tempVerts[t].y;
-                    //Assign normals.
-                    newModVert.nx   = tempVerts[n].x;
-                    newModVert.ny   = tempVerts[n].y;
-                    newModVert.nz   = tempVerts[n].z;
+                    int v[3];
+                    int n[3];
+                    int t[3]; // YUK!!
+                    sscanf(line.c_str(), "%*c %d%*c%d%*c%d %d%*c%d%*c%d %d%*c%d%*c%d", 
+                                                             &v[0], &t[0], &n[0], 
+                                                             &v[1], &t[1], &n[1], 
+                                                             &v[2], &t[2], &n[2]);
+                    // Reverse loop to reverse winding.
+                    for(int i = 2; i > -1; i--)
+                    {
+                        ModelVertex newModVert;
+                        // Assign vertex positions.
+                        newModVert.x    = tempVerts[v[i]-1].x; 
+                        newModVert.y    = tempVerts[v[i]-1].y;
+                        newModVert.z    = tempVerts[v[i]-1].z;
+                        // Assign texture coords.
+                        newModVert.tu   = tempUVs[t[i]-1].x;
+                        newModVert.tv   = tempUVs[t[i]-1].y;
+                        // Assign normals.
+                        newModVert.nx   = tempNormals[n[i]-1].x;
+                        newModVert.ny   = tempNormals[n[i]-1].y;
+                        newModVert.nz   = tempNormals[n[i]-1].z;
 
-                    m_modelData.push_back(newModVert);
+                        m_modelData.push_back(newModVert);
+                    }
 
                     // Read in next 2 lines, don't read in last loop, don't need this line yet.
                     if(i != 2)
@@ -165,7 +173,7 @@ bool StaticMesh::InitBuffers(D3D& d3d)
     D3D11_BUFFER_DESC indexBufferDesc;
     indexBufferDesc.Usage               = D3D11_USAGE_DEFAULT;
     // vertexCount == indexCount.
-    indexBufferDesc.ByteWidth           = sizeof(unsigned long) * m_vertexCount; 
+    indexBufferDesc.ByteWidth           = sizeof(unsigned long) * m_indexCount; 
 	indexBufferDesc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags      = 0;
 	indexBufferDesc.MiscFlags           = 0;

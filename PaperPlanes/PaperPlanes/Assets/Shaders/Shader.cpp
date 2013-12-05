@@ -91,11 +91,11 @@ Shader::~Shader(void)
 
 
 bool Shader::SetVertexShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target,
-                             D3D11_INPUT_ELEMENT_DESC polygonLayout[])
+                             D3D11_INPUT_ELEMENT_DESC polygonLayout[], int numElems)
 {
     ID3D10Blob* shaderBuff = 0;
     // Compile Shader.
-    if(!CompileShader(hwnd, filename, entryPoint, target, shaderBuff))
+    if(!CompileShader(hwnd, filename, entryPoint, target, &shaderBuff))
     {
         return false;
     }
@@ -109,9 +109,7 @@ bool Shader::SetVertexShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPo
         return false;
 
     // Create input layout.
-    int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
-
-    result = d3d.GetDevice().CreateInputLayout(polygonLayout, numElements, 
+    result = d3d.GetDevice().CreateInputLayout(polygonLayout, numElems, 
                                                shaderBuff->GetBufferPointer(), 
                                                shaderBuff->GetBufferSize(), &m_inputLayout);
 
@@ -128,7 +126,7 @@ bool Shader::SetHullShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoin
 {
     ID3D10Blob* shaderBuff = 0;
     // Compile Shader.
-    if(!CompileShader(hwnd, filename, entryPoint, target, shaderBuff))
+    if(!CompileShader(hwnd, filename, entryPoint, target, &shaderBuff))
     {
         return false;
     }
@@ -150,7 +148,7 @@ bool Shader::SetDomainShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPo
 {
     ID3D10Blob* shaderBuff = 0;
     // Compile Shader.
-    if(!CompileShader(hwnd, filename, entryPoint, target, shaderBuff))
+    if(!CompileShader(hwnd, filename, entryPoint, target, &shaderBuff))
     {
         return false;
     }
@@ -172,7 +170,7 @@ bool Shader::SetGeomShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoin
 {
     ID3D10Blob* shaderBuff = 0;
     // Compile Shader.
-    if(!CompileShader(hwnd, filename, entryPoint, target, shaderBuff))
+    if(!CompileShader(hwnd, filename, entryPoint, target, &shaderBuff))
     {
         return false;
     }
@@ -194,7 +192,7 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
 {
     ID3D10Blob* shaderBuff = 0;
     // Compile Shader.
-    if(!CompileShader(hwnd, filename, entryPoint, target, shaderBuff))
+    if(!CompileShader(hwnd, filename, entryPoint, target, &shaderBuff))
     {
         return false;
     }
@@ -493,12 +491,12 @@ void Shader::OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shad
 
 
 bool Shader::CompileShader(HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target, 
-                           ID3D10Blob* shaderBuff) const
+                           ID3D10Blob** shaderBuff) const
 {
     HRESULT result;
     ID3D10Blob* errMsg;
     // Compile shader.
-    result = D3DCompileFromFile(filename, NULL, NULL, entryPoint, target, 0, 0, &shaderBuff, 
+    result = D3DCompileFromFile(filename, NULL, NULL, entryPoint, target, 0, 0, shaderBuff, 
                                 &errMsg);
 
     if(FAILED(result))

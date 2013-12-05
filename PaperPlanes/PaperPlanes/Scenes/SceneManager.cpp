@@ -63,6 +63,10 @@ bool SceneManager::AddScene(Scene* const sceneToAdd)
     if(!DoesSceneExist(sceneToAdd->GetSceneName()))
     { // No scene exists in the current context with that name.
         m_Scenes[sceneToAdd->GetSceneName()] = sceneToAdd;
+        if(!m_ActiveScene)
+        {
+            m_ActiveScene = sceneToAdd;
+        }
         return true;
     }
     else
