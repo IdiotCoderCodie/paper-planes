@@ -10,7 +10,7 @@
 #include "Components\VisualComponent.h"
 #include "Components\VisualMeshComponent.h"
 #include "Assets\Shaders\Shader.h"
-
+#include "Assets\Textures\Texture.h"
 
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen) 
     :   m_d3d(screenWidth, screenHeight, true, hwnd, fullscreen),
@@ -27,9 +27,10 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
 
     testScene->AddEntity(cubeEntity);
 
+	Texture* texture = new Texture(m_d3d, L"Assets\\Textures\\tim.dds");
     VisualMeshComponent* meshComp 
-        = new VisualMeshComponent(m_d3d, std::string("Assets\\Models\\cube.obj"), *shader); 
-    //cubeEntity->MoveForward(10.0f);
+        = new VisualMeshComponent(m_d3d, std::string("Assets\\Models\\cube.obj"), *shader, *texture); 
+    
     cubeEntity->RotateLocalY(-315.0f);
     cubeEntity->RotateGlobalX(-45.0f);
     meshComp->SetParent(*cubeEntity);

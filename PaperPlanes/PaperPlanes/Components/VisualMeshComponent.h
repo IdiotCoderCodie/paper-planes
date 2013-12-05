@@ -1,6 +1,7 @@
 #pragma once
 #include "VisualComponent.h"
 #include "StaticMesh.h"
+#include "../Assets/Textures/Texture.h"
 #include <DirectXMath.h>
 
 class VisualMeshComponent : public VisualComponent
@@ -14,7 +15,7 @@ struct MatrixBufferFormat
 
 
 public:
-    VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader);
+    VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader, Texture& texture);
     ~VisualMeshComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualMeshComponent"; }
@@ -25,5 +26,6 @@ public:
 
 private:
     StaticMesh m_mesh;
+	Texture& m_texture;
 };
 

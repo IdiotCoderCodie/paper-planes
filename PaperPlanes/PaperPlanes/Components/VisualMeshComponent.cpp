@@ -6,9 +6,10 @@
 
 #include "../glm/gtc/matrix_transform.hpp"
 
-VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader)
+VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader, Texture& texture)
     :   VisualComponent(shader),
-        m_mesh(filename, d3d) // Eurgh.
+        m_mesh(filename, d3d), // Eurgh.
+		m_texture(texture)
 {
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	polygonLayout[0].SemanticName           = "POSITION";
@@ -46,7 +47,25 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
 	m_Shader.AddBuffer(d3d, "MatrixBuffer", 
                        D3D11_USAGE_DYNAMIC, sizeof(glm::mat4) * 3, D3D11_BIND_CONSTANT_BUFFER, 
                        D3D11_CPU_ACCESS_WRITE, 0, 0);
-	
+
+	// Sample State.
+	D3D11_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter			= D3D11_FILTER_MIN_MAG_MIP_LINEAR; 
+	samplerDesc.AddressU		= D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV		= D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW		= D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias		= 0.0f;
+	samplerDesc.MaxAnisotropy	= 4;
+	samplerDesc.ComparisonFunc	= D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0]	= 0;
+	samplerDesc.BorderColor[1]	= 0;
+	samplerDesc.BorderColor[2]	= 0;
+	samplerDesc.BorderColor[3]	= 0;
+	samplerDesc.MinLOD			= 0;
+	samplerDesc.MaxLOD			= D3D11_FLOAT32_MAX;
+
+	if(m_Shader.SetSampleState(d3d, samplerDesc) == false)
+		assert(true);
 }
 
 
@@ -76,5 +95,8 @@ void VisualMeshComponent::Draw(D3D& d3d)
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
 
     int test = m_mesh.GetIndexCount();
+
+	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
     m_Shader.RenderShader(d3d, m_mesh.GetIndexCount());
 }
