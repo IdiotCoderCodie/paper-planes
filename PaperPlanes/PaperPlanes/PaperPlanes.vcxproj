@@ -93,6 +93,7 @@
     <ClCompile Include="DXWindow.cpp" />
     <ClCompile Include="Math\Frame.cpp" />
     <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
+    <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp" />
     <ClCompile Include="Components\VisualComponent.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Components\Light\LightComponent.h" />
     <ClInclude Include="Math\Frame.h" />
     <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
+    <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Components\VisualComponent.h" />
