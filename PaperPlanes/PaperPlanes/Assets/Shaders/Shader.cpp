@@ -222,6 +222,10 @@ bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
 
 bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_BUFFER_DESC& bufferDesc)
 {
+    // Check if a buffer with this identity already exists.
+    if(m_buffers.find(identity) != m_buffers.end())
+        return false;
+
     // Attempt to create the buffer.
     ID3D11Buffer* newBuffer;
     HRESULT result = d3d.GetDevice().CreateBuffer(&bufferDesc, NULL, &newBuffer);
