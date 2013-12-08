@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "../Components/Camera/CameraComponent.h"
+#include "../Components/Light/LightComponent.h"
 
 Scene::Scene(const std::string& name, SceneManager* sceneMgr)
     :   m_Name(name),
@@ -26,14 +27,13 @@ void Scene::AddEntity(Entity* ent)
 {
     m_Entities.push_back(ent);
 
-    // LOGIC FOR LIGHTS AND CAMERAS.
-    // Component* light = objectToAdd->GetComponent("LightComponent");
-	//if(light)
-	//{ // This object has a light attached... add it to the lights list.
-	//	// Cast the component to a LightComponent and push it into the lights list.
-	//	LightComponent* test = static_cast<LightComponent*>(light);
-	//	m_Lights.push_back(static_cast<LightComponent*>(light));
-	//}
+    // Check if the entity has a light component attached.
+    Component* light = ent->GetComponent("LightComponent");
+	if(light)
+	{
+        // Cast the component to a LightComponent and push it into the lights list.
+		m_Lights.push_back(light);
+	}
 
 	// If there is not already an active camera component then check if the 
 	// added entity has a camera component attached to it and add this as the

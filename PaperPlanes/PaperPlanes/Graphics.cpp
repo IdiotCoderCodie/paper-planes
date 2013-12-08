@@ -12,6 +12,7 @@
 #include "Assets\Shaders\Shader.h"
 #include "Assets\Textures\Texture.h"
 #include "Components\PhysicsComponent.h"
+#include "Components\Light\LightComponent.h"
 
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen) 
     :   m_d3d(screenWidth, screenHeight, true, hwnd, fullscreen),
@@ -33,20 +34,22 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         = new VisualMeshComponent(m_d3d, std::string("Assets\\Models\\cube.obj"), *shader, *texture); 
     
     cubeEntity->MoveForward(15.0f);
-    //cubeEntity->RotateLocalY(45.0f);
-    //cubeEntity->RotateGlobalX(-45.0f);
     meshComp->SetParent(*cubeEntity);
 
     cubeEntity->SetComponent(meshComp);
     cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f),
-                                                  glm::vec3(0.0f, 0.0, 0.0f), 
-                                                  glm::vec3(0.0f, 0.0f, 0.002f)));
+                                                  glm::vec3(0.0f, 0.20, 0.0f), 
+                                                  glm::vec3(0.0f, 0.0f, 0.000f)));
 
 
     Entity* cameraEntity = new Entity(*testScene, std::string("camEntity"));
     CameraComponent* camComp = new PerspectiveCamComponent(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     cameraEntity->SetComponent(camComp);
     cameraEntity->MoveForward(-10.0f);
+
+    cameraEntity->SetComponent(new LightComponent(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f),
+                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
     camComp->SetParent(*cameraEntity);
 	
     testScene->AddEntity(cameraEntity);

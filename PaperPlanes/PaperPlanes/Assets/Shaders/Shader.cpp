@@ -252,9 +252,7 @@ bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_USAGE usage,
     bufferDesc.MiscFlags            = miscFlags;
     bufferDesc.StructureByteStride  = byteStride;
 
-    AddBuffer(d3d, identity, bufferDesc);
-
-    return true;
+    return AddBuffer(d3d, identity, bufferDesc);
 }
 
 //

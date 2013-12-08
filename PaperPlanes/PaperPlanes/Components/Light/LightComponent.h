@@ -19,8 +19,8 @@ public:
     LightComponent(const glm::vec4& ambient, const glm::vec4& diffuse, const glm::vec4& specular);
     virtual ~LightComponent(void);
 
-    void FamilyID(componentId_t& out)   { out = "LightComponent"; }
-    void ComponentID(componentId_t& out) { out = "SpotLightComponent"; } //Temporary.
+    void FamilyID(componentId_t& out) const     { out = "LightComponent"; }
+    void ComponentID(componentId_t& out) const  { out = "SpotLightComponent"; } //Temporary.?
 
     const glm::vec4& GetAmbient() const                     { return m_ambient; }
     void SetAmbient(const glm::vec4 ambient)                { m_ambient = ambient; }

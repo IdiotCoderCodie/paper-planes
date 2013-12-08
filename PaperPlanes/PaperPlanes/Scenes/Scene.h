@@ -22,6 +22,8 @@ public:
     const CameraComponent* GetActiveCamera()                  { return m_ActiveCamera; }
     void SetActiveCamera(CameraComponent* const newActiveCam) { m_ActiveCamera = newActiveCam; }
 
+    const std::vector<Component*>& GetLights() { return m_Lights; }
+
     SceneManager& GetParent() { return *m_Parent; }
 
     void Update(double time);
@@ -32,7 +34,7 @@ private:
     std::string m_Name;
     SceneManager* m_Parent;
     std::vector<Entity*> m_Entities;
-
+    std::vector<Component*> m_Lights;
     CameraComponent* m_ActiveCamera;
 };
 

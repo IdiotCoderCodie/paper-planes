@@ -3,12 +3,13 @@
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneManager.h"
 #include "Camera\CameraComponent.h"
+#include "Light\LightComponent.h"
 
 #include "../glm/gtc/matrix_transform.hpp"
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader, Texture& texture)
     :   VisualComponent(shader),
-        m_mesh(filename, d3d), // Eurgh.
+        m_mesh(filename, d3d), 
 		m_texture(texture)
 {
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
@@ -37,8 +38,8 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
 	polygonLayout[2].InstanceDataStepRate   = 0;
 
 	// Set vertex shader and input layout.
-	m_Shader.SetVertexShader(d3d, 0,
-                             L"Assets\\Shaders\\color_vs.hlsl", "vp_main", "vs_5_0", polygonLayout, 3);
+	m_Shader.SetVertexShader(d3d, 0, L"Assets\\Shaders\\color_vs.hlsl", "vp_main", "vs_5_0", 
+                             polygonLayout, 3);
 	// Set pixel shader.
 	m_Shader.SetPixelShader(d3d, 0,
                             L"Assets\\Shaders\\color_ps.hlsl", "ps_main", "ps_5_0");
@@ -47,6 +48,18 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
 	m_Shader.AddBuffer(d3d, "MatrixBuffer", 
                        D3D11_USAGE_DYNAMIC, sizeof(glm::mat4) * 3, D3D11_BIND_CONSTANT_BUFFER, 
                        D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    // Add camera buffer.
+    m_Shader.AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC, sizeof(CameraBufferFormat), 
+                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    // Add light color buffer.
+    m_Shader.AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC, sizeof(LightColorBufferFormat),
+                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    // Add light position buffer.
+    m_Shader.AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC, sizeof(glm::vec4), 
+                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	// Sample State.
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -83,6 +96,8 @@ void VisualMeshComponent::Draw(D3D& d3d)
 {
     m_mesh.Render(d3d);
 
+    //----------------------------------------------------------------------------------------------
+    // Get matrices and put in buffer format.
     MatrixBufferFormat matBuffer;
     matBuffer.modelMatrix       = glm::transpose(
                                     GetParent().GetTransform().GetMatrix());
@@ -90,13 +105,63 @@ void VisualMeshComponent::Draw(D3D& d3d)
                                     GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
     matBuffer.projectionMatrix  = glm::transpose(
                                     GetParent().GetParent().GetActiveCamera()->GetProjMatrix());
-
+    // Set the buffer data using above matrices.
     m_Shader.VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-    int test = m_mesh.GetIndexCount();
 
+    //----------------------------------------------------------------------------------------------
+    // Get light from the scene.
+    const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
+    // Get first light.
+    if(lights.size() > 0)
+    {
+        LightComponent* light = static_cast<LightComponent*>(lights[0]);
+        LightColorBufferFormat firstLight = 
+        { 
+            light->GetAmbient(),
+            light->GetDiffuse(),
+            light->GetSpecular(),
+            50.0f,
+            glm::vec3(0.0f, 0.0f, 0.0f)
+        };
+
+        m_Shader.PSSetConstBufferData(d3d, std::string("LightColorBuffer"), 
+            (void*)&firstLight, sizeof(firstLight), 0);
+
+        // Get pos and send to buffer.
+        glm::vec4 lightPos(light->GetParent().GetPos(), 0.0f);
+
+        m_Shader.VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
+            (void*)&lightPos, sizeof(glm::vec4), 1);
+    }
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+    // Get active camera and put data in CameraBufferFormat, then send to shader.
+    const CameraBufferFormat cam = 
+    { 
+        GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 
+        0.0f 
+    };
+
+    m_Shader.VSSetConstBufferData(d3d, std::string("CameraBuffer"), (void*)&cam, sizeof(cam), 2);
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+    // Get texture for this model and set for shader.
 	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+
+    // Render sahder.
     m_Shader.RenderShader(d3d, m_mesh.GetIndexCount());
 }
