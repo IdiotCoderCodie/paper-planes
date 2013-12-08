@@ -13,7 +13,7 @@ class Scene
 {
 public:
     Scene(const std::string& name, SceneManager* sceneMgr);
-    ~Scene();
+    virtual ~Scene();
 
     const std::string& GetSceneName() { return m_Name; }
 
@@ -26,9 +26,9 @@ public:
 
     SceneManager& GetParent() { return *m_Parent; }
 
-    void Update(double time);
+    virtual void Update(double time);
 
-    void Draw(D3D& d3d);
+    virtual void Draw(D3D& d3d);
 
 private:
     std::string m_Name;
