@@ -5,6 +5,7 @@
 #include "../Components/PhysicsComponent.h"
 #include "../Components/Camera/PerspectiveCamComponent.h"
 #include "../Components/Light/LightComponent.h"
+#include "../Components/Visual/VisualBitmapComponent.h"
 
 #include "SceneManager.h"
 
@@ -47,6 +48,15 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     camComp->SetParent(*cameraEntity);
 	
     testScene->AddEntity(cameraEntity);
+
+
+    // TESTING BITMAP
+    Entity* bmpEntity = new Entity(*testScene, std::string("bmpEntity"));
+    Shader* newShader = new Shader();
+    Bitmap* bmp = new Bitmap(d3d, *texture, 256, 256, 800, 600);
+
+    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
+    testScene->AddEntity(bmpEntity);
 }
 
 

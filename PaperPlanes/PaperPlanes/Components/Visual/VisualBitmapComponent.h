@@ -1,6 +1,7 @@
 #pragma once
 #include "VisualComponent.h"
 #include "../../Assets/Textures/Texture.h"
+#include "../../Assets/Textures/Bitmap.h"
 
 class VisualBitmapComponent : public VisualComponent
 {
@@ -12,22 +13,16 @@ private:
     };
 
 public:
-    VisualBitmapComponent(D3D& d3d, Shader& shader, Texture& texture, int screenWidth, 
-                          int screenHeight);
+    VisualBitmapComponent(D3D& d3d, Shader& shader, Bitmap& bitmap);
     ~VisualBitmapComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualBitmapComponent"; }
 
-    void Update(float time);
+    virtual void Update(float time);
 
-    void Draw(D3D& d3d);
+    virtual void Draw(D3D& d3d);
 
 private:
-    int m_screenWidth;
-    int m_screenHeight;
-    int m_width;
-    int m_height;
-    glm::vec3& m_prevPos;
-    Texture& m_texture;
+    Bitmap& m_bitmap;
 };
 

@@ -75,10 +75,10 @@
     <ClCompile Include="Components\Visual\VisualMeshComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assets\Textures\Models\StaticMesh.cpp">
+    <ClCompile Include="Assets\Textures\Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assets\Textures\Bitmap.cpp">
+    <ClCompile Include="Assets\Models\StaticMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,10 +143,10 @@
     <ClInclude Include="Components\Visual\VisualMeshComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Textures\Models\StaticMesh.h">
+    <ClInclude Include="Assets\Textures\Bitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Textures\Bitmap.h">
+    <ClInclude Include="Assets\Models\StaticMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -156,5 +156,7 @@
   <ItemGroup>
     <FxCompile Include="Assets\Shaders\color_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\color_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\bitmap_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\bitmap_ps.hlsl" />
   </ItemGroup>
 </Project>

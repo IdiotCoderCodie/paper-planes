@@ -6,13 +6,13 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int height, int width, int screenWidt
         m_vertexBuffer(0), m_indexBuffer(0),
         m_vertexCount(0), m_indexCount(0),
         m_bitmapWidth(width), m_bitmapHeight(height),
-        m_screenWidth(width), m_screenHeight(height)      
+        m_screenWidth(screenWidth), m_screenHeight(screenHeight)      
 {
     m_indexCount = m_vertexCount = 6;
 
     // Create vertex array.
-    VertexStruct* vertices;
-    vertices = new VertexStruct[m_vertexCount];
+    bitmap::VertexStruct* vertices;
+    vertices = new bitmap::VertexStruct[m_vertexCount];
     if(!vertices)
         assert(true);
 
@@ -32,7 +32,7 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int height, int width, int screenWidt
     // Set up description.
     D3D11_BUFFER_DESC vertexBufferDesc;
     vertexBufferDesc.Usage                  = D3D11_USAGE_DYNAMIC;
-	vertexBufferDesc.ByteWidth              = sizeof(VertexStruct) * m_vertexCount;
+	vertexBufferDesc.ByteWidth              = sizeof(bitmap::VertexStruct) * m_vertexCount;
 	vertexBufferDesc.BindFlags              = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags         = D3D11_CPU_ACCESS_WRITE;
 	vertexBufferDesc.MiscFlags              = 0;
@@ -90,7 +90,7 @@ bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY)
 
     float bot   = top - (float)m_bitmapHeight;
 
-    VertexStruct* vertices = new VertexStruct[m_vertexCount];
+    bitmap::VertexStruct* vertices = new bitmap::VertexStruct[m_vertexCount];
     if(!vertices)
     {
         assert(true);
@@ -121,4 +121,19 @@ bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY)
     }
 
     return true;
+}
+
+void Bitmap::Draw(D3D& d3d)
+{
+    unsigned int stride = sizeof(bitmap::VertexStruct);
+    unsigned int offset = 0;
+
+    // Set vertex buffer active.
+    d3d.GetDeviceContext().IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+    // Set index buffer active
+    d3d.GetDeviceContext().IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+    // Set primitive type.
+    d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
