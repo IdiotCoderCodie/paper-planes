@@ -1,6 +1,6 @@
 #pragma once
-#include "Component.h"
-#include "../Assets/Shaders/Shader.h"
+#include "../Component.h"
+#include "../../Assets/Shaders/Shader.h"
 
 class VisualComponent : public Component
 {

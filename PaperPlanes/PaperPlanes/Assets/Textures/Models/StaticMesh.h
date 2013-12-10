@@ -1,10 +1,10 @@
 #pragma once
-#include "../glm/glm.hpp"
+#include "../../glm/glm.hpp"
 #include <d3d11.h>
 #include <vector>
 #include <fstream>
 
-#include "../D3D.h"
+#include "../../D3D.h"
 
 class StaticMesh
 {

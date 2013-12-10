@@ -1,7 +1,7 @@
 #pragma once
 #include "VisualComponent.h"
-#include "StaticMesh.h"
-#include "../Assets/Textures/Texture.h"
+#include "../../Assets/Models/StaticMesh.h"
+#include "../../Assets/Textures/Texture.h"
 #include <DirectXMath.h>
 
 class VisualMeshComponent : public VisualComponent

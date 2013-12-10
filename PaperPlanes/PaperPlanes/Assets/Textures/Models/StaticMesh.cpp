@@ -1,5 +1,5 @@
 #include "StaticMesh.h"
-#include "../d3d_safe_release.h"
+#include "../../d3d_safe_release.h"
 #include <string>
 #include <cassert>
 

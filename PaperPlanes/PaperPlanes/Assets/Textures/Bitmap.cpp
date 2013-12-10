@@ -1,0 +1,124 @@
+#include "Bitmap.h"
+#include "../../d3d_safe_release.h"
+
+Bitmap::Bitmap(D3D& d3d, Texture& texture, int height, int width, int screenWidth, int screenHeight)
+    :   m_texture(texture),
+        m_vertexBuffer(0), m_indexBuffer(0),
+        m_vertexCount(0), m_indexCount(0),
+        m_bitmapWidth(width), m_bitmapHeight(height),
+        m_screenWidth(width), m_screenHeight(height)      
+{
+    m_indexCount = m_vertexCount = 6;
+
+    // Create vertex array.
+    VertexStruct* vertices;
+    vertices = new VertexStruct[m_vertexCount];
+    if(!vertices)
+        assert(true);
+
+    // Create index array.
+    unsigned long* indices = new unsigned long[m_indexCount];
+    if(!indices)
+        assert(true);
+
+    // Init vertices info to all 0's, indices to 1-6.
+    for(int i = 0; i < m_vertexCount; i++)
+    {
+        vertices[i].position    = glm::vec3(0.0f);
+        vertices[i].uv          = glm::vec2(0.0f);
+        indices[i] = i;
+    }
+
+    // Set up description.
+    D3D11_BUFFER_DESC vertexBufferDesc;
+    vertexBufferDesc.Usage                  = D3D11_USAGE_DYNAMIC;
+	vertexBufferDesc.ByteWidth              = sizeof(VertexStruct) * m_vertexCount;
+	vertexBufferDesc.BindFlags              = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags         = D3D11_CPU_ACCESS_WRITE;
+	vertexBufferDesc.MiscFlags              = 0;
+	vertexBufferDesc.StructureByteStride    = 0;
+
+    // Give subresource structure pointer to data.
+    D3D11_SUBRESOURCE_DATA vertexData;
+	vertexData.pSysMem          = vertices;
+	vertexData.SysMemPitch      = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+    // Create vertex buffer.
+    if(FAILED(d3d.GetDevice().CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer)))
+        assert(true);
+
+    // Create index buffer description.
+    D3D11_BUFFER_DESC indexBufferDesc;
+	indexBufferDesc.Usage               = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth           = sizeof(unsigned long) * m_indexCount;
+	indexBufferDesc.BindFlags           = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags      = 0;
+	indexBufferDesc.MiscFlags           = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+    // Give pointer to data.
+    D3D11_SUBRESOURCE_DATA indexData;
+	indexData.pSysMem           = indices;
+	indexData.SysMemPitch       = 0;
+	indexData.SysMemSlicePitch  = 0;
+
+    if(FAILED(d3d.GetDevice().CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer)))
+        assert(true);
+
+    delete[] vertices;
+    vertices = 0;
+    delete[] indices;
+    indices = 0;
+}
+
+
+Bitmap::~Bitmap(void)
+{
+    d3d_safe_release(m_vertexBuffer);
+    d3d_safe_release(m_indexBuffer);
+}
+
+
+bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY)
+{
+    float left = (float)((m_screenWidth / 2) * -1) + (float)positionX;
+
+    float right = left + (float)m_bitmapWidth;
+
+    float top   = (float)((m_screenHeight / 2.0f) - (float)positionY);
+
+    float bot   = top - (float)m_bitmapHeight;
+
+    VertexStruct* vertices = new VertexStruct[m_vertexCount];
+    if(!vertices)
+    {
+        assert(true);
+        return false;
+    }
+
+    // Tri 1.
+    vertices[0].position = glm::vec3(left, top, 0.0f);
+    vertices[0].uv       = glm::vec2(0.0f, 0.0f);
+    vertices[1].position = glm::vec3(right, bot, 0.0f);
+    vertices[1].uv       = glm::vec2(1.0f, 1.0f);
+    vertices[2].position = glm::vec3(left, bot, 0.0f);
+    vertices[2].uv       = glm::vec2(0.0f, 1.0f);
+
+    // Tri 2.
+    vertices[3].position = glm::vec3(left, top, 0.0f);
+    vertices[3].uv       = glm::vec2(0.0f, 0.0f);
+    vertices[4].position = glm::vec3(right, bot, 0.0f);
+    vertices[4].uv       = glm::vec2(1.0f, 0.0f);
+    vertices[5].position = glm::vec3(right, bot, 0.0f);
+    vertices[5].uv       = glm::vec2(1.0f, 1.0f);
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    if(FAILED(d3d.GetDeviceContext().Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+    {
+        assert(true);
+        return false;
+    }
+
+    return true;
+}

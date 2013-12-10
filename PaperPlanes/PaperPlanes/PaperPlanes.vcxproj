@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Assets\Textures\Bitmap.cpp" />
     <ClCompile Include="Components\Camera\CameraComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="D3D.cpp" />
@@ -97,13 +98,15 @@
     <ClCompile Include="Scenes\PlaneScene.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp" />
-    <ClCompile Include="Components\VisualComponent.cpp" />
+    <ClCompile Include="Components\Visual\VisualComponent.cpp" />
     <ClCompile Include="Assets\Shaders\Shader.cpp" />
-    <ClCompile Include="Components\VisualMeshComponent.cpp" />
-    <ClCompile Include="Components\StaticMesh.cpp" />
+    <ClCompile Include="Components\Visual\VisualMeshComponent.cpp" />
+    <ClCompile Include="Assets\Textures\Models\StaticMesh.cpp" />
     <ClCompile Include="Assets\Textures\Texture.cpp" />
+    <ClCompile Include="Components\Visual\VisualBitmapComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assets\Textures\Bitmap.h" />
     <ClInclude Include="Components\Camera\CameraComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="D3D.h" />
@@ -119,11 +122,12 @@
     <ClInclude Include="Scenes\PlaneScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
-    <ClInclude Include="Components\VisualComponent.h" />
+    <ClInclude Include="Components\Visual\VisualComponent.h" />
     <ClInclude Include="Assets\Shaders\Shader.h" />
-    <ClInclude Include="Components\VisualMeshComponent.h" />
-    <ClInclude Include="Components\StaticMesh.h" />
+    <ClInclude Include="Components\Visual\VisualMeshComponent.h" />
+    <ClInclude Include="Assets\Textures\Models\StaticMesh.h" />
     <ClInclude Include="Assets\Textures\Texture.h" />
+    <ClInclude Include="Components\Visual\VisualBitmapComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt">

@@ -1,7 +1,7 @@
 #include "PlaneScene.h"
 #include "../Assets/Shaders/Shader.h"
 #include "../Assets/Textures/Texture.h"
-#include "../Components/VisualMeshComponent.h"
+#include "../Components/Visual/VisualMeshComponent.h"
 #include "../Components/PhysicsComponent.h"
 #include "../Components/Camera/PerspectiveCamComponent.h"
 #include "../Components/Light/LightComponent.h"

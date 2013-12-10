@@ -1,11 +1,11 @@
 #include "VisualMeshComponent.h"
-#include "../Entities/Entity.h"
-#include "../Scenes/Scene.h"
-#include "../Scenes/SceneManager.h"
-#include "Camera\CameraComponent.h"
-#include "Light\LightComponent.h"
+#include "../../Entities/Entity.h"
+#include "../../Scenes/Scene.h"
+#include "../../Scenes/SceneManager.h"
+#include "../Camera/CameraComponent.h"
+#include "../Light/LightComponent.h"
 
-#include "../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/matrix_transform.hpp"
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Shader& shader, Texture& texture)
     :   VisualComponent(shader),
