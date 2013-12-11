@@ -40,7 +40,7 @@ Entity::~Entity(void)
     catch (int e)
     {
         // Exception thrown trying to clear components.
-        assert(true);
+        assert(false);
     }
 }
 

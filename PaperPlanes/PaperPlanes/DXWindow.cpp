@@ -16,8 +16,16 @@ DXWindow::DXWindow(void) :
 
     if(InitializeWindow(screenWidth, screenHeight, fullscreen))
     {
+        // Initialize input manager.
         m_InputMgr = new InputManager;
+        bool result = m_InputMgr->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+        if(!result)
+        {
+            MessageBox(m_hwnd, L"Could not initialize input manager.", L"Error", MB_OK);
+            //assert(false);
+        }
 
+        // Initialize graphics.
         m_Graphics = new Graphics(screenWidth, screenHeight, m_hwnd, fullscreen);
     }	
 }
@@ -67,10 +75,22 @@ void DXWindow::Run()
         }
 
         if(msg.message == WM_QUIT)
+        {
             done = true;
+        }
         else
-        { // If frame returns fase, user wanted to quit.
+        { 
+            // If frame returns false, user wanted to quit.
             done = !(Frame());
+        }
+
+        if(m_InputMgr->IsEscapeKeyPressed())
+        {
+            done = true;
+        }
+        if(m_InputMgr->IsKeyPressed(DIK_A))
+        {
+            return;
         }
     }
 }
@@ -78,8 +98,11 @@ void DXWindow::Run()
 
 bool DXWindow::Frame()
 {
-    if(m_InputMgr->IsKeyDown(VK_ESCAPE))
+    bool result = m_InputMgr->Update();
+    if(!result)
+    {
         return false;
+    }
 
     return m_Graphics->Frame();
     //return m_Graphics->Frame();
@@ -89,7 +112,7 @@ bool DXWindow::Frame()
 
 LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
-    switch(umsg)
+    /*switch(umsg)
     {
     case WM_KEYDOWN:
         m_InputMgr->KeyDown((unsigned int)wparam);
@@ -101,7 +124,7 @@ LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, L
 
     default:
         break;
-    }
+    }*/
     // Send all messages to default message handler.
     return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
@@ -123,7 +146,7 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight, bool& fulls
     if(fin.fail())
     {// Failed to open config file.
         return false;
-        assert(true);
+        assert(false);
     }
     
     std::string line;

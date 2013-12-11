@@ -19,7 +19,7 @@ SceneManager::~SceneManager()
     }
     catch (int e)
     {
-        assert(true);
+        assert(false);
     }
 }
 

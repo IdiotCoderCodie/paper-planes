@@ -39,7 +39,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
 
     Entity* cameraEntity = new Entity(*testScene, std::string("camEntity"));
-    CameraComponent* camComp = new PerspectiveCamComponent(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+    float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
+                        / (float)GetParent().GetD3DInstance().GetScreenHeight();
+    CameraComponent* camComp = new PerspectiveCamComponent(60.0f, aspect, 0.1f, 1000.0f);
     cameraEntity->SetComponent(camComp);
     cameraEntity->MoveForward(-10.0f);
     cameraEntity->MoveRight(1.0f);

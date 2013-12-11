@@ -78,7 +78,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
 	samplerDesc.MaxLOD			= D3D11_FLOAT32_MAX;
 
 	if(m_Shader.SetSampleState(d3d, samplerDesc) == false)
-		assert(true);
+		assert(false);
 }
 
 
