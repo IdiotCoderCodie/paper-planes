@@ -32,7 +32,7 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, Shader& shader, Bitmap& b
     // Set pixel shader.
     m_Shader.SetPixelShader(d3d, 0, L"Assets\\Shaders\\bitmap_ps.hlsl", "ps_main", "ps_5_0");
 
-    m_Shader.AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, sizeof(glm::mat4) * 3, 
+    m_Shader.AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, sizeof(bitmap::MatrixBufferStruct), 
                        D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
     D3D11_SAMPLER_DESC samplerDesc;
@@ -81,8 +81,8 @@ void VisualBitmapComponent::Draw(D3D& d3d)
     { 
         glm::mat4(2.0f / 800.0f, 0.0f, 0.0f, 0.0f,
                   0.0f, 2.0f / 600.0f, 0.0f, 0.0f,
-                  0.0f, 0.0f, 1.0f/(100.0f), 0.0f,
-                  0.0f, 0.0f, -0.0f/(100.0f - 0.0f), 1.0f)
+                  0.0f, 0.0f, 1.0f/(100.0f - 0.01f), 0.0f,
+                  0.0f, 0.0f, 0.01f/(0.01f - 100.0f), 1.0f)
         //glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, 0.0f, 100.0f) 
     };
 

@@ -53,10 +53,14 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // TESTING BITMAP
     Entity* bmpEntity = new Entity(*testScene, std::string("bmpEntity"));
     Shader* newShader = new Shader();
-    Bitmap* bmp = new Bitmap(d3d, *texture, 256, 256, 800, 600);
+    Bitmap* bmp = new Bitmap(d3d, *texture, 600, 600, 800, 600);
 
     bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
     testScene->AddEntity(bmpEntity);
+    // Some lolz.
+    bmpEntity->MoveRight(600.0f);
+    bmpEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(-10.0f, 0.0f, 0.0f), 
+                            glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 }
 
 

@@ -108,17 +108,27 @@ bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY)
     // Tri 2.
     vertices[3].position = glm::vec3(left, top, 0.0f);
     vertices[3].uv       = glm::vec2(0.0f, 0.0f);
-    vertices[4].position = glm::vec3(right, bot, 0.0f);
+    vertices[4].position = glm::vec3(right, top, 0.0f);
     vertices[4].uv       = glm::vec2(1.0f, 0.0f);
     vertices[5].position = glm::vec3(right, bot, 0.0f);
     vertices[5].uv       = glm::vec2(1.0f, 1.0f);
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    if(FAILED(d3d.GetDeviceContext().Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+    if(FAILED(d3d.GetDeviceContext().Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, 
+              &mappedResource)))
     {
         assert(true);
         return false;
     }
+
+    bitmap::VertexStruct* verticesPtr = (bitmap::VertexStruct*)mappedResource.pData;
+
+    memcpy(verticesPtr, (void*)vertices, (sizeof(bitmap::VertexStruct) * m_vertexCount));
+
+    d3d.GetDeviceContext().Unmap(m_vertexBuffer, 0);
+
+    delete[] vertices;
+    vertices = 0;
 
     return true;
 }
