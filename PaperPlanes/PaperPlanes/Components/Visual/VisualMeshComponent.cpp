@@ -124,7 +124,7 @@ void VisualMeshComponent::Draw(D3D& d3d)
             light->GetAmbient(),
             light->GetDiffuse(),
             light->GetSpecular(),
-            50.0f,
+            40.0f,
             glm::vec3(0.0f, 0.0f, 0.0f)
         };
 

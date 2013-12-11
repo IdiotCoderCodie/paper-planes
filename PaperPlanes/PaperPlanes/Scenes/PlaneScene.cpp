@@ -28,19 +28,21 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     VisualMeshComponent* meshComp 
         = new VisualMeshComponent(d3d, std::string("Assets\\Models\\cube.obj"), *shader, *texture); 
     
-    cubeEntity->MoveForward(15.0f);
+    cubeEntity->MoveForward(0.0f);
+    cubeEntity->MoveRight(1.0f);
     meshComp->SetParent(*cubeEntity);
 
     cubeEntity->SetComponent(meshComp);
-    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f),
+    /*cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f),
                                                   glm::vec3(0.0f, 0.20, 0.0f), 
-                                                  glm::vec3(0.0f, 0.0f, 0.000f)));
+                                                  glm::vec3(0.0f, 0.0f, 0.000f)));*/
 
 
     Entity* cameraEntity = new Entity(*testScene, std::string("camEntity"));
     CameraComponent* camComp = new PerspectiveCamComponent(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     cameraEntity->SetComponent(camComp);
     cameraEntity->MoveForward(-10.0f);
+    cameraEntity->MoveRight(1.0f);
 
     cameraEntity->SetComponent(new LightComponent(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f),
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
@@ -53,14 +55,15 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // TESTING BITMAP
     Entity* bmpEntity = new Entity(*testScene, std::string("bmpEntity"));
     Shader* newShader = new Shader();
-    Bitmap* bmp = new Bitmap(d3d, *texture, 600, 600, 800, 600);
+    Bitmap* bmp = new Bitmap(d3d, *texture, 256, 256, 
+                             GetParent().GetD3DInstance().GetScreenWidth(), 
+                             GetParent().GetD3DInstance().GetScreenHeight());
 
     bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
     testScene->AddEntity(bmpEntity);
     // Some lolz.
-    bmpEntity->MoveRight(600.0f);
-    bmpEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(-10.0f, 0.0f, 0.0f), 
-                            glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+    /*bmpEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(-10.0f, 0.0f, 0.0f), 
+                            glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));*/
 }
 
 

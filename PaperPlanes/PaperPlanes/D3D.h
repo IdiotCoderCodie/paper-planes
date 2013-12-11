@@ -35,6 +35,9 @@ public:
     void TurnZBufferOn();
     void TurnZBufferOff();
 
+    int GetScreenWidth()    { return m_screenWidth; }
+    int GetScreenHeight()   { return m_screenHeight; }
+
     bool IsInitialized() { return m_initialized; }
 
 private:
@@ -51,5 +54,7 @@ private:
     ID3D11DepthStencilState*    m_depthDisabledStencilState;
     ID3D11DepthStencilView*     m_depthStencilView;
     ID3D11RasterizerState*      m_rasterState;
+    int                         m_screenWidth;
+    int                         m_screenHeight;
 };
 

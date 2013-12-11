@@ -14,7 +14,9 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
     m_depthStencilState(0),
     m_depthDisabledStencilState(0),
     m_depthStencilView(0),
-    m_rasterState(0)
+    m_rasterState(0),
+    m_screenWidth(screenWidth),
+    m_screenHeight(screenHeight)
 {
     m_initialized = InitializeD3D(screenWidth, screenHeight, vsync, hwnd, fullscreen);
 }
