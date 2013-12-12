@@ -6,9 +6,11 @@
 
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen) 
     :   m_d3d(screenWidth, screenHeight, true, hwnd, fullscreen),
-        m_sceneMgr(m_d3d)
+        m_sceneMgr(m_d3d),
+        m_timer()
 {
     m_sceneMgr.AddScene(new PlaneScene("PlaneName", &m_sceneMgr));
+    m_timer.Start();
 }
 
 
@@ -26,9 +28,10 @@ bool Graphics::IsInitialized()
 bool Graphics::Frame()
 {
     m_d3d.BeginScene(0.8f, 0.8f, 0.8f, 0.1f);
+    
+    double elapsedTime = m_timer.GetTimeInMilliseconds();
 
-    // NEED TO GET TIME.
-	m_sceneMgr.Update(1.0);
+    m_sceneMgr.Update(elapsedTime);
 
 	m_sceneMgr.Draw(m_d3d);
 

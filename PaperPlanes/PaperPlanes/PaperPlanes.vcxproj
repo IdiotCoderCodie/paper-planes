@@ -88,6 +88,7 @@
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="HiResTimer.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Components\Light\LightComponent.cpp" />
     <ClCompile Include="main.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="d3d_safe_release.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="HiResTimer.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="DXWindow.h" />
     <ClInclude Include="Components\Light\LightComponent.h" />

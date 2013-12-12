@@ -2,6 +2,7 @@
 #include "D3D.h"
 
 #include "Scenes/SceneManager.h"
+#include "HiResTimer.h"
 
 class Graphics
 {
@@ -23,4 +24,5 @@ private:
 private:
 	D3D m_d3d;
 	SceneManager m_sceneMgr;
+    HiResTimer m_timer;
 };
