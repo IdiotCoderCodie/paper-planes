@@ -22,11 +22,6 @@ public:
 
     bool IsKeyPressed(int keyId);// { return m_keyboardState[keyId] & 0x80; }
 
-	void KeyDown(unsigned int key);
-	void KeyUp(unsigned int key);
-
-	bool IsKeyDown(unsigned int key);
-
 // Private Functions
 private:
 	InputManager(const InputManager& other) {};

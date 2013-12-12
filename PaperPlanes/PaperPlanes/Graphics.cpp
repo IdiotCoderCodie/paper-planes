@@ -29,7 +29,7 @@ bool Graphics::Frame()
 {
     m_d3d.BeginScene(0.8f, 0.8f, 0.8f, 0.1f);
     
-    double elapsedTime = m_timer.GetTimeInMilliseconds();
+    double elapsedTime = m_timer.GetTimeInSeconds();
 
     m_sceneMgr.Update(elapsedTime);
 

@@ -1,7 +1,9 @@
 #include "InputManager.h"
 #include "d3d_safe_release.h"
-
 #include <cassert>
+
+// Global input manager.
+InputManager G_InputManager;
 
 InputManager::InputManager(void)
     : m_directInput(0),
@@ -110,6 +112,8 @@ bool InputManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, i
     }
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
+    
+    return true;
 }
 
 
@@ -201,26 +205,12 @@ void InputManager::ProcessInput()
     m_mouseX < 0 ? m_mouseX = 0 : m_mouseX;
     m_mouseY < 0 ? m_mouseY = 0 : m_mouseY;
 
-    m_mouseX > m_screenWidth    ? m_mouseX = m_screenWidth  : m_mouseX;
-    m_mouseY > m_screenHeight   ? m_mouseY = m_screenHeight : m_mouseY;
+    m_mouseX > m_screenWidth  ? m_mouseX = m_screenWidth  : m_mouseX;
+    m_mouseY > m_screenHeight ? m_mouseY = m_screenHeight : m_mouseY;
 }
-
-
 
 
 bool InputManager::IsKeyPressed(int key)
 {
 	return m_keyboardState[key] & 0x80;
 }
-//
-//
-//void InputManager::KeyUp(unsigned int key)
-//{
-//	m_keys[key] = false;
-//}
-//
-//
-//bool InputManager::IsKeyDown(unsigned int key)
-//{
-//	return m_keys[key];
-//}

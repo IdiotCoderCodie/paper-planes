@@ -8,7 +8,6 @@ DXWindow::DXWindow(void) :
     m_applicationName(),
     m_hinstance(),
     m_hwnd(0),
-    m_InputMgr(0),
     m_Graphics(0)
 {
     int screenWidth, screenHeight;
@@ -17,8 +16,7 @@ DXWindow::DXWindow(void) :
     if(InitializeWindow(screenWidth, screenHeight, fullscreen))
     {
         // Initialize input manager.
-        m_InputMgr = new InputManager;
-        bool result = m_InputMgr->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+        bool result = G_InputManager.Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
         if(!result)
         {
             MessageBox(m_hwnd, L"Could not initialize input manager.", L"Error", MB_OK);
@@ -39,19 +37,13 @@ DXWindow::~DXWindow(void)
         m_Graphics = 0;
     }
 
-    if(m_InputMgr)
-    {
-        delete m_InputMgr;
-        m_InputMgr = 0;
-    }
-
     ShutdownWindow();
 }
 
 
 bool DXWindow::IsInitialized()
 {
-    if(!m_InputMgr || !m_Graphics || !m_Graphics->IsInitialized())
+    if(!m_Graphics || !m_Graphics->IsInitialized())
         return false;
     else
         return true;
@@ -84,13 +76,9 @@ void DXWindow::Run()
             done = !(Frame());
         }
 
-        if(m_InputMgr->IsEscapeKeyPressed())
+        if(G_InputManager.IsEscapeKeyPressed())
         {
             done = true;
-        }
-        if(m_InputMgr->IsKeyPressed(DIK_A))
-        {
-            return;
         }
     }
 }
@@ -98,7 +86,7 @@ void DXWindow::Run()
 
 bool DXWindow::Frame()
 {
-    bool result = m_InputMgr->Update();
+    bool result = G_InputManager.Update();
     if(!result)
     {
         return false;

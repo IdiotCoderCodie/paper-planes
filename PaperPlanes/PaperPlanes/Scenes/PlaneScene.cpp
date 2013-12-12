@@ -2,10 +2,11 @@
 #include "../Assets/Shaders/Shader.h"
 #include "../Assets/Textures/Texture.h"
 #include "../Components/Visual/VisualMeshComponent.h"
-#include "../Components/PhysicsComponent.h"
+#include "../Components/Physics/PhysicsComponent.h"
 #include "../Components/Camera/PerspectiveCamComponent.h"
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
+#include "../Components/Physics/FreeRoamFpComponent.h"
 
 #include "SceneManager.h"
 
@@ -34,7 +35,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     cubeEntity->SetComponent(meshComp);
     /*cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f),
-                                                  glm::vec3(0.0f, 0.20, 0.0f), 
+                                                  glm::vec3(10.0f, 5.0f, 15.0f), 
                                                   glm::vec3(0.0f, 0.0f, 0.000f)));*/
 
 
@@ -50,6 +51,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
     camComp->SetParent(*cameraEntity);
+    cameraEntity->SetComponent(new FreeRoamFpComponent(10.0f, 1.0f, 1.0f));
 	
     testScene->AddEntity(cameraEntity);
 

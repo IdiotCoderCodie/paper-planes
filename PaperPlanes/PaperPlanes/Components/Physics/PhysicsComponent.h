@@ -1,6 +1,6 @@
 #pragma once
-#include "Component.h"
-#include "../glm/glm.hpp"
+#include "../Component.h"
+#include "../../glm/glm.hpp"
 
 class PhysicsComponent : public Component
 {
@@ -30,7 +30,7 @@ public:
     virtual ~PhysicsComponent(void);
 
 
-    virtual void FamilyID(componentId_t& out) const     { out = "PhysicsComponent"; }
+    void FamilyID(componentId_t& out) const     { out = "PhysicsComponent"; }
     virtual void ComponentID(componentId_t& out) const  { out = "BasicPhysicsComponent"; }
     
     virtual void Update(float time);

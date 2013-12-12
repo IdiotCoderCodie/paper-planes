@@ -31,11 +31,10 @@ private:
     LPCWSTR m_applicationName;
     HINSTANCE m_hinstance;
     HWND m_hwnd;
-
-    InputManager* m_InputMgr;
     Graphics* m_Graphics;
 };
 
+extern InputManager G_InputManager;
 // Used to redirect windows system messaging.
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
 

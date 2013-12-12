@@ -1,5 +1,5 @@
 #include "PhysicsComponent.h"
-#include "../Entities/Entity.h"
+#include "../../Entities/Entity.h"
 
 PhysicsComponent::PhysicsComponent()
     :   m_mass(1.0f),
@@ -75,7 +75,7 @@ PhysicsComponent::~PhysicsComponent(void)
 
 void PhysicsComponent::Update(float time)
 {
-    m_velocity += m_acceleration * time;
+    m_velocity += (m_acceleration * time);
     GetParent().MoveForward(m_velocity.z * time);
     GetParent().MoveRight(m_velocity.x * time);
     GetParent().MoveUp(m_velocity.y * time);

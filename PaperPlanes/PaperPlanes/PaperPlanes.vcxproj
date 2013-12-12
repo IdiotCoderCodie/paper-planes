@@ -87,6 +87,7 @@
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
+    <ClCompile Include="Components\Physics\FreeRoamFpComponent.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="HiResTimer.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -95,7 +96,7 @@
     <ClCompile Include="DXWindow.cpp" />
     <ClCompile Include="Math\Frame.cpp" />
     <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
-    <ClCompile Include="Components\PhysicsComponent.cpp" />
+    <ClCompile Include="Components\Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Scenes\PlaneScene.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="D3D.h" />
     <ClInclude Include="d3d_safe_release.h" />
     <ClInclude Include="Entities\Entity.h" />
+    <ClInclude Include="Components\Physics\FreeRoamFpComponent.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="HiResTimer.h" />
     <ClInclude Include="InputManager.h" />
@@ -120,7 +122,7 @@
     <ClInclude Include="Components\Light\LightComponent.h" />
     <ClInclude Include="Math\Frame.h" />
     <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
-    <ClInclude Include="Components\PhysicsComponent.h" />
+    <ClInclude Include="Components\Physics\PhysicsComponent.h" />
     <ClInclude Include="Scenes\PlaneScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
