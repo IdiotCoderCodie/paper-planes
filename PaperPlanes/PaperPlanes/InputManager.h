@@ -20,7 +20,7 @@ public:
 
     bool IsEscapeKeyPressed() { return m_keyboardState[DIK_ESCAPE] & 0x80; }
 
-    bool IsKeyPressed(int keyId);// { return m_keyboardState[keyId] & 0x80; }
+    bool IsKeyPressed(unsigned char keyId);// { return m_keyboardState[keyId] & 0x80; }
 
 // Private Functions
 private:

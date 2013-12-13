@@ -37,4 +37,6 @@ private:
     bool m_goingBackward;
     bool m_goingRight;
     bool m_goingLeft;
+    bool m_goingUp;
+    bool m_goingDown;
 };

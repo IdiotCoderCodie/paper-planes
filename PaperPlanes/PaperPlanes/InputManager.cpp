@@ -192,6 +192,8 @@ bool InputManager::ReadMouse()
         }
     }
 
+    
+
     return true;
 }
 
@@ -210,7 +212,7 @@ void InputManager::ProcessInput()
 }
 
 
-bool InputManager::IsKeyPressed(int key)
+bool InputManager::IsKeyPressed(unsigned char key)
 {
 	return m_keyboardState[key] & 0x80;
 }

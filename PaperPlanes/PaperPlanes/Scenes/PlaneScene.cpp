@@ -51,7 +51,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
     camComp->SetParent(*cameraEntity);
-    cameraEntity->SetComponent(new FreeRoamFpComponent(10.0f, 1.0f, 1.0f));
+    cameraEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
 	
     testScene->AddEntity(cameraEntity);
 
