@@ -450,3 +450,9 @@ void D3D::TurnZBufferOff()
 {
     m_deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
 }
+
+
+void D3D::SetBackBufferRenderTarget()
+{
+    m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+}

@@ -40,6 +40,9 @@ public:
 
     bool IsInitialized() { return m_initialized; }
 
+    ID3D11DepthStencilView* GetDepthStencilView() { return m_depthStencilView; }
+    void SetBackBufferRenderTarget();
+
 private:
     bool                        m_initialized;
     bool                        m_vsyncEnabled;

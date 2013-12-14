@@ -2,11 +2,38 @@
 #include "../../d3d_safe_release.h"
 
 Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidth, int screenHeight)
-    :   m_texture(texture),
+    :   m_texture(texture.GetTexture()),
         m_vertexBuffer(0), m_indexBuffer(0),
         m_vertexCount(0), m_indexCount(0),
         m_bitmapWidth(width), m_bitmapHeight(height),
         m_screenWidth(screenWidth), m_screenHeight(screenHeight)      
+{
+    Init(&d3d.GetDevice());
+}
+
+Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int height, int width, int screenWidth,
+               int screenHeight)
+    : m_texture(texture),
+      m_vertexBuffer(0), m_indexBuffer(0),
+      m_vertexCount(0), m_indexCount(0),
+      m_bitmapWidth(width), m_bitmapHeight(height),
+      m_screenWidth(screenWidth), m_screenHeight(screenHeight)      
+{
+    Init(&d3d.GetDevice());
+}
+
+
+Bitmap::~Bitmap(void)
+{
+    d3d_safe_release(m_vertexBuffer);
+    d3d_safe_release(m_indexBuffer);
+
+    // Not responsible for deleting the shader resource view. May be being used elsewhere.
+    m_texture = 0;
+}
+
+
+bool Bitmap::Init(ID3D11Device* device)
 {
     m_indexCount = m_vertexCount = 6;
 
@@ -45,7 +72,7 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidt
 	vertexData.SysMemSlicePitch = 0;
 
     // Create vertex buffer.
-    if(FAILED(d3d.GetDevice().CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer)))
+    if(FAILED(device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer)))
         assert(true);
 
     // Create index buffer description.
@@ -63,20 +90,15 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidt
 	indexData.SysMemPitch       = 0;
 	indexData.SysMemSlicePitch  = 0;
 
-    if(FAILED(d3d.GetDevice().CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer)))
+    if(FAILED(device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer)))
         assert(true);
 
     delete[] vertices;
     vertices = 0;
     delete[] indices;
     indices = 0;
-}
 
-
-Bitmap::~Bitmap(void)
-{
-    d3d_safe_release(m_vertexBuffer);
-    d3d_safe_release(m_indexBuffer);
+    return true;
 }
 
 

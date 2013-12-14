@@ -6,7 +6,7 @@
 
 VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, Shader& shader, Bitmap& bitmap)
     :	VisualComponent(shader),
-    m_bitmap(bitmap)
+        m_bitmap(bitmap)
 {
 
     D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
@@ -92,7 +92,7 @@ void VisualBitmapComponent::Draw(D3D& d3d)
     m_Shader.VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
 
-    ID3D11ShaderResourceView* tex = m_bitmap.GetTexture().GetTexture();
+    ID3D11ShaderResourceView* tex = m_bitmap.GetTextureShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
     m_Shader.RenderShader(d3d, 6);

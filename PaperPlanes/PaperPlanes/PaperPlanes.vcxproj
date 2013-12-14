@@ -97,6 +97,7 @@
     <ClCompile Include="Math\Frame.cpp" />
     <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
     <ClCompile Include="Components\Physics\PhysicsComponent.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Scenes\PlaneScene.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Math\Frame.h" />
     <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
     <ClInclude Include="Components\Physics\PhysicsComponent.h" />
+    <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Scenes\PlaneScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />

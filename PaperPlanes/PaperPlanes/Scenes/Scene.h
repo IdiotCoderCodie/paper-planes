@@ -26,6 +26,8 @@ public:
 
     SceneManager& GetParent() { return *m_Parent; }
 
+    std::vector<Entity*>& GetEntities() { return m_Entities; }
+
     virtual void Update(double time);
 
     virtual void Draw(D3D& d3d);

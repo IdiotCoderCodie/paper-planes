@@ -11,7 +11,8 @@
 #include "SceneManager.h"
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
-    : Scene(name, sceneMgr)
+    : Scene(name, sceneMgr),
+    m_renderTargetTest(0)
 {
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
@@ -50,22 +51,57 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     AddEntity(cameraEntity);
 
 
-    // TESTING BITMAP
+    m_renderTargetTest = new RenderTarget(&d3d.GetDevice(), 800, 600);
+    
+    // BITMAP for drawing what is rendered to render target.
     Entity* bmpEntity = new Entity(*this, std::string("bmpEntity"));
     Shader* newShader = new Shader();
-    Bitmap* bmp = new Bitmap(d3d, *texture, 256, 256, 
+    // Give bitmap the shader resource view from render target.
+    Bitmap* bmp = new Bitmap(d3d, m_renderTargetTest->GetShaderResourceView(), 256, 256, 
                              GetParent().GetD3DInstance().GetScreenWidth(), 
                              GetParent().GetD3DInstance().GetScreenHeight());
 
     bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
     AddEntity(bmpEntity);
-    // Some lolz.
-    /*bmpEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(-10.0f, 0.0f, 0.0f), 
-                            glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));*/
+    
 }
 
 
 PlaneScene::~PlaneScene(void)
 {
 
+}
+
+void PlaneScene::Draw(D3D& d3d)
+{
+    m_renderTargetTest->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+
+    m_renderTargetTest->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
+                                          0.0f, 0.0f, 1.0f, 1.0f);
+
+    // Now render once, rendering to texture.
+    // This is going to try and render the bitmap which is drawing the renderTarget... hmm...
+    Scene::Draw(d3d);
+
+    //for(auto it = GetEntities().begin(); it != GetEntities().end(); ++it)
+    //{
+    //    if((*it)->GetComponent("VisualComponent"))
+    //    {
+    //        std::string compID;
+    //        (*it)->GetComponent("VisualComponent")->ComponentID(compID);
+    //        if(compID.compare("VisualBitmapComponent"))
+    //        {
+    //            // Didn't compare, so draw.
+    //            (*it)->Draw(d3d);
+    //        }
+    //    }
+    //}
+
+    // Clear buffers to draw 3D scene.
+    d3d.BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
+    // Reset to drawing to back buffer.
+    d3d.SetBackBufferRenderTarget();
+
+    // Now render 3D scene.
+    Scene::Draw(d3d);
 }

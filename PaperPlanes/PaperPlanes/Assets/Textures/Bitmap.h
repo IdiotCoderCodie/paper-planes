@@ -21,16 +21,23 @@ class Bitmap
 {
 public:
     Bitmap(D3D& d3d, Texture& texture, int height, int width, int screenWidth, int screenHeight);
+    Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int height, int width, int screenWidth,
+           int screenHeight);
     ~Bitmap(void);
 
-    Texture& GetTexture() const { return m_texture; }
+    ID3D11ShaderResourceView* GetTextureShaderResourceView() const       { return m_texture; }
+    void GetTextureShaderResourceView(ID3D11ShaderResourceView* texture) { m_texture = texture; }
+
 
     bool UpdateBuffers(D3D& d3d, int positionX, int positionY);
 
     void Draw(D3D& d3d);
 
 private:
-    Texture& m_texture;
+    bool Init(ID3D11Device* device);
+
+private:
+    ID3D11ShaderResourceView* m_texture;
     ID3D11Buffer* m_vertexBuffer;
     ID3D11Buffer* m_indexBuffer;
     int m_vertexCount;
