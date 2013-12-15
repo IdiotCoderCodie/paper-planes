@@ -107,8 +107,12 @@
     <ClCompile Include="Assets\Models\StaticMesh.cpp" />
     <ClCompile Include="Assets\Textures\Texture.cpp" />
     <ClCompile Include="Components\Visual\VisualBitmapComponent.cpp" />
+    <ClCompile Include="Assets\Shaders\ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assets\Shaders\ShaderResources\constant_buffers.h" />
+    <ClInclude Include="Assets\Shaders\ShaderResources\poly_layouts.h" />
+    <ClInclude Include="Assets\Shaders\ShaderResources\sampler_desc.h" />
     <ClInclude Include="Assets\Textures\Bitmap.h" />
     <ClInclude Include="Components\Camera\CameraComponent.h" />
     <ClInclude Include="Components\Component.h" />
@@ -134,6 +138,7 @@
     <ClInclude Include="Assets\Models\StaticMesh.h" />
     <ClInclude Include="Assets\Textures\Texture.h" />
     <ClInclude Include="Components\Visual\VisualBitmapComponent.h" />
+    <ClInclude Include="Assets\Shaders\ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt">
