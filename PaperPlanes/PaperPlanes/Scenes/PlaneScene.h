@@ -12,5 +12,6 @@ public:
 
 private:
     RenderTarget* m_renderTargetTest;
+    Entity* m_drawRenderTargetEntity;
 };
 

@@ -63,6 +63,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
     AddEntity(bmpEntity);
+
+    m_drawRenderTargetEntity = bmpEntity;
     
 }
 
@@ -79,26 +81,18 @@ void PlaneScene::Draw(D3D& d3d)
     m_renderTargetTest->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
                                           0.0f, 0.0f, 1.0f, 1.0f);
 
-    // Now render once, rendering to texture.
-    // This is going to try and render the bitmap which is drawing the renderTarget... hmm...
-    Scene::Draw(d3d);
-
-    //for(auto it = GetEntities().begin(); it != GetEntities().end(); ++it)
-    //{
-    //    if((*it)->GetComponent("VisualComponent"))
-    //    {
-    //        std::string compID;
-    //        (*it)->GetComponent("VisualComponent")->ComponentID(compID);
-    //        if(compID.compare("VisualBitmapComponent"))
-    //        {
-    //            // Didn't compare, so draw.
-    //            (*it)->Draw(d3d);
-    //        }
-    //    }
-    //}
+    // Render all things, but the renderTarget entity.
+    for(auto ent : GetEntities())
+    {
+        if(ent != m_drawRenderTargetEntity)
+        {
+            ent->Draw(d3d);
+        }
+    }
 
     // Clear buffers to draw 3D scene.
     d3d.BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
+
     // Reset to drawing to back buffer.
     d3d.SetBackBufferRenderTarget();
 
