@@ -496,7 +496,7 @@ bool Shader::CompileShader(HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* t
                            ID3D10Blob** shaderBuff) const
 {
     HRESULT result;
-    ID3D10Blob* errMsg;
+    ID3D10Blob* errMsg = 0;
     // Compile shader.
     result = D3DCompileFromFile(filename, NULL, NULL, entryPoint, target, 0, 0, shaderBuff, 
                                 &errMsg);

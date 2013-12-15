@@ -1,8 +1,9 @@
+#pragma once
 #include <d3d11.h>
 
 namespace SamplerDesc
 {
-    D3D11_SAMPLER_DESC DEFAULT = 
+    static D3D11_SAMPLER_DESC DEFAULT = 
     {
         D3D11_FILTER_MIN_MAG_MIP_LINEAR,    // Filter
 	    D3D11_TEXTURE_ADDRESS_WRAP,         // AddressU

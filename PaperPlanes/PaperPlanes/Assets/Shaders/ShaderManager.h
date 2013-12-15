@@ -2,21 +2,26 @@
 #include <unordered_map>
 
 #include "Shader.h"
+#include "ShaderResources\poly_layouts.h"
+#include "ShaderResources\constant_buffers.h"
+#include "ShaderResources\sampler_desc.h"
 
 
 class ShaderManager
 {
 public:
-    ShaderManager(D3D& d3d);
+    ShaderManager();
 
-    bool LoadShaders(const std::string& configFilename);
+    bool LoadShaders(D3D& d3d, const std::string& configFilename);
 
     Shader* GetShader(const std::string& id);
+
+    bool IsLoaded() { return m_loaded; }
 
     ~ShaderManager(void);
 
 private:
-    D3D& m_d3dInstance;
+    bool m_loaded;
     std::unordered_map<std::string, Shader> m_shaders;
 };
 

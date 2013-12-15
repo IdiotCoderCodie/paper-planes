@@ -1,8 +1,9 @@
+#pragma once
 #include <d3d11.h>
 
 namespace PolyLayouts
 {
-    D3D11_INPUT_ELEMENT_DESC POS3_TEX2[2] =
+    static D3D11_INPUT_ELEMENT_DESC POS3_TEX2[2] =
     {
         { 
             "POSITION",                     // Semantic Name
@@ -24,7 +25,7 @@ namespace PolyLayouts
         }
     };
 
-    D3D11_INPUT_ELEMENT_DESC POS3_TEX2_NORM3[3] = 
+    static D3D11_INPUT_ELEMENT_DESC POS3_TEX2_NORM3[3] = 
     {
         { 
             "POSITION",                     // Semantic Name

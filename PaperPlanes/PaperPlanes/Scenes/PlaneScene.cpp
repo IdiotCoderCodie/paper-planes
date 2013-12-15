@@ -25,7 +25,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
 	Texture* texture = new Texture(d3d, L"Assets\\Textures\\tim.dds");
     VisualMeshComponent* meshComp 
-        = new VisualMeshComponent(d3d, std::string("Assets\\Models\\cubeInv.obj"), *shader, *texture); 
+        = new VisualMeshComponent(d3d, std::string("Assets\\Models\\cubeInv.obj"), *texture); 
     
     cubeEntity->MoveForward(0.0f);
     cubeEntity->MoveRight(1.0f);
