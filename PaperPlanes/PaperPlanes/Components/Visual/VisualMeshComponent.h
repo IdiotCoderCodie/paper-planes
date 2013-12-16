@@ -17,7 +17,7 @@ public:
 
     virtual void Update(float timeElapsed);
 
-    virtual void ShadowPass() {};
+    void ShadowPass(D3D& d3d);
     virtual void Draw(D3D& d3d);
 
 private:

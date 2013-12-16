@@ -17,6 +17,16 @@ namespace ConstantBuffers
     };
 
 
+    struct MVPShadowBuffer
+    {
+        glm::mat4 modelMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
+        glm::mat4 lightViewMatrix;
+        glm::mat4 lightProjectionMatrix;
+    };
+
+
     struct CameraPosBuffer
     {
         glm::vec3 cameraPos;

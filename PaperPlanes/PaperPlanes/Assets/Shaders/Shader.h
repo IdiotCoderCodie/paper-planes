@@ -57,6 +57,7 @@ public:
      * Set the shaders sample state using samplerDesc.
      */
     bool SetSampleState (D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc);
+    bool SetSampleState2(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc);
 
     /**
      * Creates and adds a buffer using "bufferDesc".
@@ -106,6 +107,7 @@ private:
     ID3D11InputLayout*      m_inputLayout;
 
     ID3D11SamplerState*     m_sampleState;
+    ID3D11SamplerState*     m_sampleState2;
 
     std::map<std::string, ID3D11Buffer*> m_buffers;
 };

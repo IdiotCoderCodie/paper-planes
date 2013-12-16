@@ -38,20 +38,48 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                       sizeof(ConstantBuffers::LightPosBuffer), 
                                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-    m_shaders["Mesh_1L_1T"].SetSampleState(d3d, SamplerDesc::DEFAULT);
+    m_shaders["Mesh_1L_1T"].SetSampleState(d3d, SamplerDesc::DEFAULT_WRAP);
     //----------------------------------------------------------------------------------------------
+
+
+
+    //----------------------------------------------------------------------------------------------
+    // Create mesh render shader using shadow, using 1 light and 1 texture.
+    m_shaders["Mesh_1L_1T_ShadowMap"] = Shader();
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow_vs.hlsl", "vp_main", 
+                                            "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadow_ps.hlsl", "ps_main", 
+                                           "ps_5_0");
+
+    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::MVPShadowBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+    
+    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::LightColorBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::LightPosBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetSampleState(d3d, SamplerDesc::DEFAULT_WRAP);
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetSampleState2(d3d, SamplerDesc::SAMPLE_CLAMP);
+
+    //----------------------------------------------------------------------------------------------
+
+
 
     //----------------------------------------------------------------------------------------------
     // Create shader for render pass to create shadows.
-    /*m_shaders["Mesh_1L_1T_SHADOW"] = Shader();
-    m_shaders["Mesh_1L_1T_SHADOW"].SetVertexShader(d3d, 0, L"mesh_shadow_vs.hlsl", 
+    m_shaders["Mesh_1L_Shadow"] = Shader();
+    m_shaders["Mesh_1L_Shadow"].SetVertexShader(d3d, 0, L"mesh_shadow_vs.hlsl", 
                                    "vp_main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
-    m_shaders["Mesh_1L_1T_SHADOW"].SetPixelShader(d3d, 0, L"mesh_shadow_ps.hlsl", 
+    m_shaders["Mesh_1L_Shadow"].SetPixelShader(d3d, 0, L"mesh_shadow_ps.hlsl", 
                                    "ps_main", "ps_5_0");
 
-    m_shaders["Mesh_1L_1T_SHADOW"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+    m_shaders["Mesh_1L_Shadow"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
                                    sizeof(ConstantBuffers::MVPBuffer), D3D11_BIND_CONSTANT_BUFFER, 
-                                   D3D11_CPU_ACCESS_WRITE, 0, 0);*/
+                                   D3D11_CPU_ACCESS_WRITE, 0, 0);
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -66,7 +94,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                   sizeof(ConstantBuffers::MVPBuffer), D3D11_BIND_CONSTANT_BUFFER, 
                                   D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-    m_shaders["Bitmap"].SetSampleState(d3d, SamplerDesc::DEFAULT);
+    m_shaders["Bitmap"].SetSampleState(d3d, SamplerDesc::DEFAULT_WRAP);
     //----------------------------------------------------------------------------------------------
 
     m_loaded = true;

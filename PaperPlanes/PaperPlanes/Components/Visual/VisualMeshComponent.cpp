@@ -34,6 +34,25 @@ void VisualMeshComponent::Update(float timeElapsed)
 }
 
 
+void VisualMeshComponent::ShadowPass(D3D& d3d)
+{
+    Shader* shadowShader = G_ShaderManager.GetShader("Mesh_1L_Shadow");
+
+    ConstantBuffers::MVPShadowBuffer matBuffer;
+    matBuffer.modelMatrix       = glm::transpose(
+                                    GetParent().GetTransform().GetMatrix());
+    matBuffer.viewMatrix        = glm::transpose(
+                                    GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
+    matBuffer.projectionMatrix  = glm::transpose(
+                                    GetParent().GetParent().GetActiveCamera()->GetProjMatrix());
+    // MVPShadowBuffer isn't to be used in this pass! To be used in actual Render Pass (Draw)!!!
+    // IN HERE IS WHERE THE SHIT FOR THE "DEPTHSHADER" GOES!!
+    // Set the buffer data using above matrices.
+    shadowShader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
+                                  (void*)&matBuffer, sizeof(matBuffer), 0);
+}
+
+
 void VisualMeshComponent::Draw(D3D& d3d)
 {
     m_mesh.Render(d3d);

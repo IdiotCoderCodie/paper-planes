@@ -191,5 +191,7 @@
     <FxCompile Include="Assets\Shaders\color_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\bitmap_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\bitmap_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow_ps.hlsl" />
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@ Shader::Shader(void) :
     m_pixelShader(0),
     m_inputLayout(0),
     m_sampleState(0),
+    m_sampleState2(0),
     m_buffers()
 {
 }
@@ -213,6 +214,16 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
 bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
 {
     HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState);
+    if(FAILED(result))
+        return false;
+
+    return true;
+}
+
+
+bool Shader::SetSampleState2(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
+{
+    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState2);
     if(FAILED(result))
         return false;
 
@@ -459,6 +470,10 @@ void Shader::RenderShader(D3D& d3d, int indexCount)
     if(m_sampleState)
     {
         d3d.GetDeviceContext().PSSetSamplers(0, 1, &m_sampleState);
+    }
+    if(m_sampleState2)
+    {
+        d3d.GetDeviceContext().PSSetSamplers(1, 1, &m_sampleState2);
     }
 
     // Render.
