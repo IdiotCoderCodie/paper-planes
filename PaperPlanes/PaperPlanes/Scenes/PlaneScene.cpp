@@ -35,6 +35,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     meshComp->SetParent(*cubeEntity);
 
     cubeEntity->SetComponent(meshComp);
+    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+                               glm::vec3(0.0f, 20.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -90,7 +92,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* bmpEntity = new Entity(*this, std::string("bmpEntity"));
     Shader* newShader = new Shader();
     // Give bitmap the shader resource view from render target.
-    Bitmap* bmp = new Bitmap(d3d, m_renderTargetTest->GetShaderResourceView(), 256, 256, 
+    Bitmap* bmp = new Bitmap(d3d, m_renderTargetTest->GetShaderResourceView(), 100, 100, 
                              GetParent().GetD3DInstance().GetScreenWidth(), 
                              GetParent().GetD3DInstance().GetScreenHeight());
 
@@ -112,7 +114,7 @@ void PlaneScene::Draw(D3D& d3d)
     m_renderTargetTest->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
 
     m_renderTargetTest->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
-                                          0.0f, 0.0f, 0.0f, 1.0f);
+                                          1.0f, 1.0f, 1.0f, 1.0f);
 
     // Render all things, but the renderTarget entity.
     for(auto ent : GetEntities())
