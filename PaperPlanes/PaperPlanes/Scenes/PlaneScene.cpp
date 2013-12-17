@@ -17,7 +17,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
     
-    m_renderTargetTest = new RenderTarget(&d3d.GetDevice(), 1024, 1024);
+    m_renderTargetTest = new RenderTarget(&d3d.GetDevice(), 800, 600);
 
 	Shader* shader = new Shader();
 
@@ -47,8 +47,10 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                             m_renderTargetTest->GetShaderResourceView());
     occluderCubeMesh->SetParent(*occluderCube);
     occluderCube->SetComponent(occluderCubeMesh);
-    occluderCube->MoveUp(-1.0f);
+    occluderCube->MoveUp(-1.5f);
     occluderCube->MoveForward(-5.0f);
+    occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+                               glm::vec3(15.0f, 20.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -57,7 +59,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
                         / (float)GetParent().GetD3DInstance().GetScreenHeight();
-    CameraComponent* camComp = new PerspectiveCamComponent(60.0f, aspect, 1.0f, 100.0f);
+    CameraComponent* camComp = new PerspectiveCamComponent(60.0f, aspect, 0.1f, 100.0f);
     camComp->SetParent(*cameraEntity);
     cameraEntity->SetComponent(camComp);
     
@@ -71,11 +73,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Light entity
     Entity* lightEntity = new Entity(*this, std::string("lightEntity"));
 
-    LightComponent* lightComp = new LightComponent(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f),
+    LightComponent* lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
                                                   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
+    //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     lightEntity->MoveForward(-10.0f);
     AddEntity(lightEntity);
 	//----------------------------------------------------------------------------------------------
@@ -125,7 +128,7 @@ void PlaneScene::Draw(D3D& d3d)
                 vmc->ShadowPass(d3d);
             }
              
-             //ent->Draw(d3d);
+            //ent->Draw(d3d);
         }
     }
 
@@ -133,7 +136,7 @@ void PlaneScene::Draw(D3D& d3d)
     d3d.BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
 
     // Reset to drawing to back buffer.
-    d3d.SetBackBufferRenderTarget();
+    d3d.SetBackBufferRenderTarget();    
 
     // Now render 3D scene.
     Scene::Draw(d3d);

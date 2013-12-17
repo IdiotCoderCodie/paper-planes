@@ -141,7 +141,7 @@ void VisualMeshComponent::Draw(D3D& d3d)
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
     ID3D11ShaderResourceView* shadowTex = m_shadowMap;
-    d3d.GetDeviceContext().PSGetShaderResources(1, 1, &shadowTex);
+    d3d.GetDeviceContext().PSSetShaderResources(1, 1, &shadowTex);
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
