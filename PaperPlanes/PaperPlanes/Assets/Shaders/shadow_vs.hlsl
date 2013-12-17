@@ -24,7 +24,7 @@ struct VertexInputType
 
 struct PixelInputType
 {
-    float4 position          : POSITION;
+    float4 position          : SV_POSITION;
     float2 uv                : TEXCOORD0;
     float3 normal            : NORMAL;
     float4 lightViewPosition : TEXCOORD1;
@@ -45,8 +45,8 @@ PixelInputType vp_main( VertexInputType input )
 
     // Get position from light's perspective.
     output.lightViewPosition = mul(input.position,  modelMatrix);
-    output.lightViewPosition = mul(output.position, lightViewMatrix);
-    output.lightViewPosition = mul(output.position, lightProjectionMatrix);
+    output.lightViewPosition = mul(output.lightViewPosition, lightViewMatrix);
+    output.lightViewPosition = mul(output.lightViewPosition, lightProjectionMatrix);
 
     output.uv = input.uv;
 

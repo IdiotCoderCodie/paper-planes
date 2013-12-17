@@ -54,6 +54,22 @@ Component* Entity::GetComponent(const componentId_t& familyId)
     return 0;
 }
 
+Component* Entity::GetComponent(const componentId_t& familyId, const componentId_t& componentId)
+{
+    if(m_Components.find(familyId) != m_Components.end())
+    {
+        std::string compId;
+        m_Components.find(familyId)->second->ComponentID(compId);
+        if(compId.compare(componentId) == 0)
+        {
+            // This is a component of the asks type.
+            return m_Components.find(familyId)->second;
+        }
+    }
+
+    return 0;
+}
+
 
 void Entity::SetComponent(Component* newComponent)
 {

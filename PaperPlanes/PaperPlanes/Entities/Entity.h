@@ -28,6 +28,7 @@ public:
     void SetID(const entityId_t id)             { m_id = id; }
 
     Component* GetComponent(const componentId_t& familyId) ;
+    Component* GetComponent(const componentId_t& familyId, const componentId_t& componentId);
     void SetComponent(Component* newComponent);
     void ClearComponents();
 

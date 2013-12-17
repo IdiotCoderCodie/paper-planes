@@ -38,10 +38,26 @@ public:
     void Enable()           { m_active = true; }
     bool Disable()          { m_active = false; }
 
+    // Functions for shadow mapping.
+
+    void GenerateProjectionMatrix(float near, float far);
+
+    const glm::mat4& GetViewMatrix() { return m_viewMatrix; }
+    const glm::mat4& GetProjMatrix() { return m_projectionMatrix; }
+
+    virtual void Update(float time);
+    
+
 private:
+    bool m_active;
     glm::vec4 m_ambient;
     glm::vec4 m_diffuse;
     glm::vec4 m_specular;
-    bool m_active;
+    
+    // Used for shadow mapping.
+    glm::mat4 m_viewMatrix;
+    glm::mat4 m_projectionMatrix;
+
+
 };
 

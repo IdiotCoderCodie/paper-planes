@@ -8,7 +8,7 @@ class VisualMeshComponent : public VisualComponent
 {
 
 public:
-    VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture);
+    VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture, ID3D11ShaderResourceView* shadowMap);
     ~VisualMeshComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualMeshComponent"; }
@@ -23,6 +23,7 @@ public:
 private:
     StaticMesh m_mesh;
 	Texture& m_texture;
+    ID3D11ShaderResourceView* m_shadowMap;
     bool m_castShadows;
 };
 

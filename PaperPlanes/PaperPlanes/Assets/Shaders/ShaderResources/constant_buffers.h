@@ -43,6 +43,13 @@ namespace ConstantBuffers
         glm::vec3 padding;
     };
 
+
+    struct LightAmbientDiffuseColorBuffer
+    {
+        glm::vec4 ambient;
+        glm::vec4 diffuse;
+    };
+
     struct LightPosBuffer
     {
         glm::vec4 lightPosition;

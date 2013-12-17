@@ -13,7 +13,7 @@ cbuffer LightColorBuffer
 
 struct PixelInputType
 {
-    float4 position          : POSITION;
+    float4 position          : SV_POSITION;
     float2 uv                : TEXCOORD0;
     float3 normal            : NORMAL;
     float4 lightViewPosition : TEXCOORD1;
@@ -23,8 +23,6 @@ struct PixelInputType
 
 float4 ps_main(PixelInputType input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
-
     // Because of the low floating point precision of depth map, need a bias.
     float bias = 0.001f;
 
@@ -47,7 +45,7 @@ float4 ps_main(PixelInputType input) : SV_TARGET
         float lightDepthValue = input.lightViewPosition.z / input.lightViewPosition.w;
 
         // Subtract bias to get around floating point precision issue.
-        lightDepthValue -= bias;
+        lightDepthValue = lightDepthValue - bias;
 
         // Compare light depth and object depth.
         if(lightDepthValue < depthValue)
