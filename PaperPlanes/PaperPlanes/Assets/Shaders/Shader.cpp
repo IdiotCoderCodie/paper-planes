@@ -16,9 +16,8 @@ Shader::Shader(void) :
     m_geomShader(0),
     m_pixelShader(0),
     m_inputLayout(0),
-    m_sampleState(0),
-    m_sampleState2(0),
-    m_buffers()
+    m_buffers(),
+    m_samplerStates()
 {
 }
 
@@ -31,6 +30,20 @@ Shader::~Shader(void)
     d3d_safe_release(m_geomShader);
     d3d_safe_release(m_pixelShader);
     d3d_safe_release(m_inputLayout);
+
+    for(auto samplerState : m_samplerStates)
+    {
+        d3d_safe_release(samplerState.second);
+        samplerState.second = 0;
+    }
+    m_samplerStates.clear();
+
+    for(auto buffer : m_buffers)
+    {
+        d3d_safe_release(buffer.second);
+        buffer.second = 0;
+    }
+    m_buffers.clear();
 }
 
 

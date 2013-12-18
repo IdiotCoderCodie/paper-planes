@@ -97,9 +97,6 @@ private:
 
     ID3D11InputLayout*      m_inputLayout;
 
-    ID3D11SamplerState*     m_sampleState;
-    ID3D11SamplerState*     m_sampleState2;
-
-    std::map<std::string, ID3D11SamplerState*> m_samplerStates;
     std::map<std::string, ID3D11Buffer*>       m_buffers;
+    std::map<std::string, ID3D11SamplerState*> m_samplerStates;  
 };
