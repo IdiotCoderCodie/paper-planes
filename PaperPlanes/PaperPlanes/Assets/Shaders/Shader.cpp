@@ -33,63 +33,6 @@ Shader::~Shader(void)
     d3d_safe_release(m_inputLayout);
 }
 
-//
-//bool Shader::InitShader(D3D& d3d, HWND hwnd, WCHAR* vsFilename, WCHAR* fsFilename)
-//{
-//    HRESULT result;
-//    ID3D10Blob* vertShaderBuff;
-//    ID3D10Blob* pixelShaderBuff;
-//    ID3D10Blob* errMessage;
-//
-//    
-//
-//    // Compile vertex shader.
-//    result = D3DCompileFromFile(vsFilename, NULL, NULL, "vp_main", "vs_5_0", 0, 0, &vertShaderBuff, 
-//                                &errMessage);
-//    if(FAILED(result))
-//    {
-//        if(errMessage)
-//        {
-//            OutputShaderErrorMessage(errMessage, hwnd, vsFilename);
-//        }
-//        else
-//        {
-//            MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
-//        }
-//        return false;
-//    }
-//
-//    // HORRIBLE REPEATED CODE. CHANGE THIS!!! O.O
-//    // Compile fragment shader.
-//    result = D3DCompileFromFile(fsFilename, NULL, NULL, "fp_main", "vs_5_0", 0, 0, &pixelShaderBuff, 
-//                                &errMessage);
-//    if(FAILED(result))
-//    {
-//        if(errMessage)
-//        {
-//            OutputShaderErrorMessage(errMessage, hwnd, vsFilename);
-//        }
-//        else
-//        {
-//            MessageBox(hwnd, fsFilename, L"Missing Shader File", MB_OK);
-//        }
-//        return false;
-//    }
-//
-//    // Create vertex shader.
-//    result = d3d.GetDevice().CreateVertexShader(vertShaderBuff->GetBufferPointer(), 
-//                                                vertShaderBuff->GetBufferSize(), NULL, 
-//                                                &m_vertexShader);
-//    if(FAILED(result))
-//        return false;
-//    // Create fragment shader.
-//    result = d3d.GetDevice().CreatePixelShader(pixelShaderBuff->GetBufferPointer(),
-//                                               pixelShaderBuff->GetBufferSize(), NULL,
-//                                               &m_pixelShader);
-//    if(FAILED(result))
-//        return false;
-//}
-
 
 bool Shader::SetVertexShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target,
                              D3D11_INPUT_ELEMENT_DESC polygonLayout[], int numElems)
@@ -211,22 +154,26 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
 }
 
 
-bool Shader::SetSampleState(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
+bool Shader::AddSamplerState(D3D& d3d, const std::string& identity, D3D11_SAMPLER_DESC& samplerDesc)
 {
-    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState);
-    if(FAILED(result))
+    if(m_samplerStates.find(identity) != m_samplerStates.end())
+    {
+        // SamplerState with "identity" already been added.
         return false;
+    }
 
-    return true;
-}
+    ID3D11SamplerState* newSamplerState;
+    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &newSamplerState);
 
-
-bool Shader::SetSampleState2(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc)
-{
-    HRESULT result = d3d.GetDevice().CreateSamplerState(&samplerDesc, &m_sampleState2);
     if(FAILED(result))
+    {
         return false;
+    }
 
+    // Add newly created SamplerState to the map.
+    m_samplerStates[identity] = newSamplerState;
+
+    newSamplerState = 0;
     return true;
 }
 
@@ -466,14 +413,13 @@ void Shader::RenderShader(D3D& d3d, int indexCount)
         d3d.GetDeviceContext().GSSetShader(m_geomShader, NULL, 0);
     }
 
-    // Set the sampler state in pixel shader.
-    if(m_sampleState)
+    // Set the sampler states.
+    int i = 0;
+    for(auto samplerState : m_samplerStates)
     {
-        d3d.GetDeviceContext().PSSetSamplers(0, 1, &m_sampleState);
-    }
-    if(m_sampleState2)
-    {
-        d3d.GetDeviceContext().PSSetSamplers(1, 1, &m_sampleState2);
+        // NOTE: This isn't entirely correct. Might have a sampler in another shader!
+        d3d.GetDeviceContext().PSSetSamplers(i, 1, &samplerState.second);
+        i++;
     }
 
     // Render.

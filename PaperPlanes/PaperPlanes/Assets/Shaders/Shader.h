@@ -9,15 +9,6 @@
 #include "../../D3D.h"
 #include "../../d3d_safe_release.h"
 
-enum SHADER_TYPE
-{
-    VERTEX_SHADER,
-    HULL_SHADER,
-    DOMAIN_SHADER,
-    GEOMETRY_SHADER,
-    PIXEL_SHADER
-};
-
 class Shader
 {
 public:
@@ -54,10 +45,10 @@ public:
     bool SetPixelShader (D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* target);
 
     /**
-     * Set the shaders sample state using samplerDesc.
+     * Creates a sampler state from the description provided and adds it to the list. Add the
+     * sampler states in the correct order as they are in the shader file.
      */
-    bool SetSampleState (D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc);
-    bool SetSampleState2(D3D& d3d, D3D11_SAMPLER_DESC& samplerDesc);
+    bool AddSamplerState(D3D& d3d, const std::string& identity, D3D11_SAMPLER_DESC& samplerDesc);
 
     /**
      * Creates and adds a buffer using "bufferDesc".
@@ -109,5 +100,6 @@ private:
     ID3D11SamplerState*     m_sampleState;
     ID3D11SamplerState*     m_sampleState2;
 
-    std::map<std::string, ID3D11Buffer*> m_buffers;
+    std::map<std::string, ID3D11SamplerState*> m_samplerStates;
+    std::map<std::string, ID3D11Buffer*>       m_buffers;
 };
