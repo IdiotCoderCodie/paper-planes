@@ -33,6 +33,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                             m_renderTargetTest->GetShaderResourceView()); 
     
     meshComp->SetParent(*cubeEntity);
+    meshComp->EnableRecieveShadows();
 
     cubeEntity->SetComponent(meshComp);
     cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
@@ -45,14 +46,16 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     AddEntity(occluderCube);
 
     VisualMeshComponent* occluderCubeMesh = new VisualMeshComponent(d3d, 
-                                            std::string("Assets\\Models\\cube.obj"), *texture, 
+                                            std::string("Assets\\Models\\sphere.obj"), *texture, 
                                             m_renderTargetTest->GetShaderResourceView());
     occluderCubeMesh->SetParent(*occluderCube);
+    occluderCubeMesh->EnableCastShadows();
     occluderCube->SetComponent(occluderCubeMesh);
-    occluderCube->MoveUp(-1.5f);
+    occluderCube->MoveUp(-1.0f);
     occluderCube->MoveForward(-5.0f);
+    occluderCube->RotateGlobalX(180.0f);
     occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                               glm::vec3(15.0f, 20.0f, 0.0f)));
+                               glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 100.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
