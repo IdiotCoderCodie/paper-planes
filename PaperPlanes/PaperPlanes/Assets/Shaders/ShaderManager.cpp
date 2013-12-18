@@ -43,6 +43,31 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 
 
     //----------------------------------------------------------------------------------------------
+    // Create mesh render shader, using 1 light and 1 texture.
+    m_shaders["Mesh_2L_1T"] = Shader();
+    m_shaders["Mesh_2L_1T"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\mesh_2l_vs.hlsl", "vp_main", 
+                                            "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+    m_shaders["Mesh_2L_1T"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\mesh_2l_ps.hlsl", "ps_main", 
+                                           "ps_5_0");
+
+    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::MVPBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::CameraPosBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::LightColorBuffer2), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::LightPosBuffer2), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Mesh_2L_1T"].AddSamplerState(d3d, "ModelTextureSampler", SamplerDesc::DEFAULT_WRAP);
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
     // Create mesh render shader using shadow, using 1 light and 1 texture.
     m_shaders["Mesh_1L_1T_ShadowMap"] = Shader();
     m_shaders["Mesh_1L_1T_ShadowMap"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow_vs.hlsl", 

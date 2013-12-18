@@ -12,12 +12,13 @@
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr),
-    m_renderTargetTest(0)
+    m_light1shadowMap(0)
 {
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
     
-    m_renderTargetTest = new RenderTarget(&d3d.GetDevice(), 800, 600);
+    m_light1shadowMap = new RenderTarget(&d3d.GetDevice(), 800, 600);
+
 
 	Shader* shader = new Shader();
 
@@ -30,7 +31,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 	Texture* texture = new Texture(d3d, L"Assets\\Textures\\tim.dds");
     VisualMeshComponent* meshComp = new VisualMeshComponent(d3d, 
                                             std::string("Assets\\Models\\cubeInv.obj"), *texture, 
-                                            m_renderTargetTest->GetShaderResourceView()); 
+                                            GetShadowMaps()); 
     
     meshComp->SetParent(*cubeEntity);
     meshComp->EnableRecieveShadows();
@@ -47,15 +48,15 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     VisualMeshComponent* occluderCubeMesh = new VisualMeshComponent(d3d, 
                                             std::string("Assets\\Models\\sphere.obj"), *texture, 
-                                            m_renderTargetTest->GetShaderResourceView());
+                                            GetShadowMaps());
     occluderCubeMesh->SetParent(*occluderCube);
     occluderCubeMesh->EnableCastShadows();
     occluderCube->SetComponent(occluderCubeMesh);
     occluderCube->MoveUp(-1.0f);
     occluderCube->MoveForward(-5.0f);
     occluderCube->RotateGlobalX(180.0f);
-    occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                               glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 100.0f, 0.0f)));
+   /* occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+                               glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 100.0f, 0.0f)));*/
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -79,28 +80,57 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* lightEntity = new Entity(*this, std::string("lightEntity"));
 
     LightComponent* lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+                                                  glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                                                  glm::vec4(1.0f, 0.8f, 0.8f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
     //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     lightEntity->MoveForward(-10.0f);
+    lightEntity->MoveRight(2.0f);
     AddEntity(lightEntity);
 	//----------------------------------------------------------------------------------------------
     
+    //----------------------------------------------------------------------------------------------
+    // Light entity no.2
+    lightEntity = new Entity(*this, std::string("lightEntity2"));
 
-
+    lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
+                                                  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                                  glm::vec4(0.8f, 1.0f, 0.8f, 1.0f));
+    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
+    lightEntity->SetComponent(lightComp);
+    //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
+    lightEntity->MoveForward(-10.0f);
+    lightEntity->MoveRight(-2.0f);
+    AddEntity(lightEntity);
+    //----------------------------------------------------------------------------------------------
     
-    // BITMAP for drawing what is rendered to render target.
-    Entity* bmpEntity = new Entity(*this, std::string("bmpEntity"));
+    //----------------------------------------------------------------------------------------------
+    // BITMAP for drawing what is rendered to first light's render target.
+    Entity* bmpEntity = new Entity(*this, std::string("bitmapLight1ShadowMap"));
     Shader* newShader = new Shader();
     // Give bitmap the shader resource view from render target.
-    Bitmap* bmp = new Bitmap(d3d, m_renderTargetTest->GetShaderResourceView(), 100, 100, 
+    Bitmap* bmp = new Bitmap(d3d, GetShadowMaps()[0]->GetShaderResourceView(), 100, 100, 
                              GetParent().GetD3DInstance().GetScreenWidth(), 
                              GetParent().GetD3DInstance().GetScreenHeight());
 
     bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
     AddEntity(bmpEntity);
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Bitmap for drawing what is rendered to the second light's render target.
+    bmpEntity = new Entity(*this, std::string("bitmapLight1ShadowMap"));
+    //Shader* newShader = new Shader();
+    // Give bitmap the shader resource view from render target.
+    bmp = new Bitmap(d3d, GetShadowMaps()[1]->GetShaderResourceView(), 100, 100, 
+                             GetParent().GetD3DInstance().GetScreenWidth(), 
+                             GetParent().GetD3DInstance().GetScreenHeight());
+
+    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
+    bmpEntity->MoveRight(-101.0f);
+    AddEntity(bmpEntity);
+    //----------------------------------------------------------------------------------------------
 
     m_drawRenderTargetEntity = bmpEntity;
     
@@ -114,9 +144,14 @@ PlaneScene::~PlaneScene(void)
 
 void PlaneScene::Draw(D3D& d3d)
 {
-    m_renderTargetTest->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+    //
 
-    m_renderTargetTest->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
+    //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+
+    GetShadowMaps()[0]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
+                                          1.0f, 1.0f, 1.0f, 1.0f);
+
+    GetShadowMaps()[1]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
                                           1.0f, 1.0f, 1.0f, 1.0f);
 
     // Render all things, but the renderTarget entity.

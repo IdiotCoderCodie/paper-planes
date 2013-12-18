@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "../Components/Camera/CameraComponent.h"
 #include "../Components/Light/LightComponent.h"
+#include "SceneManager.h"
 
 Scene::Scene(const std::string& name, SceneManager* sceneMgr)
     :   m_Name(name),
@@ -33,6 +34,13 @@ void Scene::AddEntity(Entity* ent)
 	{
         // Cast the component to a LightComponent and push it into the lights list.
 		m_Lights.push_back(light);
+
+        // New light, create a shadow map for it.
+        int screenWidth = m_Parent->GetD3DInstance().GetScreenWidth();
+        int screenHeight = m_Parent->GetD3DInstance().GetScreenHeight();
+        RenderTarget* newShadowMap = new RenderTarget(&m_Parent->GetD3DInstance().GetDevice(), 
+                                                      screenWidth, screenHeight);
+        m_shadowMaps.push_back(newShadowMap);
 	}
 
 	// If there is not already an active camera component then check if the 

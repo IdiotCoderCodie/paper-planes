@@ -4,6 +4,7 @@
 
 #include "../D3D.h"
 #include "../Entities/Entity.h"
+#include "../RenderTarget.h"
 
 class CameraComponent;
 
@@ -28,6 +29,8 @@ public:
 
     std::vector<Entity*>& GetEntities() { return m_Entities; }
 
+    std::vector<RenderTarget*>& GetShadowMaps() { return m_shadowMaps; }
+
     virtual void Update(double time);
 
     virtual void Draw(D3D& d3d);
@@ -38,5 +41,6 @@ private:
     std::vector<Entity*> m_Entities;
     std::vector<Component*> m_Lights;
     CameraComponent* m_ActiveCamera;
+    std::vector<RenderTarget*> m_shadowMaps;
 };
 

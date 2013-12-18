@@ -12,11 +12,11 @@
 extern ShaderManager G_ShaderManager;
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
-                                         ID3D11ShaderResourceView* shadowMap)
+                                         std::vector<RenderTarget*>& shadowMaps)
     :   VisualComponent(),
         m_mesh(filename, d3d), 
 		m_texture(texture),
-        m_shadowMap(shadowMap),
+        m_shadowMaps(shadowMaps),
         m_castShadows(false),
         m_recieveShadows(false)
 {
@@ -48,29 +48,49 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
         // Send data for the matrix buffer to the shader, getting view and projection matrix from light.
 
         const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
-
-        ConstantBuffers::MVPBuffer matBuffer;
-        matBuffer.modelMatrix       = glm::transpose(
-                                        GetParent().GetTransform().GetMatrix());
-        if(lights.size() > 0)
+        const auto& renderTargets = GetParent().GetParent().GetShadowMaps();
+        // Get the first (1) lights and render their depth buffers.
+        for(int i = 0; i < glm::min(2, (int)renderTargets.size()); i++)
         {
-            LightComponent* light = static_cast<LightComponent*>(lights[0]);
+            renderTargets[i]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+            d3d.ClearDepthStencilView();
 
-            matBuffer.viewMatrix   = glm::transpose(
-                                            light->GetViewMatrix());
-            matBuffer.projectionMatrix = glm::transpose(
-                                            light->GetProjMatrix());
-        }
-        else
-        {
-            assert(false);
-        }
-!
-        // Set the buffer data using above matrices.
-        shadowShader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
-                                      (void*)&matBuffer, sizeof(matBuffer), 0);
+            ConstantBuffers::MVPBuffer matBuffer;
+            matBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix());
+            LightComponent* light = static_cast<LightComponent*>(lights[i]);
+            matBuffer.viewMatrix = glm::transpose( light->GetViewMatrix());
+            matBuffer.projectionMatrix = glm::transpose(light->GetProjMatrix());
 
-        shadowShader->RenderShader(d3d, m_mesh.GetIndexCount());
+            shadowShader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer,
+                                               sizeof(matBuffer), 0);
+            shadowShader->RenderShader(d3d, m_mesh.GetIndexCount());
+        }
+        
+
+
+
+//        ConstantBuffers::MVPBuffer matBuffer;
+//        matBuffer.modelMatrix       = glm::transpose(
+//                                        GetParent().GetTransform().GetMatrix());
+//        if(lights.size() > 0)
+//        {
+//            LightComponent* light = static_cast<LightComponent*>(lights[0]);
+//
+//            matBuffer.viewMatrix   = glm::transpose(
+//                                            light->GetViewMatrix());
+//            matBuffer.projectionMatrix = glm::transpose(
+//                                            light->GetProjMatrix());
+//        }
+//        else
+//        {
+//            assert(false);
+//        }
+//!
+//        // Set the buffer data using above matrices.
+//        shadowShader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
+//                                      (void*)&matBuffer, sizeof(matBuffer), 0);
+//
+//        shadowShader->RenderShader(d3d, m_mesh.GetIndexCount());
     }
 }
 
@@ -94,7 +114,7 @@ void VisualMeshComponent::Draw(D3D& d3d)
 
 void VisualMeshComponent::DrawNoShadows(D3D& d3d)
 {
-    Shader* noShadowShader = G_ShaderManager.GetShader("Mesh_1L_1T");
+    Shader* noShadowShader = G_ShaderManager.GetShader("Mesh_2L_1T");
     //----------------------------------------------------------------------------------------------
     // Get matrices and put in buffer format.
     ConstantBuffers::MVPBuffer matBuffer;
@@ -117,24 +137,36 @@ void VisualMeshComponent::DrawNoShadows(D3D& d3d)
     // Get first light.
     if(lights.size() > 0)
     {
-        LightComponent* light = static_cast<LightComponent*>(lights[0]);
-        ConstantBuffers::LightColorBuffer firstLight = 
+        LightComponent* light1 = static_cast<LightComponent*>(lights[0]);
+        LightComponent* light2 = static_cast<LightComponent*>(lights[1]);
+        ConstantBuffers::LightColorBuffer2 firstLight = 
         { 
-            light->GetAmbient(),
-            light->GetDiffuse(),
-            light->GetSpecular(),
+            light1->GetAmbient(),
+            light1->GetDiffuse(),
+            light1->GetSpecular(),
+            40.0f,
+            glm::vec3(0.0f, 0.0f, 0.0f),
+
+            light2->GetAmbient(),
+            light2->GetDiffuse(),
+            light2->GetSpecular(),
             40.0f,
             glm::vec3(0.0f, 0.0f, 0.0f)
         };
 
         noShadowShader->PSSetConstBufferData(d3d, std::string("LightColorBuffer"), 
-            (void*)&firstLight, sizeof(firstLight), 0);
+                                             (void*)&firstLight, sizeof(firstLight), 0);
 
-        // Get pos and send to buffer.
-        glm::vec4 lightPos(light->GetParent().GetPos(), 0.0f);
+        // Get light positions and send to buffer.
+        ConstantBuffers::LightPosBuffer2 posBuffer =
+        {
+            glm::vec4(light1->GetParent().GetPos(), 0.0f),
+            glm::vec4(light2->GetParent().GetPos(), 0.0f)
+        };
 
         noShadowShader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
-            (void*)&lightPos, sizeof(glm::vec4), 1);
+                                             (void*)&posBuffer, sizeof(posBuffer), 1);
+
     }
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -148,7 +180,8 @@ void VisualMeshComponent::DrawNoShadows(D3D& d3d)
         0.0f 
     };
 
-    noShadowShader->VSSetConstBufferData(d3d, std::string("CameraBuffer"), (void*)&cam, sizeof(cam), 2);
+    noShadowShader->VSSetConstBufferData(d3d, std::string("CameraBuffer"), (void*)&cam, sizeof(cam), 
+                                         2);
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -232,7 +265,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
-    ID3D11ShaderResourceView* shadowTex = m_shadowMap;
+    ID3D11ShaderResourceView* shadowTex = m_shadowMaps[0]->GetShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(1, 1, &shadowTex);
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------

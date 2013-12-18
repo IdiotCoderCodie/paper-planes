@@ -451,6 +451,10 @@ void D3D::TurnZBufferOff()
     m_deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
 }
 
+void D3D::ClearDepthStencilView()
+{
+    m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
 
 void D3D::SetBackBufferRenderTarget()
 {

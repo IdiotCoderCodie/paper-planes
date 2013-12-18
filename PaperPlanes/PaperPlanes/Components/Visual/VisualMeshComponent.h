@@ -2,13 +2,15 @@
 #include "VisualComponent.h"
 #include "../../Assets/Models/StaticMesh.h"
 #include "../../Assets/Textures/Texture.h"
+#include "../../RenderTarget.h"
 #include <DirectXMath.h>
 
 class VisualMeshComponent : public VisualComponent
 {
 
 public:
-    VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture, ID3D11ShaderResourceView* shadowMap);
+    VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture, 
+                        std::vector<RenderTarget*>& shadowMaps);
     ~VisualMeshComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualMeshComponent"; }
@@ -46,7 +48,8 @@ private:
 private:
     StaticMesh m_mesh;
 	Texture& m_texture;
-    ID3D11ShaderResourceView* m_shadowMap;
+    std::vector<RenderTarget*>& m_shadowMaps;
+    //ID3D11ShaderResourceView* m_shadowMap;
     bool m_castShadows;
     bool m_recieveShadows;
 };
