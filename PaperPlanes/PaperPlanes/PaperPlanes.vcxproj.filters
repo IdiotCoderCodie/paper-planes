@@ -197,5 +197,7 @@
     <FxCompile Include="Assets\Shaders\depth_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\mesh_2l_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\mesh_2l_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow2_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow2_vs.hlsl" />
   </ItemGroup>
 </Project>

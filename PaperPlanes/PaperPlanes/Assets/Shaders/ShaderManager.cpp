@@ -70,20 +70,20 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
     //----------------------------------------------------------------------------------------------
     // Create mesh render shader using shadow, using 1 light and 1 texture.
     m_shaders["Mesh_1L_1T_ShadowMap"] = Shader();
-    m_shaders["Mesh_1L_1T_ShadowMap"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow_vs.hlsl", 
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow2_vs.hlsl", 
                                         "vp_main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
-    m_shaders["Mesh_1L_1T_ShadowMap"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadow_ps.hlsl", 
+    m_shaders["Mesh_1L_1T_ShadowMap"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadow2_ps.hlsl", 
                                         "ps_main", "ps_5_0");
 
     // Add all the buffers.
     m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::MVPShadowBuffer), 
+                                      sizeof(ConstantBuffers::MVPShadowBuffer2), 
                                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);    
     m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightAmbientDiffuseColorBuffer), 
+                                      sizeof(ConstantBuffers::LightAmbientDiffuse2ColorBuffer), 
                                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
     m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightPosBuffer), 
+                                      sizeof(ConstantBuffers::LightPosBuffer2), 
                                       D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
     // Add the sampler states.

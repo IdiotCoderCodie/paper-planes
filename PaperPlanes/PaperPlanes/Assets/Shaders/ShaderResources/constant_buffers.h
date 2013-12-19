@@ -26,6 +26,23 @@ namespace ConstantBuffers
         glm::mat4 lightProjectionMatrix;
     };
 
+    struct MVPShadowBuffer2
+    {
+        glm::mat4 modelMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
+        glm::mat4 lightViewMatrix;
+        glm::mat4 lightProjectionMatrix;
+        glm::mat4 lightViewMatrix2;
+        glm::mat4 lightProjectionMatrix2;
+    };
+
+    struct LightShadowColorBuffer2
+    {
+        glm::vec4 ambientColor;
+        glm::vec4 diffuseColor;
+        glm::vec4 diffuseColor2;
+    };
 
     struct CameraPosBuffer
     {
@@ -59,11 +76,17 @@ namespace ConstantBuffers
         glm::vec3 padding2;
     };
 
-
     struct LightAmbientDiffuseColorBuffer
     {
         glm::vec4 ambient;
         glm::vec4 diffuse;
+    };
+
+    struct LightAmbientDiffuse2ColorBuffer
+    {
+        glm::vec4 ambient;
+        glm::vec4 diffuse;
+        glm::vec4 diffuse2;
     };
 
     struct LightPosBuffer

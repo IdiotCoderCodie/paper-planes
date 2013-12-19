@@ -80,7 +80,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* lightEntity = new Entity(*this, std::string("lightEntity"));
 
     LightComponent* lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
                                                   glm::vec4(1.0f, 0.8f, 0.8f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
@@ -95,7 +95,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     lightEntity = new Entity(*this, std::string("lightEntity2"));
 
     lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
                                                   glm::vec4(0.8f, 1.0f, 0.8f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
