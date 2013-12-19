@@ -4,7 +4,7 @@
 #include "../../Scenes/SceneManager.h"
 #include "../../glm/gtc/matrix_transform.hpp"
 
-VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, Shader& shader, Bitmap& bitmap)
+VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, Bitmap& bitmap)
     :	VisualComponent(),
         m_bitmap(bitmap)
 {

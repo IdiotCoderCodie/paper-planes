@@ -13,7 +13,7 @@ private:
     };
 
 public:
-    VisualBitmapComponent(D3D& d3d, Shader& shader, Bitmap& bitmap);
+    VisualBitmapComponent(D3D& d3d, Bitmap& bitmap);
     ~VisualBitmapComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualBitmapComponent"; }

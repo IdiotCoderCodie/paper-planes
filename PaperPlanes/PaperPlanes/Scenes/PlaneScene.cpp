@@ -121,13 +121,13 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // BITMAP for drawing what is rendered to first light's render target.
     Entity* bmpEntity = new Entity(*this, std::string("bitmapLight1ShadowMap"));
-    Shader* newShader = new Shader();
+    //Shader* newShader = new Shader();
     // Give bitmap the shader resource view from render target.
     Bitmap* bmp = new Bitmap(d3d, GetShadowMaps()[0]->GetShaderResourceView(), 100, 100, 
                              GetParent().GetD3DInstance().GetScreenWidth(), 
                              GetParent().GetD3DInstance().GetScreenHeight());
 
-    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
+    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *bmp));
     AddEntity(bmpEntity);
     //----------------------------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                              GetParent().GetD3DInstance().GetScreenWidth(), 
                              GetParent().GetD3DInstance().GetScreenHeight());
 
-    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *newShader, *bmp));
+    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *bmp));
     bmpEntity->MoveRight(-101.0f);
     AddEntity(bmpEntity);
     //----------------------------------------------------------------------------------------------
