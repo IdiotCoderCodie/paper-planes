@@ -59,6 +59,9 @@ public:
     void RotateGlobalY(float delta)             { m_Transform.RotateGlobalY(delta); }
     void RotateGlobalZ(float delta)             { m_Transform.RotateGlobalZ(delta); }
 
+    void SetScaleX(float x)                        { m_Transform.SetScaleX(x); }
+    void SetScaleY(float y)                        { m_Transform.SetScaleY(y); }
+    void SetScaleZ(float z)                        { m_Transform.SetScaleZ(z); }
 
 private:
     Scene&                              m_Parent;

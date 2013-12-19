@@ -20,7 +20,7 @@ public:
 	void SetUp(float x, float y, float z) { m_Up = glm::vec3(x, y, z); }
 	const glm::vec3& GetUp() const { return m_Up; }
 
-	const glm::mat4 GetMatrix() const;
+	const glm::mat4 GetMatrix() const; // Not const because it calculates.
 
 	// Move the frame forward along forward vector.
 	void MoveForward(float delta); 
@@ -37,11 +37,16 @@ public:
 	void RotateGlobalY(const float delta);
 	void RotateGlobalZ(const float delta);
 
+    void SetScaleX(float x) { m_Scale.x = x; }
+    void SetScaleY(float y) { m_Scale.y = y; }
+    void SetScaleZ(float z) { m_Scale.z = z; }
+
 private:
 	glm::mat4 m_Matrix;
 	glm::vec3 m_Position;
 	glm::vec3 m_Up;
 	glm::vec3 m_Forward;
-	glm::mat4 m_Rotation;	
+	glm::mat4 m_Rotation;
+    glm::vec3 m_Scale;
 };
 

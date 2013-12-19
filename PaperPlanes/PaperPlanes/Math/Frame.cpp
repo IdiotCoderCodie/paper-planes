@@ -10,12 +10,12 @@
 
 Frame::Frame(void)
 	:	m_Position(glm::vec3(0.0f, 0.0f, 0.0f)), m_Forward(glm::vec3(0.0f, 0.0f, 1.0f)),
-		m_Up(glm::vec3(0.0f, 1.0f, 0.0f))
+		m_Up(glm::vec3(0.0f, 1.0f, 0.0f)), m_Scale(1.0f, 1.0f, 1.0f)
 {
 }
 
 Frame::Frame(const glm::vec3& position, const glm::vec3& forward, const glm::vec3& up)
-	: m_Position(position), m_Forward(forward), m_Up(up)
+	: m_Position(position), m_Forward(forward), m_Up(up), m_Scale(1.0f, 1.0f, 1.0f)
 {
 }
 
@@ -38,6 +38,8 @@ const glm::mat4 Frame::GetMatrix() const
 	returnMatrix = glm::column(returnMatrix, 2, glm::vec4(m_Forward, 0.0f));
 
 	returnMatrix = glm::column(returnMatrix, 3, glm::vec4(m_Position, 1.0f));
+
+    returnMatrix = glm::scale(returnMatrix, m_Scale);
 
 	return returnMatrix;
 }
@@ -123,43 +125,3 @@ void Frame::RotateGlobalZ(const float delta)
 	m_Forward			= glm::normalize(glm::vec3(Rotation * glm::vec4(m_Forward, 0.0f))); 
 	m_Up				= glm::normalize(glm::vec3(Rotation * glm::vec4(m_Up, 0.0f))); 
 }
-
-/*
-void Frame::RotateX( float delta )
-{
-	glm::vec3 cross = glm::normalize(glm::cross(m_Up, m_Forward)); //calculate x axis
-
-	glm::mat4 Rotation	= glm::rotate(glm::mat4(1.0f), delta, cross);
-
-	m_Forward			= glm::normalize(
-		glm::vec3(Rotation * glm::vec4(m_Forward, 0.0f))); //Rotate forward vector by new rotation
-	m_Up				= glm::normalize(
-		glm::vec3(Rotation * glm::vec4(m_Up, 0.0f))); //Rotate up vector by new rotation
-
-	//TEST
-	//m_Up = glm::rotate(m_Up, delta, cross);
-	//m_Forward = glm::rotate(m_Forward, delta, cross);
-}
-
-
-void Frame::RotateY( float delta )
-{
-	glm::mat4 Rotation	= glm::rotate(glm::mat4(1.0f), delta,  glm::vec3(0.0f, 1.0f, 0.0f));	
-	//
-	m_Forward			= glm::normalize(
-		glm::vec3(Rotation * glm::vec4(m_Forward, 0.0f))); //Rotate forward vector by new rotation
-
-	m_Up				= glm::vec3(Rotation * glm::vec4(m_Up, 0.0f)); //Rotate up vector by new rotation
-	//m_Forward = glm::rotate(m_Forward, delta, m_Up);
-}
-
-
-void Frame::RotateZ( float delta )
-{
-	//z axis of camera is it's forward vector
-	glm::mat4 Rotation	= glm::rotate(glm::mat4(1.0f), delta, m_Forward);
-	m_Up				= glm::normalize(
-		glm::vec3(Rotation * glm::vec4(m_Up, 0.0f))); //Rotate up vector by new rotation
-	//m_Forward			= glm::vec3(Rotation * glm::vec4(m_Forward, 0.0f)); //Rotate forward vector by new rotation
-}
-*/

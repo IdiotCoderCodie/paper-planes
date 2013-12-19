@@ -28,7 +28,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     AddEntity(cubeEntity);
 
-	Texture* texture = new Texture(d3d, L"Assets\\Textures\\tim.dds");
+	Texture* texture = new Texture(d3d, L"Assets\\Textures\\grasstex.dds");
     VisualMeshComponent* meshComp = new VisualMeshComponent(d3d, 
                                             std::string("Assets\\Models\\cubeInv.obj"), *texture, 
                                             GetShadowMaps()); 
@@ -37,8 +37,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     meshComp->EnableRecieveShadows();
 
     cubeEntity->SetComponent(meshComp);
-    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                               glm::vec3(0.0f, 20.0f, 0.0f)));
+    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f), 
+                               glm::vec3(0.0f, 0.0f, 0.0f)));
+
+    cubeEntity->SetScaleX(2.0f);
+    cubeEntity->SetScaleY(2.0f);
+    cubeEntity->SetScaleZ(2.0f);
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -52,9 +56,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     occluderCubeMesh->SetParent(*occluderCube);
     occluderCubeMesh->EnableCastShadows();
     occluderCube->SetComponent(occluderCubeMesh);
-    occluderCube->MoveUp(-1.0f);
-    occluderCube->MoveForward(-5.0f);
+    occluderCube->MoveUp(-0.0f);
+    occluderCube->MoveForward(-3.0f);
     occluderCube->RotateGlobalX(180.0f);
+    occluderCube->SetScaleX(0.1f);
+    occluderCube->SetScaleY(0.1f);
+    occluderCube->SetScaleZ(0.1f);
    /* occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
                                glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 100.0f, 0.0f)));*/
     //----------------------------------------------------------------------------------------------
@@ -80,13 +87,13 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* lightEntity = new Entity(*this, std::string("lightEntity"));
 
     LightComponent* lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+                                                  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
                                                   glm::vec4(1.0f, 0.8f, 0.8f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
     //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     lightEntity->MoveForward(-10.0f);
-    lightEntity->MoveRight(2.0f);
+    lightEntity->MoveRight(1.0f);
     AddEntity(lightEntity);
 	//----------------------------------------------------------------------------------------------
     
@@ -95,13 +102,13 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     lightEntity = new Entity(*this, std::string("lightEntity2"));
 
     lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+                                                  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
                                                   glm::vec4(0.8f, 1.0f, 0.8f, 1.0f));
     lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
     lightEntity->SetComponent(lightComp);
     //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     lightEntity->MoveForward(-10.0f);
-    lightEntity->MoveRight(-2.0f);
+    lightEntity->MoveRight(-1.0f);
     AddEntity(lightEntity);
     //----------------------------------------------------------------------------------------------
     
