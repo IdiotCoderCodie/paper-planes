@@ -7,8 +7,10 @@
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Physics/FreeRoamFpComponent.h"
+#include "../Assets/Textures/TextureManager.h"
 
 #include "SceneManager.h"
+extern TextureManager G_TextureManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr),
@@ -28,7 +30,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     AddEntity(cubeEntity);
 
-	Texture* texture = new Texture(d3d, L"Assets\\Textures\\grasstex.dds");
+    Texture* texture = G_TextureManager.LoadTexture(d3d, L"grasstex.dds", 
+                                                          "GrassTexture");
+	//Texture* texture = new Texture(d3d, L"Assets\\Textures\\texture_error.dds");
     VisualMeshComponent* meshComp = new VisualMeshComponent(d3d, 
                                             std::string("Assets\\Models\\cubeInv.obj"), *texture, 
                                             GetShadowMaps()); 
@@ -49,6 +53,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Small occluding cube.
     Entity* occluderCube = new Entity(*this, std::string("testOccluderCube"));
     AddEntity(occluderCube);
+
+    texture = G_TextureManager.LoadTexture(d3d, L"tim.dds", "Tim");
 
     VisualMeshComponent* occluderCubeMesh = new VisualMeshComponent(d3d, 
                                             std::string("Assets\\Models\\sphere.obj"), *texture, 
