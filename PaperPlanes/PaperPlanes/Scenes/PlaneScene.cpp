@@ -8,6 +8,7 @@
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Physics/FreeRoamFpComponent.h"
 #include "../Assets/Textures/TextureManager.h"
+#include "../Entities/EntityFactory.h"
 
 #include "SceneManager.h"
 extern TextureManager G_TextureManager;
@@ -30,7 +31,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     AddEntity(cubeEntity);
 
-    Texture* texture = G_TextureManager.LoadTexture(d3d, L"grasstex.dds", 
+    Texture* texture = G_TextureManager.LoadTexture(d3d, L"grasstexd.dds", 
                                                           "GrassTexture");
 	//Texture* texture = new Texture(d3d, L"Assets\\Textures\\texture_error.dds");
     VisualMeshComponent* meshComp = new VisualMeshComponent(d3d, 
@@ -41,81 +42,44 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     meshComp->EnableRecieveShadows();
 
     cubeEntity->SetComponent(meshComp);
-    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.0f), 
+    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), 
                                glm::vec3(0.0f, 0.0f, 0.0f)));
 
-    cubeEntity->SetScaleX(2.0f);
-    cubeEntity->SetScaleY(2.0f);
-    cubeEntity->SetScaleZ(2.0f);
+    cubeEntity->SetScaleX(4.0f);
+    cubeEntity->SetScaleY(4.0f);
+    cubeEntity->SetScaleZ(4.0f);
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     // Small occluding cube.
-    Entity* occluderCube = new Entity(*this, std::string("testOccluderCube"));
-    AddEntity(occluderCube);
 
-    texture = G_TextureManager.LoadTexture(d3d, L"tim.dds", "Tim");
-
-    VisualMeshComponent* occluderCubeMesh = new VisualMeshComponent(d3d, 
-                                            std::string("Assets\\Models\\sphere.obj"), *texture, 
-                                            GetShadowMaps());
-    occluderCubeMesh->SetParent(*occluderCube);
-    occluderCubeMesh->EnableCastShadows();
-    occluderCube->SetComponent(occluderCubeMesh);
-    occluderCube->MoveUp(-0.0f);
-    occluderCube->MoveForward(-3.0f);
-    occluderCube->RotateGlobalX(180.0f);
-    occluderCube->SetScaleX(0.1f);
-    occluderCube->SetScaleY(0.1f);
-    occluderCube->SetScaleZ(0.1f);
-   /* occluderCube->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                               glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 100.0f, 0.0f)));*/
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"tim.dds", 
+        GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(1.0f), "occluderSphere");
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     // Camera entity.
-    Entity* cameraEntity = new Entity(*this, std::string("camEntity"));
-
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
                         / (float)GetParent().GetD3DInstance().GetScreenHeight();
-    CameraComponent* camComp = new PerspectiveCamComponent(60.0f, aspect, 0.1f, 100.0f);
-    camComp->SetParent(*cameraEntity);
-    cameraEntity->SetComponent(camComp);
-    
-    cameraEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
-    
-    cameraEntity->MoveForward(-10.0f);
-    AddEntity(cameraEntity);
+    EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 100.0f, "camera1"); 
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     // Light entity
-    Entity* lightEntity = new Entity(*this, std::string("lightEntity"));
-
-    LightComponent* lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-                                                  glm::vec4(1.0f, 0.8f, 0.8f, 1.0f));
-    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
-    lightEntity->SetComponent(lightComp);
-    //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
-    lightEntity->MoveForward(-10.0f);
-    lightEntity->MoveRight(1.0f);
-    AddEntity(lightEntity);
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), 
+                                                glm::vec4(0.7f, 0.2f, 0.2f, 0.5f), 
+                                                glm::vec4(0.9f, 0.7f, 0.7f, 0.5f), 
+                                                glm::vec3(1.0f, 0.0f, -10.0f),
+                                                "redLight");
 	//----------------------------------------------------------------------------------------------
     
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
-    lightEntity = new Entity(*this, std::string("lightEntity2"));
-
-    lightComp = new LightComponent(glm::vec4(0.04f, 0.04f, 0.04f, 1.0f),
-                                                  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-                                                  glm::vec4(0.8f, 1.0f, 0.8f, 1.0f));
-    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
-    lightEntity->SetComponent(lightComp);
-    //lightEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
-    lightEntity->MoveForward(-10.0f);
-    lightEntity->MoveRight(-1.0f);
-    AddEntity(lightEntity);
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), 
+                                            glm::vec4(0.2f, 0.7f, 0.2f, 0.5f), 
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),
+                                            glm::vec3(-1.0f, 0.0f, -10.0f),
+                                            "greenLight");
     //----------------------------------------------------------------------------------------------
     
     //----------------------------------------------------------------------------------------------
