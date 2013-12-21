@@ -11,7 +11,6 @@ public:
     void Draw(D3D& d3d);
 
 private:
-    RenderTarget* m_light1shadowMap;
     Entity* m_drawRenderTargetEntity;
 };
 

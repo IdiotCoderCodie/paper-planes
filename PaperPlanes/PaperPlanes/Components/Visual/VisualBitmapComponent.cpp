@@ -4,9 +4,11 @@
 #include "../../Scenes/SceneManager.h"
 #include "../../glm/gtc/matrix_transform.hpp"
 
-VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, Bitmap& bitmap)
+VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
+                                             int width, int height, 
+                                             int screenWidth, int screenHeight)
     :	VisualComponent(),
-        m_bitmap(bitmap)
+        m_bitmap(d3d, srcTexture, width, height, screenWidth, screenHeight)
 {
     if(!G_ShaderManager.IsLoaded())
     {

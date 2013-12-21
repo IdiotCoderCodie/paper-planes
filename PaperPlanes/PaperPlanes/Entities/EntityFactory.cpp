@@ -6,6 +6,7 @@
 #include "../Components/Physics/FreeRoamFpComponent.h"
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualMeshComponent.h"
+#include "../Components/Visual/VisualBitmapComponent.h"
 
 
 extern TextureManager G_TextureManager;
@@ -77,6 +78,32 @@ Entity* EntityFactory::CreateMeshEntity(Scene& scene, D3D& d3d, const std::strin
 
     // Add to the scene.
     scene.AddEntity(newEntity);
+
+    return newEntity;
+}
+
+
+Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResourceView* srcTexture,
+                                       int width, int height, int screenWidth, int screenHeight,
+                                       const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+    newEntity->SetComponent(new VisualBitmapComponent(d3d, srcTexture, width, height, screenWidth,
+                                                      screenHeight));
+    scene.AddEntity(newEntity);
+    return newEntity;
+}
+
+
+Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResourceView* srcTexture,
+                                       int width, int height, int screenWidth, int screenHeight,
+                                       int xPos, int yPos, const std::string& id)
+{
+    Entity* newEntity = CreateBmpEntity(scene,d3d, srcTexture, width, height, screenWidth, 
+                                        screenHeight, id);
+    
+    newEntity->MoveRight(-xPos);
+    newEntity->MoveUp(-yPos);
 
     return newEntity;
 }

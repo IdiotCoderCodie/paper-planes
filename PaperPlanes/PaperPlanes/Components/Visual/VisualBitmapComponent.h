@@ -13,7 +13,8 @@ private:
     };
 
 public:
-    VisualBitmapComponent(D3D& d3d, Bitmap& bitmap);
+    VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, int width, int height,
+                          int screenWidth, int screenHeight);
     ~VisualBitmapComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualBitmapComponent"; }
@@ -23,6 +24,6 @@ public:
     virtual void Draw(D3D& d3d);
 
 private:
-    Bitmap& m_bitmap;
+    Bitmap m_bitmap;
 };
 

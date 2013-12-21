@@ -14,45 +14,19 @@
 extern TextureManager G_TextureManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
-    : Scene(name, sceneMgr),
-    m_light1shadowMap(0)
+    : Scene(name, sceneMgr)
 {
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
-    
-    m_light1shadowMap = new RenderTarget(&d3d.GetDevice(), 800, 600);
-
-
-	Shader* shader = new Shader();
 
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
-    Entity* cubeEntity = new Entity(*this, std::string("testEntity1"));
-
-    AddEntity(cubeEntity);
-
-    Texture* texture = G_TextureManager.LoadTexture(d3d, L"grasstexd.dds", 
-                                                          "GrassTexture");
-	//Texture* texture = new Texture(d3d, L"Assets\\Textures\\texture_error.dds");
-    VisualMeshComponent* meshComp = new VisualMeshComponent(d3d, 
-                                            std::string("Assets\\Models\\cubeInv.obj"), *texture, 
-                                            GetShadowMaps()); 
-    
-    meshComp->SetParent(*cubeEntity);
-    meshComp->EnableRecieveShadows();
-
-    cubeEntity->SetComponent(meshComp);
-    cubeEntity->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), 
-                               glm::vec3(0.0f, 0.0f, 0.0f)));
-
-    cubeEntity->SetScaleX(4.0f);
-    cubeEntity->SetScaleY(4.0f);
-    cubeEntity->SetScaleZ(4.0f);
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", L"grasstex.dds", 
+        GetShadowMaps(), glm::vec3(0.0f), glm::vec3(4.0f), "mainCube");
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
-    // Small occluding cube.
-
+    // Test Occluding Sphere.
     EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"tim.dds", 
         GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(1.0f), "occluderSphere");
     //----------------------------------------------------------------------------------------------
@@ -84,33 +58,19 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     
     //----------------------------------------------------------------------------------------------
     // BITMAP for drawing what is rendered to first light's render target.
-    Entity* bmpEntity = new Entity(*this, std::string("bitmapLight1ShadowMap"));
-    //Shader* newShader = new Shader();
-    // Give bitmap the shader resource view from render target.
-    Bitmap* bmp = new Bitmap(d3d, GetShadowMaps()[0]->GetShaderResourceView(), 100, 100, 
-                             GetParent().GetD3DInstance().GetScreenWidth(), 
-                             GetParent().GetD3DInstance().GetScreenHeight());
-
-    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *bmp));
-    AddEntity(bmpEntity);
+    EntityFactory::CreateBmpEntity(*this, d3d, GetShadowMaps()[0]->GetShaderResourceView(), 
+                                   100, 100, GetParent().GetD3DInstance().GetScreenWidth(), 
+                                   GetParent().GetD3DInstance().GetScreenHeight(),
+                                   "light1ShadowMapBmp");
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     // Bitmap for drawing what is rendered to the second light's render target.
-    bmpEntity = new Entity(*this, std::string("bitmapLight1ShadowMap"));
-    //Shader* newShader = new Shader();
-    // Give bitmap the shader resource view from render target.
-    bmp = new Bitmap(d3d, GetShadowMaps()[1]->GetShaderResourceView(), 100, 100, 
-                             GetParent().GetD3DInstance().GetScreenWidth(), 
-                             GetParent().GetD3DInstance().GetScreenHeight());
-
-    bmpEntity->SetComponent(new VisualBitmapComponent(d3d, *bmp));
-    bmpEntity->MoveRight(-101.0f);
-    AddEntity(bmpEntity);
-    //----------------------------------------------------------------------------------------------
-
-    m_drawRenderTargetEntity = bmpEntity;
-    
+    EntityFactory::CreateBmpEntity(*this, d3d, GetShadowMaps()[1]->GetShaderResourceView(),
+                                   100, 100, GetParent().GetD3DInstance().GetScreenWidth(),
+                                   GetParent().GetD3DInstance().GetScreenHeight(), 101, 0,
+                                   "light2ShadowMapBmp");
+    //----------------------------------------------------------------------------------------------  
 }
 
 

@@ -11,7 +11,7 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidt
     Init(&d3d.GetDevice());
 }
 
-Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int height, int width, int screenWidth,
+Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int height, int screenWidth,
                int screenHeight)
     : m_texture(texture),
       m_vertexBuffer(0), m_indexBuffer(0),
