@@ -27,8 +27,11 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"tim.dds", 
+    Entity* sphere = 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"grasstex.dds", 
         GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(1.0f), "occluderSphere");
+    sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+                                                  glm::vec3(0.0f, 10.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -40,6 +43,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     //----------------------------------------------------------------------------------------------
     // Light entity
+    Entity* redLight =
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), 
                                                 glm::vec4(0.7f, 0.2f, 0.2f, 0.5f), 
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f), 
@@ -49,6 +53,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
+    Entity* greenLight = 
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), 
                                             glm::vec4(0.2f, 0.7f, 0.2f, 0.5f), 
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),

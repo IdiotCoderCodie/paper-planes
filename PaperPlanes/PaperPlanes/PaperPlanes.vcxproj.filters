@@ -211,5 +211,7 @@
     <FxCompile Include="Assets\Shaders\mesh_2l_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\shadow2_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\shadow2_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow2_bump_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadow2_bump_vs.hlsl" />
   </ItemGroup>
 </Project>

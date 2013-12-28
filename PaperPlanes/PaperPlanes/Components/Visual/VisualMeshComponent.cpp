@@ -6,15 +6,17 @@
 #include "../Light/LightComponent.h"
 
 #include "../../Assets/Shaders/ShaderManager.h"
+#include "../../Assets/Textures/TextureManager.h"
 
 #include "../../glm/gtc/matrix_transform.hpp"
 
 extern ShaderManager G_ShaderManager;
+extern TextureManager G_TextureManager;
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
                                          std::vector<RenderTarget*>& shadowMaps)
     :   VisualComponent(),
-        m_mesh(filename, d3d), 
+        m_mesh(filename, d3d, true), 
 		m_texture(texture),
         m_shadowMaps(shadowMaps),
         m_castShadows(false),
@@ -24,7 +26,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager.LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager.GetShader("Mesh_1L_1T_ShadowMap"));
+    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows"));
 }
 
 
@@ -284,6 +286,21 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 
     ID3D11ShaderResourceView* shadowTex2 = m_shadowMaps[1]->GetShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(2, 1, &shadowTex2);
+
+    // If the static mesh contains tangents and binormals. Send the normal map to the shader
+    // (just to test atm, need to add something to turn this on/off and to select which normal
+    // map is wanted to be used.
+    if(m_mesh.DoesContainTanBin())
+    {
+	    ID3D11ShaderResourceView* normalMap = G_TextureManager.LoadTexture(d3d, L"rockwall_normal.dds", 
+												    "rockwall_normal.dds")->GetTexture();
+	    if(normalMap)
+	    {
+		    d3d.GetDeviceContext().PSSetShaderResources(3, 1, &normalMap);
+
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 

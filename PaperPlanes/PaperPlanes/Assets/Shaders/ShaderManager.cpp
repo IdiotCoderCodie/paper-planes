@@ -122,6 +122,33 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
     m_shaders["Bitmap"].AddSamplerState(d3d, "BitmapTextureSampler", SamplerDesc::DEFAULT_WRAP);
     //----------------------------------------------------------------------------------------------
 
+	//----------------------------------------------------------------------------------------------
+	// Load in the test normal map shader, with 2 lights and shadows.
+	m_shaders["Normal_Shadows"] = Shader();
+	m_shaders["Normal_Shadows"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow2_bump_vs.hlsl", 
+                                                "vp_main", "vs_5_0", 
+                                                &PolyLayouts::POS3_TEX2_NORM3_TAN3_BIN3[0], 5);
+	m_shaders["Normal_Shadows"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\shadow2_bump_ps.hlsl", 
+												"ps_main", "ps_5_0");
+	m_shaders["Normal_Shadows"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
+										 sizeof(ConstantBuffers::MVPShadowBuffer2), D3D11_BIND_CONSTANT_BUFFER, 
+										 D3D11_CPU_ACCESS_WRITE, 0, 0);
+	m_shaders["Normal_Shadows"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC, 
+										  sizeof(ConstantBuffers::LightAmbientDiffuse2ColorBuffer), 
+										  D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	m_shaders["Normal_Shadows"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+										  sizeof(ConstantBuffers::LightPosBuffer2), 
+										  D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	// Add the sampler states.  
+	 m_shaders["Normal_Shadows"].AddSamplerState(d3d, "ModelTextureSampler", 
+                                                      SamplerDesc::DEFAULT_WRAP);
+	 m_shaders["Normal_Shadows"].AddSamplerState(d3d, "ShadowMapSampler", 
+                                                      SamplerDesc::SAMPLE_CLAMP);
+     /*m_shaders["Normal_Shadows"].AddSamplerState(d3d, "NormalTexture", 
+                                                 SamplerDesc::DEFAULT_WRAP);*/
+	//----------------------------------------------------------------------------------------------
+
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
     return true;

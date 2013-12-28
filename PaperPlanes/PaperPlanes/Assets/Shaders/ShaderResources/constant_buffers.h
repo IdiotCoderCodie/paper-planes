@@ -10,6 +10,10 @@ namespace ConstantBuffers
         glm::mat4 projectionMatrix;
     };
 
+	struct ModelMatrixBuffer
+	{
+		glm::mat4 modelMatrix;
+	};
 
     struct ProjectionOnlyBuffer
     {
