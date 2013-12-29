@@ -28,7 +28,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
     Entity* sphere = 
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"grasstex.dds", 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"grasstex.dds", 
         GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(1.0f), "occluderSphere");
     sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
                                                   glm::vec3(0.0f, 10.0f, 0.0f)));

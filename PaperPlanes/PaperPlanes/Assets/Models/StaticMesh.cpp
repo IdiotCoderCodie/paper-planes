@@ -363,7 +363,7 @@ void StaticMesh::CalculateModelVectors()
         {       
             m_modelData[index].x, m_modelData[index].y, m_modelData[index].z,
             m_modelData[index].tu, m_modelData[index].tv,
-            newNormal.x, newNormal.y, newNormal.z,
+            m_modelData[index].nx, m_modelData[index].ny, m_modelData[index].nz,
             tangent.x, tangent.y, tangent.z,
             binormal.x, binormal.y, binormal.z
         };
@@ -372,7 +372,7 @@ void StaticMesh::CalculateModelVectors()
         {       
             m_modelData[index].x, m_modelData[index].y, m_modelData[index].z,
             m_modelData[index].tu, m_modelData[index].tv,
-            newNormal.x, newNormal.y, newNormal.z,
+            m_modelData[index].nx, m_modelData[index].ny, m_modelData[index].nz,
             tangent.x, tangent.y, tangent.z,
             binormal.x, binormal.y, binormal.z
         };
@@ -381,7 +381,7 @@ void StaticMesh::CalculateModelVectors()
         {       
             m_modelData[index].x, m_modelData[index].y, m_modelData[index].z,
             m_modelData[index].tu, m_modelData[index].tv,
-            newNormal.x, newNormal.y, newNormal.z,
+            m_modelData[index].nx, m_modelData[index].ny, m_modelData[index].nz,
             tangent.x, tangent.y, tangent.z,
             binormal.x, binormal.y, binormal.z
         };
