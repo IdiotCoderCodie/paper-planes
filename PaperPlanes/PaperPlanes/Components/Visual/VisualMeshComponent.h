@@ -11,17 +11,19 @@ class VisualMeshComponent : public VisualComponent
 public:
     VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture, 
                         std::vector<RenderTarget*>& shadowMaps);
+    VisualMeshComponent(D3D& d3d, const std::string& meshFilename, Texture& texture,
+                        Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
     ~VisualMeshComponent(void);
 
     virtual void ComponentID(componentId_t& out) const { out = "VisualMeshComponent"; }
 
-    bool DoesCastShadows() { return m_castShadows; }
-    void EnableCastShadows()  { m_castShadows = true; }
-    void DisableCastShadows() { m_castShadows = false; }
+    bool DoesCastShadows()          { return m_castShadows; }
+    void EnableCastShadows()        { m_castShadows = true; }
+    void DisableCastShadows()       { m_castShadows = false; }
 
-    bool DoesRecieveShadows() { return m_recieveShadows; }
-    void EnableRecieveShadows()  { m_recieveShadows = true; }
-    void DisableRecieveShadows() { m_recieveShadows = false; }
+    bool DoesRecieveShadows()       { return m_recieveShadows; }
+    void EnableRecieveShadows()     { m_recieveShadows = true; }
+    void DisableRecieveShadows()    { m_recieveShadows = false; }
 
     virtual void Update(float timeElapsed);
 
@@ -31,6 +33,7 @@ public:
      * mesh has been enabled.
      */
     void ShadowPass(D3D& d3d);
+
     virtual void Draw(D3D& d3d);
 
 private:
@@ -46,11 +49,11 @@ private:
     void DrawWithShadows(D3D& d3d);
 
 private:
-    StaticMesh m_mesh;
-	Texture& m_texture;
+    StaticMesh                  m_mesh;
+	Texture&                    m_texture;
+    Texture&                    m_bumpTexture;
     std::vector<RenderTarget*>& m_shadowMaps;
-    //ID3D11ShaderResourceView* m_shadowMap;
-    bool m_castShadows;
-    bool m_recieveShadows;
+    bool                        m_castShadows;
+    bool                        m_recieveShadows;
 };
 

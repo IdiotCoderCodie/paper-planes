@@ -15,12 +15,31 @@ extern TextureManager G_TextureManager;
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
                                          std::vector<RenderTarget*>& shadowMaps)
-    :   VisualComponent(),
-        m_mesh(filename, d3d, true), 
-		m_texture(texture),
-        m_shadowMaps(shadowMaps),
-        m_castShadows(false),
-        m_recieveShadows(false)
+    : VisualComponent(),
+      m_mesh(filename, d3d, false), 
+	  m_texture(texture),
+      m_bumpTexture(texture), // Not used anyway, so set as same as m_texture for now?
+      m_shadowMaps(shadowMaps),
+      m_castShadows(false),
+      m_recieveShadows(false)
+{
+    if(!G_ShaderManager.IsLoaded())
+    {
+        G_ShaderManager.LoadShaders(d3d, "configFile");
+    }
+    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows"));
+}
+
+
+VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
+                                         Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps)
+    : VisualComponent(),
+      m_mesh(filename, d3d, true),
+      m_texture(texture),
+      m_bumpTexture(bmpMap),
+      m_shadowMaps(shadowMaps),
+      m_castShadows(false),
+      m_recieveShadows(false)
 {
     if(!G_ShaderManager.IsLoaded())
     {
@@ -68,32 +87,6 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
                                                sizeof(matBuffer), 0);
             shadowShader->RenderShader(d3d, m_mesh.GetIndexCount());
         }
-        
-
-
-
-//        ConstantBuffers::MVPBuffer matBuffer;
-//        matBuffer.modelMatrix       = glm::transpose(
-//                                        GetParent().GetTransform().GetMatrix());
-//        if(lights.size() > 0)
-//        {
-//            LightComponent* light = static_cast<LightComponent*>(lights[0]);
-//
-//            matBuffer.viewMatrix   = glm::transpose(
-//                                            light->GetViewMatrix());
-//            matBuffer.projectionMatrix = glm::transpose(
-//                                            light->GetProjMatrix());
-//        }
-//        else
-//        {
-//            assert(false);
-//        }
-//!
-//        // Set the buffer data using above matrices.
-//        shadowShader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
-//                                      (void*)&matBuffer, sizeof(matBuffer), 0);
-//
-//        shadowShader->RenderShader(d3d, m_mesh.GetIndexCount());
     }
 }
 
@@ -277,7 +270,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 
 
     //----------------------------------------------------------------------------------------------
-    // Get texture for this model and set for shader.
+    // Get textures for this model and set for shader.
 	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
@@ -292,18 +285,22 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     // map is wanted to be used.
     if(m_mesh.DoesContainTanBin())
     {
-	    ID3D11ShaderResourceView* normalMap = G_TextureManager.LoadTexture(d3d, L"rockwall_normal.dds", 
-												    "rockwall_normal.dds")->GetTexture();
-	    if(normalMap)
-	    {
-		    d3d.GetDeviceContext().PSSetShaderResources(3, 1, &normalMap);
-
-        }
+        ID3D11ShaderResourceView* bumpTex = m_bumpTexture.GetTexture();
+        d3d.GetDeviceContext().PSSetShaderResources(3, 1, &bumpTex);
     }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
+    // Get appropriate shader and then render with it.
+    if(m_mesh.DoesContainTanBin())
+    {
+        m_Shader = G_ShaderManager.GetShader("Normal_Shadows");
+    }
+    else
+    {
+        m_Shader = G_ShaderManager.GetShader("Mesh_1L_1T_ShadowMap");
+    }
 
     // Render shader.
     m_Shader->RenderShader(d3d, m_mesh.GetIndexCount());

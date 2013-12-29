@@ -21,8 +21,10 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", L"grasstex.dds", 
-        GetShadowMaps(), glm::vec3(0.0f), glm::vec3(4.0f), "mainCube");
+    EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", 
+                                              L"grasstex.dds", L"rockwall_normal.dds",
+                                              GetShadowMaps(), glm::vec3(0.0f), glm::vec3(4.0f), 
+                                              "mainCube");
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
