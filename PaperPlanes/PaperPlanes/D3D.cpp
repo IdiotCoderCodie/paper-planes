@@ -1,5 +1,6 @@
 #include "D3D.h"
 
+#include <AntTweakBar.h>
 
 D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen) :
     m_initialized(false),
@@ -19,6 +20,8 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
     m_screenHeight(screenHeight)
 {
     m_initialized = InitializeD3D(screenWidth, screenHeight, vsync, hwnd, fullscreen);
+    TwInit(TW_DIRECT3D11, m_device);
+    TwWindowSize(screenWidth, screenHeight);
 }
 
 

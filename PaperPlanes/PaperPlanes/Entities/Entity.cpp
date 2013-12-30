@@ -1,14 +1,37 @@
 #include <cassert>
 
 #include "Entity.h"
+#include <AntTweakBar.h>
 
 
 Entity::Entity(Scene& parent, const entityId_t& id)
     :   m_Parent(parent),
         m_id(id),
         m_Transform(),
-        m_Components()
+        m_Components(),
+        m_tweakBar(0)
 {
+    // Create tweak bar.
+    m_tweakBar = TwNewBar(id.c_str());
+    
+    // Add various transform variables to the tweak bar.
+    TwAddVarRO(m_tweakBar, "PosX", TW_TYPE_FLOAT, &m_Transform.GetPosition().x, 
+        " label='X' group='Position' readonly='false' step=0.1");
+    TwAddVarRO(m_tweakBar, "PosY", TW_TYPE_FLOAT, &m_Transform.GetPosition().y, 
+        " label='Y' group='Position' readonly='false' step=0.1");
+    TwAddVarRO(m_tweakBar, "PosZ", TW_TYPE_FLOAT, &m_Transform.GetPosition().z, 
+        " label='Z' group='Position' readonly='false' step=0.1");
+    // Put the "Position" group into the Transform group.
+    std::string extraStr = "/Position group='Transform'";
+    TwDefine((id + extraStr).c_str());
+
+    TwAddVarRO(m_tweakBar, "Forward", TW_TYPE_DIR3F, &m_Transform.GetForward(),
+        " group='Transform' ");
+    TwAddVarRO(m_tweakBar, "Up", TW_TYPE_DIR3F, &m_Transform.GetUp(),
+        " group='Transform' ");
+
+    // Iconify the tweak bar.
+    TwDefine((id + " iconified=true ").c_str());
 }
 
 
@@ -18,6 +41,8 @@ Entity::Entity(Scene& parent, const entityId_t& id, Frame& transform)
         m_Transform(transform),
         m_Components()
 {
+    m_tweakBar = TwNewBar(id.c_str());
+    TwAddVarRO(m_tweakBar, id.c_str(), TW_TYPE_DIR3F, &m_Transform.GetPosition(), "");
 }
 
 
@@ -28,6 +53,8 @@ Entity::Entity(Scene& parent, const entityId_t& id, const glm::vec3& pos, const 
         m_Transform(pos, forward, up),
         m_Components()
 {
+    m_tweakBar = TwNewBar(id.c_str());
+    TwAddVarRO(m_tweakBar, id.c_str(), TW_TYPE_DIR3F, &m_Transform.GetPosition(), "");
 }
 
 

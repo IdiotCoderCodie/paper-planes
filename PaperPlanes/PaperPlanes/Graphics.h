@@ -1,6 +1,7 @@
 #pragma once
-#include "D3D.h"
+#include <AntTweakBar.h>
 
+#include "D3D.h"
 #include "Scenes/SceneManager.h"
 #include "HiResTimer.h"
 
@@ -22,7 +23,9 @@ private:
 
 // Private Data Members
 private:
-	D3D m_d3d;
-	SceneManager m_sceneMgr;
-    HiResTimer m_timer;
+	D3D             m_d3d;
+	SceneManager    m_sceneMgr;
+    HiResTimer      m_timer;
+    TwBar*          m_statsTweakBar;
+    float           m_fps;
 };

@@ -2,6 +2,8 @@
 #include <map>
 #include <fstream>
 
+#include <AntTweakBar.h>
+
 #define WINCONFIG_FILENAME "window_config.txt"
 
 DXWindow::DXWindow(void) :	
@@ -113,6 +115,9 @@ LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, L
     default:
         break;
     }*/
+    if(TwEventWin(hwnd, umsg, wparam, lparam))
+        return 0;
+
     // Send all messages to default message handler.
     return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
@@ -229,7 +234,7 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight, bool& fulls
     SetFocus(m_hwnd);
 
     // Hide cursor.
-    ShowCursor(false);
+    ShowCursor(true);
 
     return true;
 }

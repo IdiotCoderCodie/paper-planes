@@ -2,6 +2,8 @@
 #include <string>
 #include <map> 
 
+#include <AntTweakBar.h>
+
 #include "../glm/glm.hpp"
 #include "../Math/Frame.h"
 #include "../Components/Component.h"
@@ -63,9 +65,12 @@ public:
     void SetScaleY(float y)                        { m_Transform.SetScaleY(y); }
     void SetScaleZ(float z)                        { m_Transform.SetScaleZ(z); }
 
+    TwBar* GetTweakBar() { return m_tweakBar; }
+
 private:
     Scene&                              m_Parent;
     entityId_t                          m_id;
     Frame                               m_Transform;
     std::map<componentId_t, Component*> m_Components;
+    TwBar*                              m_tweakBar;
 };
