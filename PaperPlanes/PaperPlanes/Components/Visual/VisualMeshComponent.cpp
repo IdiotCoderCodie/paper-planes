@@ -27,7 +27,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager.LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows"));
+    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -45,7 +45,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager.LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows"));
+    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -238,33 +238,76 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 
     //----------------------------------------------------------------------------------------------
     // Set light buffer data.
-    
-    // Get first light.
     if(lights.size() > 0)
     {
-        LightComponent* light  = static_cast<LightComponent*>(lights[0]);
-        LightComponent* light2 = static_cast<LightComponent*>(lights[1]);
-
-        ConstantBuffers::LightAmbientDiffuse2ColorBuffer firstLight = 
-        { 
+        LightComponent* light = static_cast<LightComponent*>(lights[0]);
+        ConstantBuffers::Light firstLight =
+        {
+            true,
+            glm::vec4(light->GetParent().GetPos(), 1.0f),
             light->GetAmbient(),
             light->GetDiffuse(),
-            light2->GetDiffuse()
+            light->GetSpecular(),
+            180.0f,
+            glm::vec3(0.0f, 0.0f, 1.0f),
+            0.0f,
+            glm::vec3(0.0f, 0.0f, 0.0f)
         };
 
-        m_Shader->PSSetConstBufferData(d3d, std::string("LightColorBuffer"), 
-            (void*)&firstLight, sizeof(firstLight), 0);
+        m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&firstLight, sizeof(firstLight));
+        
+        ID3D11ShaderResourceView* lightBuffer = m_Shader->GetBufferSRV(std::string("LightBuffer"));
+        d3d.GetDeviceContext().PSSetShaderResources(4, 1, &lightBuffer);
+        
+        /*m_Shader->PSSetConstBufferData(d3d, std::string("LightBuffer"),
+            (void*)&firstLight, sizeof(firstLight), 0);*/
 
+        // Set camera buffer data. (pixel shader).
+        glm::vec4 cameraPos = 
+            glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
 
+        m_Shader->PSSetConstBufferData(d3d, std::string("CameraBuffer"),
+            (void*)&cameraPos, sizeof(glm::vec4), 0);
+            
+        
+        // Set light position buffer data (vertex shader)
         ConstantBuffers::LightPosBuffer2 posBuffer =
         {
             glm::vec4(light->GetParent().GetPos(), 0.0f),
-            glm::vec4(light2->GetParent().GetPos(), 0.0f)
+            glm::vec4(light->GetParent().GetPos(), 0.0f)
         };
 
         m_Shader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
             (void*)&posBuffer, sizeof(posBuffer), 1);
     }
+
+
+    //// Get first light.
+    //if(lights.size() > 0)
+    //{
+    //    LightComponent* light  = static_cast<LightComponent*>(lights[0]);
+    //    LightComponent* light2 = static_cast<LightComponent*>(lights[1]);
+
+    //    ConstantBuffers::LightAmbientDiffuse2ColorBuffer firstLight = 
+    //    { 
+    //        light->GetAmbient(),
+    //        light->GetDiffuse(),
+    //        light2->GetDiffuse()
+    //    };
+
+    //    m_Shader->PSSetConstBufferData(d3d, std::string("LightColorBuffer"), 
+    //        (void*)&firstLight, sizeof(firstLight), 0);
+
+
+        //ConstantBuffers::LightPosBuffer2 posBuffer =
+        //{
+        //    glm::vec4(light->GetParent().GetPos(), 0.0f),
+        //    glm::vec4(light2->GetParent().GetPos(), 0.0f)
+        //};
+
+        //m_Shader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
+        //    (void*)&posBuffer, sizeof(posBuffer), 1);
+    //}
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -295,7 +338,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     // Get appropriate shader and then render with it.
     if(m_mesh.DoesContainTanBin())
     {
-        m_Shader = G_ShaderManager.GetShader("Normal_Shadows");
+        m_Shader = G_ShaderManager.GetShader("Normal_Shadows_Test");
     }
     else
     {

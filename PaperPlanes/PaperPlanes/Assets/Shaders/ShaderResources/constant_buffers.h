@@ -103,4 +103,18 @@ namespace ConstantBuffers
         glm::vec4 lightPosition;
         glm::vec4 lightPosition2;
     };
+
+    struct Light
+    {
+        bool enabled;
+        glm::vec4 position;
+        glm::vec4 ambient;
+        glm::vec4 diffuse;
+        glm::vec4 specular;
+        float     spotCutoff;
+        glm::vec3 spotDirection;
+        float     spotExponent;
+        glm::vec3 attenuation;
+        glm::vec3 padding;
+    };
 };

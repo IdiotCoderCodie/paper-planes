@@ -226,6 +226,47 @@ bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_USAGE usage,
     return AddBuffer(d3d, identity, bufferDesc);
 }
 
+
+bool Shader::AddStructuredBuffer(D3D& d3d, const std::string& identity, UINT stride, UINT numElems)
+{
+    bool result = AddBuffer(d3d, identity, D3D11_USAGE_DYNAMIC, stride * numElems, 
+                            D3D11_BIND_SHADER_RESOURCE, D3D11_CPU_ACCESS_WRITE, 
+                            D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, stride);
+    
+    if(!result)
+        return false;
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+    desc.Format               = DXGI_FORMAT_UNKNOWN;
+    desc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
+    desc.Buffer.ElementOffset = 0;
+    desc.Buffer.ElementWidth  = 1;
+
+    ID3D11ShaderResourceView* srv = 0;
+    HRESULT hr = d3d.GetDevice().CreateShaderResourceView(m_buffers[identity], &desc, &srv);
+    if(FAILED(hr))
+    {
+        return false;
+    }
+
+    m_bufferSRVs[identity] = srv;
+    return true;
+}
+
+ID3D11ShaderResourceView* Shader::GetBufferSRV(std::string& identity)
+{
+    if(m_bufferSRVs.find(identity) != m_bufferSRVs.end())
+    {
+        return m_bufferSRVs[identity];
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+
+
 //
 //template<class T>
 //bool Shader::SetConstBufferData(D3D& d3d, std::string& id, T* data, int bufferNumber) 
@@ -389,6 +430,30 @@ bool Shader::PSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t 
 
     // Set const buffer with updated.
     d3d.GetDeviceContext().PSSetConstantBuffers(bufferNumber, 1, &m_buffers[id]);
+
+    return true;
+}
+
+
+bool Shader::SetStructuredBufferData(D3D& d3d, std::string& id, void* data, size_t size)
+{
+    if(m_bufferSRVs.find(id) == m_bufferSRVs.end())
+    {
+        return false;
+    }
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    HRESULT hr;
+    hr = d3d.GetDeviceContext().Map(m_buffers[id], 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    if(FAILED(hr))
+    {
+        return false;
+    }
+    void* bufferDataPtr = mappedResource.pData;
+
+    memcpy(bufferDataPtr, data, size);
+
+    d3d.GetDeviceContext().Unmap(m_buffers[id], 0);
 
     return true;
 }

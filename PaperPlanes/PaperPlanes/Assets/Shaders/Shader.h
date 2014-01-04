@@ -63,7 +63,12 @@ public:
      */
     bool AddBuffer      (D3D& d3d, const std::string& identity, D3D11_USAGE usage, UINT byteWidth, 
                          UINT bindFlags, UINT cpuAccessFlags, UINT miscFlags, UINT byteStride);
-
+    /**
+     * Creates a new structured buffer. Stores the pointer to this buffer in the map of buffers,
+     * accessible throught the "identity" string provided.
+     * Returns whether this action was a success or not.
+     */
+    bool AddStructuredBuffer(D3D& d3d, const std::string& identity, UINT stride, UINT numElems);
     /**
      * Sets the data of a specified constant buffer. 
      * bufferNumber is the position of the buffer in the shader file.
@@ -76,8 +81,12 @@ public:
     bool DSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool GSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool PSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
+    bool SetStructuredBufferData(D3D& d3d, std::string& id, void* data, size_t size);
+
 
     void RenderShader   (D3D& d3d, int indexCount);
+
+    ID3D11ShaderResourceView* GetBufferSRV(std::string& identity);
 
 private:
     void OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shaderFilename) const;
@@ -97,6 +106,8 @@ private:
 
     ID3D11InputLayout*      m_inputLayout;
 
-    std::map<std::string, ID3D11Buffer*>       m_buffers;
-    std::map<std::string, ID3D11SamplerState*> m_samplerStates;  
+    std::map<std::string, ID3D11Buffer*>             m_buffers;
+    std::map<std::string, ID3D11ShaderResourceView*> m_bufferSRVs;
+    std::map<std::string, ID3D11SamplerState*>       m_samplerStates;  
+    
 };
