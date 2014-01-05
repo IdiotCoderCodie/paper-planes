@@ -52,6 +52,11 @@ namespace ConstantBuffers
         glm::mat4 lightProjectionMatrix[MAX_SHADOWCASTING_LIGHTS];
     };
 
+    struct LightPositionBuffer
+    {
+        glm::vec4 lightPosition[MAX_SHADOWCASTING_LIGHTS];
+    };
+
     struct LightShadowColorBuffer2
     {
         glm::vec4 ambientColor;

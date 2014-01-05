@@ -202,6 +202,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     //----------------------------------------------------------------------------------------------
     // Get matrices and put in buffer format.
     ConstantBuffers::ShadowMatrixBuffer matBuffer;
+
     matBuffer.modelMatrix       = glm::transpose(
                                     GetParent().GetTransform().GetMatrix());
     matBuffer.viewMatrix        = glm::transpose(
@@ -209,7 +210,9 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     matBuffer.projectionMatrix  = glm::transpose(
                                     GetParent().GetParent().GetActiveCamera()->GetProjMatrix());
 
-    // Loop through the lights (up to the max stated) and add their matrices to the buffer.
+    ConstantBuffers::LightPositionBuffer lightPosBuffer;
+
+    // Loop through the lights (up to the max stated) and add their data to the buffer(s).
     for (int i = 0; i < ConstantBuffers::MAX_SHADOWCASTING_LIGHTS; i++)
     {
         if(i < lights.size())
@@ -219,12 +222,17 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
             
             matBuffer.lightViewMatrix[i]       = glm::transpose(light->GetViewMatrix());
             matBuffer.lightProjectionMatrix[i] = glm::transpose(light->GetProjMatrix());
+
+            lightPosBuffer.lightPosition[i]    = glm::vec4(light->GetParent().GetPos(), 0.0f);
         }
     }
 
-    // Set the buffer data using above matrices.
+    // Set the buffers using the data put into the structures above.
     m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
+
+    m_Shader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
+            (void*)&lightPosBuffer, sizeof(lightPosBuffer), 1);
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -277,16 +285,6 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
         m_Shader->PSSetConstBufferData(d3d, std::string("CameraBuffer"),
             (void*)&cameraPos, sizeof(glm::vec4), 0);
             
-        
-        // Set light position buffer data (vertex shader)
-        ConstantBuffers::LightPosBuffer2 posBuffer =
-        {
-            glm::vec4(light->GetParent().GetPos(), 0.0f),
-            glm::vec4(light->GetParent().GetPos(), 0.0f)
-        };
-
-        m_Shader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
-            (void*)&posBuffer, sizeof(posBuffer), 1);
     }
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
