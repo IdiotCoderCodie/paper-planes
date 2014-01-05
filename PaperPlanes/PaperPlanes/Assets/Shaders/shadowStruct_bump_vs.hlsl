@@ -1,3 +1,5 @@
+#define MAX_SHADOWCASTING_LIGHTS 2
+
 cbuffer MatrixBuffer
 {
     matrix modelMatrix;
@@ -30,15 +32,13 @@ struct VertexInputType
 
 struct PixelInputType
 {
-    float4 position           : SV_POSITION;
-    float2 uv                 : TEXCOORD0;
-    float3 normal             : NORMAL;
-    float3 tangent			  : TANGENT;
-    float3 binormal           : BINORMAL;
-    float4 lightViewPosition  : TEXCOORD1;
-    float3 lightPos           : TEXCOORD2;
-    float4 lightViewPosition2 : TEXCOORD3;
-    float3 lightPos2          : TEXCOORD4;
+    float4 position                                     : SV_POSITION;
+    float2 uv                                           : TEXCOORD0;
+    float3 normal                                       : NORMAL;
+    float3 tangent			                            : TANGENT;
+    float3 binormal                                     : BINORMAL;
+    float4 lightViewPosition[MAX_SHADOWCASTING_LIGHTS]  : TEXCOORD1;
+    float3 lightPos[MAX_SHADOWCASTING_LIGHTS]           : COLOR0;
 };
 
 
@@ -54,13 +54,13 @@ PixelInputType vp_main( VertexInputType input )
     output.position = mul(output.position, projectionMatrix);
 
     // Get position from light's perspective.
-    output.lightViewPosition = mul(input.position,  modelMatrix);
-    output.lightViewPosition = mul(output.lightViewPosition, lightViewMatrix);
-    output.lightViewPosition = mul(output.lightViewPosition, lightProjectionMatrix);
+    output.lightViewPosition[0] = mul(input.position,  modelMatrix);
+    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightViewMatrix);
+    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightProjectionMatrix);
 
-    output.lightViewPosition2 = mul(input.position, modelMatrix);
-    output.lightViewPosition2 = mul(output.lightViewPosition2, lightViewMatrix2);
-    output.lightViewPosition2 = mul(output.lightViewPosition2, lightProjectionMatrix2);
+    output.lightViewPosition[1] = mul(input.position, modelMatrix);
+    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightViewMatrix2);
+    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightProjectionMatrix2);
 
     output.uv = input.uv;
 
@@ -73,8 +73,8 @@ PixelInputType vp_main( VertexInputType input )
     float4 worldPosition = mul(input.position, modelMatrix);
 
     // Determine light position based off position of vertex in world space.
-    output.lightPos  = normalize(lightPosition.xyz - worldPosition.xyz);
-    output.lightPos2 = normalize(lightPosition2.xyz - worldPosition.xyz);
+    output.lightPos[0] = normalize(lightPosition.xyz - worldPosition.xyz);
+    output.lightPos[1] = normalize(lightPosition2.xyz - worldPosition.xyz);
 
     return output;
 }

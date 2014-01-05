@@ -1,4 +1,4 @@
-#define MAX_SHADOWCASTING_LIGHTS 1
+#define MAX_SHADOWCASTING_LIGHTS 2
 #define BIAS 0.001
 
 Texture2D modelTexture      : register(t0);
@@ -22,8 +22,6 @@ struct light
     float3 attenuation;
     float3 padding;
 };
-
-
 StructuredBuffer<light> LightBuffer : register(t4);
 
 
@@ -37,15 +35,12 @@ cbuffer CameraBuffer
 struct PixelInputType
 {
     float4 position           : SV_POSITION;
-    //float4 worldPosition      : TEXCOORD5;
     float2 uv                 : TEXCOORD0;
     float3 normal             : NORMAL;
     float3 tangent			  : TANGENT;
     float3 binormal           : BINORMAL;
-    float4 light1ViewPosition : TEXCOORD1;
-    float3 lightPos           : TEXCOORD2;
-    float4 lightViewPosition2 : TEXCOORD3;
-    float3 lightPos2          : TEXCOORD4;
+    float4 lightViewPosition[MAX_SHADOWCASTING_LIGHTS]  : TEXCOORD1;
+    float3 lightPos[MAX_SHADOWCASTING_LIGHTS]           : COLOR0;
 };
 
 
@@ -56,6 +51,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
     uint numLights = 0;
     uint dummy = 0;
     lights.GetDimensions(numLights, dummy);
+    LightBuffer.GetDimensions(numLights, dummy);
 
     for(uint index = 0; index < numLights; ++index)
     {
@@ -63,7 +59,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
         {
             // Light is active.
             // Get the light vector.
-            float3 lightVec = normalize(input.lightPos);
+            float3 lightVec = normalize(input.lightPos[index]);
             
             float NdotL = max(dot(norm, lightVec), 0.0);
             float2 projectTexCoord;
@@ -71,18 +67,28 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
             if(index < MAX_SHADOWCASTING_LIGHTS)
             {
                 // Calculate projected texture coords.
-                projectTexCoord.x =  input.light1ViewPosition.x / input.light1ViewPosition.w / 2.0f + 0.5f;
-                projectTexCoord.y = -input.light1ViewPosition.y / input.light1ViewPosition.w / 2.0f + 0.5f;
+                projectTexCoord.x =  input.lightViewPosition[index].x 
+                                        / input.lightViewPosition[index].w / 2.0f + 0.5f;
+                projectTexCoord.y = -input.lightViewPosition[index].y 
+                                        / input.lightViewPosition[index].w / 2.0f + 0.5f;
                 
-                // Check if projected coords are within 0 to 1. If so, the pixel is in view of the light.
+                // Check if projected coords are within 0 to 1. If so, pixel is in view of light.
                 if( (saturate(projectTexCoord.x) == projectTexCoord.x) &&
                     (saturate(projectTexCoord.y) == projectTexCoord.y) )
                 {
                     // Sample the shadow map at projected tex coordinate.
-                    float depthValue = shadowMapTexture1.Sample(SampleTypeClamp, projectTexCoord).r;
-
+                    float depthValue;
+                    if(index == 0)
+                    {
+                        depthValue = shadowMapTexture1.Sample(SampleTypeClamp, projectTexCoord).r;
+                    }
+                    else
+                    {
+                        depthValue = shadowMapTexture2.Sample(SampleTypeClamp, projectTexCoord).r;
+                    }
                     // Calculate the depth of the light.
-                    float lightDepthValue = input.light1ViewPosition.z / input.light1ViewPosition.w;
+                    float lightDepthValue = input.lightViewPosition[index].z 
+                                            / input.lightViewPosition[index].w;
 
                     lightDepthValue = lightDepthValue - BIAS;
 
@@ -104,6 +110,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
                 }
             }
         }
+        ambient += lights[index].ambient;
     }
 }
 

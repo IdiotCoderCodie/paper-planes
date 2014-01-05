@@ -66,7 +66,7 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
         m_mesh.Render(d3d);
 
         Shader* shadowShader = G_ShaderManager.GetShader("Depth");
-        // Send data for the matrix buffer to the shader, getting view and projection matrix from light.
+        // Send data for the matrix buffer to the shader, getting view and proj matrix from light.
 
         const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
         const auto& renderTargets = GetParent().GetParent().GetShadowMaps();
@@ -241,6 +241,36 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     if(lights.size() > 0)
     {
         LightComponent* light = static_cast<LightComponent*>(lights[0]);
+        LightComponent* light2 = static_cast<LightComponent*>(lights[1]);
+
+        ConstantBuffers::Light lightsBuff[2] =
+        {
+            {
+                true,
+                glm::vec4(light->GetParent().GetPos(), 1.0f),
+                light->GetAmbient(),
+                light->GetDiffuse(),
+                light->GetSpecular(),
+                180.0f,
+                glm::vec3(0.0f, 0.0f, 1.0f),
+                0.0f,
+                glm::vec3(0.0f, 0.0f, 0.0f),
+
+            },
+            {
+                true,
+                glm::vec4(light2->GetParent().GetPos(), 1.0f),
+                light2->GetAmbient(),
+                light2->GetDiffuse(),
+                light2->GetSpecular(),
+                180.0f,
+                glm::vec3(0.0f, 0.0f, 1.0f),
+                0.0f,
+                glm::vec3(0.0f, 0.0f, 0.0f)
+            }
+        };
+            
+        
         ConstantBuffers::Light firstLight =
         {
             true,
@@ -251,10 +281,13 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
             180.0f,
             glm::vec3(0.0f, 0.0f, 1.0f),
             0.0f,
-            glm::vec3(0.0f, 0.0f, 0.0f)
+            glm::vec3(0.0f, 0.0f, 0.0f),
         };
 
-        m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&firstLight, sizeof(firstLight));
+        int test = sizeof(lightsBuff);
+        int test2 = sizeof(firstLight);
+        m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuff, 
+                                          sizeof(lightsBuff));
         
         ID3D11ShaderResourceView* lightBuffer = m_Shader->GetBufferSRV(std::string("LightBuffer"));
         d3d.GetDeviceContext().PSSetShaderResources(4, 1, &lightBuffer);

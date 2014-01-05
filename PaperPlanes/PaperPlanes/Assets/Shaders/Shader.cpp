@@ -240,7 +240,7 @@ bool Shader::AddStructuredBuffer(D3D& d3d, const std::string& identity, UINT str
     desc.Format               = DXGI_FORMAT_UNKNOWN;
     desc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
     desc.Buffer.ElementOffset = 0;
-    desc.Buffer.ElementWidth  = 1;
+    desc.Buffer.ElementWidth  = numElems;
 
     ID3D11ShaderResourceView* srv = 0;
     HRESULT hr = d3d.GetDevice().CreateShaderResourceView(m_buffers[identity], &desc, &srv);
