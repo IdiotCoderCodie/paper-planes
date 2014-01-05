@@ -71,7 +71,8 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
         const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
         const auto& renderTargets = GetParent().GetParent().GetShadowMaps();
         // Get the first (1) lights and render their depth buffers.
-        for(int i = 0; i < glm::min(2, (int)renderTargets.size()); i++)
+        using namespace ConstantBuffers;
+        for(int i = 0; i < glm::min(MAX_SHADOWCASTING_LIGHTS, (int)renderTargets.size()); i++)
         {
             renderTargets[i]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
             d3d.ClearDepthStencilView();
@@ -239,53 +240,35 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 
     //----------------------------------------------------------------------------------------------
     // Set light buffer data.
-    if(lights.size() > 0)
+    ConstantBuffers::Light lightsBuffer[ConstantBuffers::MAX_SHADOWCASTING_LIGHTS];
+    
+    for (int i = 0; i < ConstantBuffers::MAX_SHADOWCASTING_LIGHTS && i < lights.size(); i++)
     {
-        LightComponent* light = static_cast<LightComponent*>(lights[0]);
-        LightComponent* light2 = static_cast<LightComponent*>(lights[1]);
+        LightComponent* light = static_cast<LightComponent*>(lights[i]);
 
-        // Create the lightBuffer to be sent to the GPU.
-        ConstantBuffers::Light lightsBuff[2] =
-        {
-            {
-                true,
-                glm::vec4(light->GetParent().GetPos(), 1.0f),
-                light->GetAmbient(),
-                light->GetDiffuse(),
-                light->GetSpecular(),
-                180.0f,
-                glm::vec3(0.0f, 0.0f, 1.0f),
-                0.0f,
-                glm::vec3(0.0f, 0.0f, 0.0f),
-
-            },
-            {
-                true,
-                glm::vec4(light2->GetParent().GetPos(), 1.0f),
-                light2->GetAmbient(),
-                light2->GetDiffuse(),
-                light2->GetSpecular(),
-                180.0f,
-                glm::vec3(0.0f, 0.0f, 1.0f),
-                0.0f,
-                glm::vec3(0.0f, 0.0f, 0.0f)
-            }
-        };
-            
-        m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuff, 
-                                          sizeof(lightsBuff));
-        
-        ID3D11ShaderResourceView* lightBuffer = m_Shader->GetBufferSRV(std::string("LightBuffer"));
-        d3d.GetDeviceContext().PSSetShaderResources(4, 1, &lightBuffer);
-
-        // Set camera buffer data. (pixel shader).
-        glm::vec4 cameraPos = 
-            glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
-
-        m_Shader->PSSetConstBufferData(d3d, std::string("CameraBuffer"),
-            (void*)&cameraPos, sizeof(glm::vec4), 0);
-            
+        lightsBuffer[i].enabled       = true;
+        lightsBuffer[i].position      = glm::vec4(light->GetParent().GetPos(), 1.0f);
+        lightsBuffer[i].ambient       = light->GetAmbient();
+        lightsBuffer[i].diffuse       = light->GetDiffuse();
+        lightsBuffer[i].specular      = light->GetSpecular();
+        lightsBuffer[i].spotCutoff    = 180.0f;
+        lightsBuffer[i].spotDirection = light->GetParent().GetTransform().GetForward();
+        lightsBuffer[i].spotExponent  = 0.0f;
+        lightsBuffer[i].attenuation   = glm::vec3(0.0f, 0.0f, 0.0f);
     }
+            
+    m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer, 
+                                        sizeof(lightsBuffer));
+        
+    ID3D11ShaderResourceView* lightBuffer = m_Shader->GetBufferSRV(std::string("LightBuffer"));
+    d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBuffer);
+
+    // Set camera buffer data. (pixel shader).
+    glm::vec4 cameraPos = 
+        glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
+
+    m_Shader->PSSetConstBufferData(d3d, std::string("CameraBuffer"),
+        (void*)&cameraPos, sizeof(glm::vec4), 0);           
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -295,20 +278,24 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
-    ID3D11ShaderResourceView* shadowTex = m_shadowMaps[0]->GetShaderResourceView();
-    d3d.GetDeviceContext().PSSetShaderResources(1, 1, &shadowTex);
+    if(m_mesh.DoesContainTanBin())
+    {
+        ID3D11ShaderResourceView* bumpTex = m_bumpTexture.GetTexture();
+        d3d.GetDeviceContext().PSSetShaderResources(1, 1, &bumpTex);
+    }
+    ID3D11ShaderResourceView* shadowTextures[ConstantBuffers::MAX_SHADOWCASTING_LIGHTS];
+    for(int i = 0; i < ConstantBuffers::MAX_SHADOWCASTING_LIGHTS; ++i)
+    {
+        shadowTextures[i] = m_shadowMaps[i]->GetShaderResourceView();
+    }
+    
+    d3d.GetDeviceContext().PSSetShaderResources(3, ConstantBuffers::MAX_SHADOWCASTING_LIGHTS, 
+                                                shadowTextures);
 
-    ID3D11ShaderResourceView* shadowTex2 = m_shadowMaps[1]->GetShaderResourceView();
-    d3d.GetDeviceContext().PSSetShaderResources(2, 1, &shadowTex2);
 
     // If the static mesh contains tangents and binormals. Send the normal map to the shader
     // (just to test atm, need to add something to turn this on/off and to select which normal
     // map is wanted to be used.
-    if(m_mesh.DoesContainTanBin())
-    {
-        ID3D11ShaderResourceView* bumpTex = m_bumpTexture.GetTexture();
-        d3d.GetDeviceContext().PSSetShaderResources(3, 1, &bumpTex);
-    }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------

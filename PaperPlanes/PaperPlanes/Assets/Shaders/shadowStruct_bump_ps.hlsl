@@ -1,13 +1,13 @@
-#define MAX_SHADOWCASTING_LIGHTS 2
-#define BIAS 0.001
-
-Texture2D modelTexture      : register(t0);
-Texture2D shadowMapTexture1 : register(t1);
-Texture2D shadowMapTexture2 : register(t2);
-Texture2D normalTexture		: register(t3);
+#define MAX_SHADOWCASTING_LIGHTS 4
+#define BIAS 0.01
 
 SamplerState SampleTypeClamp : register(s0);
 SamplerState SampleTypeWrap  : register(s1);
+
+Texture2D modelTexture      : register(t0);
+Texture2D normalTexture		: register(t1);
+Texture2D shadowMapTextures[MAX_SHADOWCASTING_LIGHTS] : register(t3); 
+
 
 struct light
 {
@@ -22,7 +22,7 @@ struct light
     float3 attenuation;
     float3 padding;
 };
-StructuredBuffer<light> LightBuffer : register(t4);
+StructuredBuffer<light> LightBuffer : register(t2);
 
 
 cbuffer CameraBuffer
@@ -53,7 +53,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
     lights.GetDimensions(numLights, dummy);
     LightBuffer.GetDimensions(numLights, dummy);
 
-    for(uint index = 0; index < numLights; ++index)
+    for(uint index = 0; index < MAX_SHADOWCASTING_LIGHTS; ++index)
     {
         if(lights[index].enabled)
         {
@@ -78,14 +78,8 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
                 {
                     // Sample the shadow map at projected tex coordinate.
                     float depthValue;
-                    if(index == 0)
-                    {
-                        depthValue = shadowMapTexture1.Sample(SampleTypeClamp, projectTexCoord).r;
-                    }
-                    else
-                    {
-                        depthValue = shadowMapTexture2.Sample(SampleTypeClamp, projectTexCoord).r;
-                    }
+                    depthValue = shadowMapTextures[index].Sample(SampleTypeClamp, projectTexCoord).r;
+
                     // Calculate the depth of the light.
                     float lightDepthValue = input.lightViewPosition[index].z 
                                             / input.lightViewPosition[index].w;
@@ -116,20 +110,15 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
 
 float4 ps_main(PixelInputType input) : SV_TARGET
 {
-    /*if(LightBuffer[0].enabled)
-        return LightBuffer[0].diffuse;
-    else
-        return LightBuffer[0].ambient;*/
-
     float4 color = float4(0.0, 0.0, 0.0, 1.0);
     float lightIntensity = 0.0f;
 
     // Sample the normal texture, put int range -1.0 to +1.0.
     float4 bumpMap    = (normalTexture.Sample(SampleTypeWrap, input.uv) * 2.0f) - 1.0f;
-    //return bumpMap;
-	float3 bumpNormal = normalize( 
-                        input.normal + bumpMap.x * input.tangent + bumpMap.y * input.binormal 
-                        ); 
+
+	float3 bumpNormal = 
+            normalize(input.normal + bumpMap.x * input.tangent + bumpMap.y * input.binormal); 
+
     float4 ambient  = float4(0.0, 0.0, 0.0, 1.0);
     float4 diffuse  = float4(0.0, 0.0, 0.0, 1.0);
     float4 specular = float4(0.0, 0.0, 0.0, 1.0);
@@ -145,7 +134,6 @@ float4 ps_main(PixelInputType input) : SV_TARGET
 
     // Sample the pixel color from the texture.
     float4 textureColor = modelTexture.Sample(SampleTypeWrap, input.uv);
-    //return textureColor;
 
     //Combine final colors.
     color = color * textureColor;

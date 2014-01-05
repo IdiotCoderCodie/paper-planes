@@ -173,7 +173,9 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                           sizeof(ConstantBuffers::CameraPosBuffer),
                                           D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-    m_shaders["Normal_Shadows_Test"].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 2);
+    m_shaders["Normal_Shadows_Test"].AddStructuredBuffer(d3d, "LightBuffer", 
+                                                         sizeof(ConstantBuffers::Light), 
+                                                         ConstantBuffers::MAX_SHADOWCASTING_LIGHTS);
 
 	// Add the sampler states.  
 	m_shaders["Normal_Shadows_Test"].AddSamplerState(d3d, "ModelTextureSampler", 

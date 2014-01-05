@@ -30,8 +30,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
     Entity* sphere = 
-    EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", 
-                                              L"grasstex.dds", L"rockwall_normal.dds",
+    EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
+                                              L"tim.dds", L"rockwall_normal.dds",
                                               GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
                                               glm::vec3(1.0f), "occluderSphere");
     sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
@@ -48,27 +48,47 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity
     Entity* redLight =
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.05f, 0.02f, 0.02f, 1.0f), // ambient.
-                                                glm::vec4(1.0f, 0.0f, 0.0f, 0.5f),     // diffuse.
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f), // ambient.
+                                                glm::vec4(0.7f, 0.0f, 0.0f, 0.2f),    // diffuse.
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
-                                                glm::vec3(+1.0f, 0.0f, -49.0f),        // position.
+                                                glm::vec3(+1.0f, 0.0f, -10.0f),        // position.
                                                 "redLight");
 	//----------------------------------------------------------------------------------------------
     
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
     Entity* greenLight = 
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.05f, 0.02f, 1.0f), // ambient.
-                                            glm::vec4(0.0f, 1.0f, 1.0f, 0.5f),         // diffuse.
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f), // ambient.
+                                            glm::vec4(0.0f, 0.7f, 0.0f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(-1.0f, 0.0f, -10.0f),            // position.
                                             "greenLight");
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Light entity no.3
+    Entity* blueLight = 
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.0f, 0.02f, 1.0f), // ambient.
+                                            glm::vec4(0.0f, 0.0f, 0.7f, 0.2f),        // diffuse.
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
+                                            glm::vec3(0.0f, +0.5f, -10.0f),            // position.
+                                            "blueLight");
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Light entity no.4
+    Entity* whiteLight = 
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+                                            glm::vec4(0.3f, 0.3f, 0.3f, 0.2f),        // diffuse.
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
+                                            glm::vec3(0.0f, -0.5f, -10.0f),            // position.
+                                            "whiteLight");
     //----------------------------------------------------------------------------------------------
     
     //----------------------------------------------------------------------------------------------
     // BITMAP for drawing what is rendered to first light's render target.
     EntityFactory::CreateBmpEntity(*this, d3d, GetShadowMaps()[0]->GetShaderResourceView(), 
-                                   200, 200, GetParent().GetD3DInstance().GetScreenWidth(), 
+                                   100, 100, GetParent().GetD3DInstance().GetScreenWidth(), 
                                    GetParent().GetD3DInstance().GetScreenHeight(),
                                    "light1ShadowMapBmp");
     //----------------------------------------------------------------------------------------------

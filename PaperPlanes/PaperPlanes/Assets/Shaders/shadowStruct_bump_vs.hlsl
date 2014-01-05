@@ -1,4 +1,4 @@
-#define MAX_SHADOWCASTING_LIGHTS 2
+#define MAX_SHADOWCASTING_LIGHTS 4
 
 cbuffer MatrixBuffer
 {
