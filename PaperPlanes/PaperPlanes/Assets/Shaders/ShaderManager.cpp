@@ -159,7 +159,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders["Normal_Shadows_Test"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_ps.hlsl", 
 												"ps_main", "ps_5_0");
 	m_shaders["Normal_Shadows_Test"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
-										  sizeof(ConstantBuffers::MVPShadowBuffer2), 
+										  sizeof(ConstantBuffers::ShadowMatrixBuffer), 
                                           D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 	/*m_shaders["Normal_Shadows_Test"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC, 
 										  sizeof(ConstantBuffers::LightAmbientDiffuse2ColorBuffer), 

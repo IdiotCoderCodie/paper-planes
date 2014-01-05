@@ -5,10 +5,8 @@ cbuffer MatrixBuffer
     matrix modelMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
-    matrix lightViewMatrix;
-    matrix lightProjectionMatrix;
-    matrix lightViewMatrix2;
-    matrix lightProjectionMatrix2;
+    matrix lightViewMatrix[MAX_SHADOWCASTING_LIGHTS];
+    matrix lightProjectionMatrix[MAX_SHADOWCASTING_LIGHTS];
 };
 
 cbuffer LightPositionBuffer
@@ -55,12 +53,12 @@ PixelInputType vp_main( VertexInputType input )
 
     // Get position from light's perspective.
     output.lightViewPosition[0] = mul(input.position,  modelMatrix);
-    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightViewMatrix);
-    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightProjectionMatrix);
+    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightViewMatrix[0]);
+    output.lightViewPosition[0] = mul(output.lightViewPosition[0], lightProjectionMatrix[0]);
 
     output.lightViewPosition[1] = mul(input.position, modelMatrix);
-    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightViewMatrix2);
-    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightProjectionMatrix2);
+    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightViewMatrix[1]);
+    output.lightViewPosition[1] = mul(output.lightViewPosition[1], lightProjectionMatrix[1]);
 
     output.uv = input.uv;
 
