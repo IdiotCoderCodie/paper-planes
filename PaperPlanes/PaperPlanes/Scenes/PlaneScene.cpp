@@ -61,8 +61,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f), // ambient.
                                             glm::vec4(0.0f, 0.7f, 0.0f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(-1.0f, 0.0f, -10.0f),            // position.
+                                            glm::vec3(0.0f, -1.0f, -10.0f),            // position.
                                             "greenLight");
+    greenLight->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------

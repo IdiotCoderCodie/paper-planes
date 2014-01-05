@@ -62,10 +62,10 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
             float3 lightVec = normalize(input.lightPos[index]);
             
             float NdotL = max(dot(norm, lightVec), 0.0);
-            float2 projectTexCoord;
-            
+                  
             if(index < MAX_SHADOWCASTING_LIGHTS)
             {
+                float2 projectTexCoord;
                 // Calculate projected texture coords.
                 projectTexCoord.x =  input.lightViewPosition[index].x 
                                         / input.lightViewPosition[index].w / 2.0f + 0.5f;
@@ -88,7 +88,23 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
 
                     if(lightDepthValue < depthValue)
                     {
-                        if(NdotL > 0.0f)
+                        // Pixel in view of light!
+
+                        // Calculate spot attenuation.
+                        float3 spotDir = normalize(lights[index].position - lights[index].spotDirection);
+                        float cosCurAngle = dot(-lightVec, normalize(lights[index].spotDirection));
+                        float cosOuterAngle = saturate(cos(LightBuffer[index].spotCutoff));
+                        float cosInnerAngle = saturate(cos((1.0 - (lights[index].spotExponent / 128.0)) *
+                                                                   lights[index].spotCutoff));
+
+                        float attenuation = saturate((cosCurAngle - cosOuterAngle) / 
+                                                (cosInnerAngle - cosOuterAngle));  
+
+                       // attenuation - 1.0f;
+                        
+
+
+                        if(NdotL > 0.0)
                         {
                             float3 H         = normalize(lightVec - normalize(pos - eye));
                             float  NdotH     = max(dot(norm, H), 0.0);
@@ -96,15 +112,16 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
                             float4 litResult = lit(NdotL, NdotH, exponent);
 
                             // Light the pixel.
-                            ambient  += lights[index].ambient  * litResult.x;
-                            diffuse  += lights[index].diffuse  * litResult.y;
-                            specular += lights[index].specular * litResult.z;
+                            //ambient  += (lights[index].ambient  * litResult.x);
+                            diffuse  += (attenuation * lights[index].diffuse  * litResult.y);
+                            specular += (attenuation * lights[index].specular * litResult.z);
                         }
                     }
-                }
+                }               
             }
+            ambient += lights[index].ambient;
         }
-        ambient += lights[index].ambient;
+        
     }
 }
 

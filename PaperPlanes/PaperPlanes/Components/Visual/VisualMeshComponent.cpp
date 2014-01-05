@@ -251,10 +251,10 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
         lightsBuffer[i].ambient       = light->GetAmbient();
         lightsBuffer[i].diffuse       = light->GetDiffuse();
         lightsBuffer[i].specular      = light->GetSpecular();
-        lightsBuffer[i].spotCutoff    = 180.0f;
+        lightsBuffer[i].spotCutoff    = 0.1f;
         lightsBuffer[i].spotDirection = light->GetParent().GetTransform().GetForward();
-        lightsBuffer[i].spotExponent  = 0.0f;
-        lightsBuffer[i].attenuation   = glm::vec3(0.0f, 0.0f, 0.0f);
+        lightsBuffer[i].spotExponent  = 5.0f;
+        lightsBuffer[i].attenuation   = glm::vec3(5.0f, 5.0f, 5.0f);
     }
             
     m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer, 
