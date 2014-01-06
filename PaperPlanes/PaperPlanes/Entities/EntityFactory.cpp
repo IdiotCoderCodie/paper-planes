@@ -7,6 +7,7 @@
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualMeshComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
+#include "../Components/Visual/ParticleSystemComponent.h"
 
 
 extern TextureManager G_TextureManager;
@@ -162,5 +163,14 @@ Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResou
     newEntity->MoveRight(-xPos);
     newEntity->MoveUp(-yPos);
 
+    return newEntity;
+}
+
+
+Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+    newEntity->SetComponent(new ParticleSystemComponent(d3d));
+    scene.AddEntity(newEntity);
     return newEntity;
 }

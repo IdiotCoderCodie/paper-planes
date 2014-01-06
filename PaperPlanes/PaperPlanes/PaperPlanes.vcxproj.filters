@@ -99,6 +99,9 @@
     <ClCompile Include="Entities\EntityFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Visual\ParticleSystemComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -194,6 +197,9 @@
     <ClInclude Include="Entities\EntityFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Visual\ParticleSystemComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
@@ -207,5 +213,7 @@
     <FxCompile Include="Assets\Shaders\shadowStruct_bump_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\shadowStruct_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\shadowStruct_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\particle_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\particle_ps.hlsl" />
   </ItemGroup>
 </Project>

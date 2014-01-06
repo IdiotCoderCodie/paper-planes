@@ -113,6 +113,24 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                                       SamplerDesc::SAMPLE_CLAMP);    
 	//----------------------------------------------------------------------------------------------
 
+
+    //----------------------------------------------------------------------------------------------
+    // Particle Shader
+    m_shaders["Particle"] = Shader();
+
+    m_shaders["Particle"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\particle_vs.hlsl", "vp_main",
+                                          "vs_5_0", &PolyLayouts::POS3_TEX2_COL4[0], 3);
+
+    m_shaders["Particle"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\particle_ps.hlsl", "ps_main",
+                                         "ps_5_0");
+
+    m_shaders["Particle"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
+                                    sizeof(ConstantBuffers::MVPBuffer),
+                                    D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Particle"].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
+    //----------------------------------------------------------------------------------------------
+
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
     return true;

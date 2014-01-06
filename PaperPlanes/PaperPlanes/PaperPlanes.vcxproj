@@ -103,6 +103,7 @@
     <ClCompile Include="Math\Frame.cpp" />
     <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
     <ClCompile Include="Components\Physics\PhysicsComponent.cpp" />
+    <ClCompile Include="Components\Visual\ParticleSystemComponent.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Scenes\PlaneScene.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Math\Frame.h" />
     <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
     <ClInclude Include="Components\Physics\PhysicsComponent.h" />
+    <ClInclude Include="Components\Visual\ParticleSystemComponent.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Scenes\PlaneScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
@@ -173,6 +175,18 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Assets\Shaders\depth_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vp_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\particle_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ps_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\particle_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vp_main</EntryPointName>

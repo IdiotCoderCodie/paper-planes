@@ -1,3 +1,5 @@
+#pragma once
+
 template<class T>
 void d3d_safe_release(T* obj)
 {

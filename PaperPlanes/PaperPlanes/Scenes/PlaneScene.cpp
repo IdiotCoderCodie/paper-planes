@@ -39,6 +39,13 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     
     //----------------------------------------------------------------------------------------------
 
+
+    //----------------------------------------------------------------------------------------------
+    // Test Particle System
+    EntityFactory::CreateParticleSystemEntity(*this, d3d, "particleSystem");
+    //----------------------------------------------------------------------------------------------
+
+
     //----------------------------------------------------------------------------------------------
     // Camera entity.
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
