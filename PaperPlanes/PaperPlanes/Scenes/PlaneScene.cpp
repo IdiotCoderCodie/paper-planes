@@ -22,7 +22,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
     EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", 
-                                              L"grasstex.dds", L"rockwall_normal.dds",
+                                              L"grassTex.dds", L"rockwall_normal.dds",
                                               GetShadowMaps(), glm::vec3(0.0f), glm::vec3(50.0f), 
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
@@ -30,12 +30,13 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
     Entity* sphere = 
-    EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
-                                              L"tim.dds", L"rockwall_normal.dds",
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\plane2.obj", 
+                                              L"crumpledPaper1024.dds",
                                               GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
-                                              glm::vec3(1.0f), "occluderSphere");
+                                              glm::vec3(2.5f), "occluderSphere");
     sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                                                  glm::vec3(0.0f, 10.0f, 0.0f)));
+                                                  glm::vec3(5.0f, 10.0f, 0.0f)));
+    
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -48,8 +49,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity
     Entity* redLight =
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f), // ambient.
-                                                glm::vec4(0.7f, 0.0f, 0.0f, 0.2f),    // diffuse.
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f),   // ambient.
+                                                glm::vec4(0.7f, 0.0f, 0.0f, 0.2f),     // diffuse.
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
                                                 glm::vec3(+1.0f, 0.0f, -10.0f),        // position.
                                                 "redLight");
@@ -58,12 +59,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
     Entity* greenLight = 
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f), // ambient.
-                                            glm::vec4(0.0f, 0.7f, 0.0f, 0.2f),        // diffuse.
+    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f),   // ambient.
+                                            glm::vec4(0.0f, 0.7f, 0.0f, 0.2f),         // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, -1.0f, -10.0f),            // position.
+                                            glm::vec3(-1.0f, 0.0f, -10.0f),            // position.
                                             "greenLight");
-    greenLight->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
+    //greenLight->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------

@@ -198,6 +198,16 @@ void VisualMeshComponent::DrawNoShadows(D3D& d3d)
 
 void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 {
+    if(m_mesh.DoesContainTanBin())
+    {
+        m_Shader = G_ShaderManager.GetShader("Mesh_Bump_Shadows");
+    }
+    else
+    {
+        m_Shader = G_ShaderManager.GetShader("Mesh_Shadows");
+    }
+
+
     const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
 
     //----------------------------------------------------------------------------------------------
@@ -251,7 +261,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
         lightsBuffer[i].ambient       = light->GetAmbient();
         lightsBuffer[i].diffuse       = light->GetDiffuse();
         lightsBuffer[i].specular      = light->GetSpecular();
-        lightsBuffer[i].spotCutoff    = 0.1f;
+        lightsBuffer[i].spotCutoff    = 1.0f;
         lightsBuffer[i].spotDirection = light->GetParent().GetTransform().GetForward();
         lightsBuffer[i].spotExponent  = 5.0f;
         lightsBuffer[i].attenuation   = glm::vec3(5.0f, 5.0f, 5.0f);
@@ -292,23 +302,11 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     d3d.GetDeviceContext().PSSetShaderResources(3, ConstantBuffers::MAX_SHADOWCASTING_LIGHTS, 
                                                 shadowTextures);
 
-
-    // If the static mesh contains tangents and binormals. Send the normal map to the shader
-    // (just to test atm, need to add something to turn this on/off and to select which normal
-    // map is wanted to be used.
-
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
     // Get appropriate shader and then render with it.
-    if(m_mesh.DoesContainTanBin())
-    {
-        m_Shader = G_ShaderManager.GetShader("Normal_Shadows_Test");
-    }
-    else
-    {
-        m_Shader = G_ShaderManager.GetShader("Mesh_1L_1T_ShadowMap");
-    }
+
 
     // Render shader.
     m_Shader->RenderShader(d3d, m_mesh.GetIndexCount());

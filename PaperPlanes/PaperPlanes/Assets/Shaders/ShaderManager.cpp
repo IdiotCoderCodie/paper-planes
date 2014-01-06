@@ -18,83 +18,6 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
     // For now, don't load from config file. Just hard-code.
 
     //----------------------------------------------------------------------------------------------
-    // Create mesh render shader, using 1 light and 1 texture.
-    m_shaders["Mesh_1L_1T"] = Shader();
-    m_shaders["Mesh_1L_1T"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\color_vs.hlsl", "vp_main", 
-                                            "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
-    m_shaders["Mesh_1L_1T"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\color_ps.hlsl", "ps_main", 
-                                           "ps_5_0");
-
-    m_shaders["Mesh_1L_1T"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::MVPBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_1L_1T"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::CameraPosBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_1L_1T"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightColorBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_1L_1T"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightPosBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-
-    m_shaders["Mesh_1L_1T"].AddSamplerState(d3d, "ModelTextureSampler", SamplerDesc::DEFAULT_WRAP);
-    //----------------------------------------------------------------------------------------------
-
-
-    //----------------------------------------------------------------------------------------------
-    // Create mesh render shader, using 1 light and 1 texture.
-    m_shaders["Mesh_2L_1T"] = Shader();
-    m_shaders["Mesh_2L_1T"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\mesh_2l_vs.hlsl", "vp_main", 
-                                            "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
-    m_shaders["Mesh_2L_1T"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\mesh_2l_ps.hlsl", "ps_main", 
-                                           "ps_5_0");
-
-    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::MVPBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::CameraPosBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightColorBuffer2), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_2L_1T"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightPosBuffer2), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-
-    m_shaders["Mesh_2L_1T"].AddSamplerState(d3d, "ModelTextureSampler", SamplerDesc::DEFAULT_WRAP);
-    //----------------------------------------------------------------------------------------------
-
-
-    //----------------------------------------------------------------------------------------------
-    // Create mesh render shader using shadow, using 1 light and 1 texture.
-    m_shaders["Mesh_1L_1T_ShadowMap"] = Shader();
-    m_shaders["Mesh_1L_1T_ShadowMap"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow2_vs.hlsl", 
-                                        "vp_main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
-    m_shaders["Mesh_1L_1T_ShadowMap"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadow2_ps.hlsl", 
-                                        "ps_main", "ps_5_0");
-
-    // Add all the buffers.
-    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::MVPShadowBuffer2), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);    
-    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightAmbientDiffuse2ColorBuffer), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-    m_shaders["Mesh_1L_1T_ShadowMap"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
-                                      sizeof(ConstantBuffers::LightPosBuffer2), 
-                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-
-    // Add the sampler states.
-    m_shaders["Mesh_1L_1T_ShadowMap"].AddSamplerState(d3d, "ModelTextureSampler", 
-                                                      SamplerDesc::DEFAULT_WRAP);
-    m_shaders["Mesh_1L_1T_ShadowMap"].AddSamplerState(d3d, "ShadowMapSampler", 
-                                                      SamplerDesc::SAMPLE_CLAMP);
-    //----------------------------------------------------------------------------------------------
-
-
-    //----------------------------------------------------------------------------------------------
     // Create shader for render pass to create shadows.
     m_shaders["Depth"] = Shader();
     m_shaders["Depth"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\depth_vs.hlsl", 
@@ -123,65 +46,70 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
     //----------------------------------------------------------------------------------------------
 
 
-	//----------------------------------------------------------------------------------------------
-	// Load in the test normal map shader, with 2 lights and shadows.
-	m_shaders["Normal_Shadows"] = Shader();
-	m_shaders["Normal_Shadows"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadow2_bump_vs.hlsl", 
-                                                "vp_main", "vs_5_0", 
-                                                &PolyLayouts::POS3_TEX2_NORM3_TAN3_BIN3[0], 5);
-	m_shaders["Normal_Shadows"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\shadow2_bump_ps.hlsl", 
-												"ps_main", "ps_5_0");
-	m_shaders["Normal_Shadows"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
-										  sizeof(ConstantBuffers::MVPShadowBuffer2), 
-                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-	m_shaders["Normal_Shadows"].AddBuffer(d3d, "LightColorBuffer", D3D11_USAGE_DYNAMIC, 
-										  sizeof(ConstantBuffers::LightAmbientDiffuse2ColorBuffer), 
-										  D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-	m_shaders["Normal_Shadows"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
-										  sizeof(ConstantBuffers::LightPosBuffer2), 
-    								      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-
-	// Add the sampler states.  
-	m_shaders["Normal_Shadows"].AddSamplerState(d3d, "ModelTextureSampler", 
-                                                      SamplerDesc::DEFAULT_WRAP);
-	m_shaders["Normal_Shadows"].AddSamplerState(d3d, "ShadowMapSampler", 
-                                                      SamplerDesc::SAMPLE_CLAMP);
-    /*m_shaders["Normal_Shadows"].AddSamplerState(d3d, "NormalTexture", 
-                                                 SamplerDesc::DEFAULT_WRAP);*/
-	//----------------------------------------------------------------------------------------------
-    
-
     //----------------------------------------------------------------------------------------------
-	// Load in the test normal map shader, with 2 lights and shadows.
-	m_shaders["Normal_Shadows_Test"] = Shader();
-	m_shaders["Normal_Shadows_Test"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_vs.hlsl", 
-                                                "vp_main", "vs_5_0", 
-                                                &PolyLayouts::POS3_TEX2_NORM3_TAN3_BIN3[0], 5);
+    // Create mesh render shader using shadow, using 1 light and 1 texture.
+    m_shaders["Mesh_Shadows"] = Shader();
+    m_shaders["Mesh_Shadows"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_vs.hlsl", 
+                                        "vp_main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+    m_shaders["Mesh_Shadows"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_ps.hlsl", 
+                                        "ps_main", "ps_5_0");
 
-	m_shaders["Normal_Shadows_Test"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_ps.hlsl", 
-												"ps_main", "ps_5_0");
+    // Add all the buffers.
+    m_shaders["Mesh_Shadows"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::ShadowMatrixBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);  
 
-	m_shaders["Normal_Shadows_Test"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
-										  sizeof(ConstantBuffers::ShadowMatrixBuffer), 
-                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
-
-	m_shaders["Normal_Shadows_Test"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+    m_shaders["Mesh_Shadows"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
                                           sizeof(ConstantBuffers::LightPositionBuffer), 
     								      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-    m_shaders["Normal_Shadows_Test"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+    m_shaders["Mesh_Shadows"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
                                           sizeof(ConstantBuffers::CameraPosBuffer),
                                           D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-    m_shaders["Normal_Shadows_Test"].AddStructuredBuffer(d3d, "LightBuffer", 
+    m_shaders["Mesh_Shadows"].AddStructuredBuffer(d3d, "LightBuffer", 
+                                                         sizeof(ConstantBuffers::Light), 
+                                                         ConstantBuffers::MAX_SHADOWCASTING_LIGHTS);
+
+    // Add the sampler states.
+    m_shaders["Mesh_Shadows"].AddSamplerState(d3d, "ModelTextureSampler", 
+                                                      SamplerDesc::DEFAULT_WRAP);
+    m_shaders["Mesh_Shadows"].AddSamplerState(d3d, "ShadowMapSampler", 
+                                                      SamplerDesc::SAMPLE_CLAMP);
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+	// Load in the test normal map shader, with 2 lights and shadows.
+	m_shaders["Mesh_Bump_Shadows"] = Shader();
+	m_shaders["Mesh_Bump_Shadows"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_vs.hlsl", 
+                                                "vp_main", "vs_5_0", 
+                                                &PolyLayouts::POS3_TEX2_NORM3_TAN3_BIN3[0], 5);
+
+	m_shaders["Mesh_Bump_Shadows"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_ps.hlsl", 
+												"ps_main", "ps_5_0");
+
+	m_shaders["Mesh_Bump_Shadows"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
+										  sizeof(ConstantBuffers::ShadowMatrixBuffer), 
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders["Mesh_Bump_Shadows"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::LightPositionBuffer), 
+    								      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Mesh_Bump_Shadows"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::CameraPosBuffer),
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Mesh_Bump_Shadows"].AddStructuredBuffer(d3d, "LightBuffer", 
                                                          sizeof(ConstantBuffers::Light), 
                                                          ConstantBuffers::MAX_SHADOWCASTING_LIGHTS);
 
 	// Add the sampler states.  
-	m_shaders["Normal_Shadows_Test"].AddSamplerState(d3d, "ModelTextureSampler", 
+	m_shaders["Mesh_Bump_Shadows"].AddSamplerState(d3d, "ModelTextureSampler", 
                                                       SamplerDesc::DEFAULT_WRAP);
 
-	m_shaders["Normal_Shadows_Test"].AddSamplerState(d3d, "ShadowMapSampler", 
+	m_shaders["Mesh_Bump_Shadows"].AddSamplerState(d3d, "ShadowMapSampler", 
                                                       SamplerDesc::SAMPLE_CLAMP);    
 	//----------------------------------------------------------------------------------------------
 

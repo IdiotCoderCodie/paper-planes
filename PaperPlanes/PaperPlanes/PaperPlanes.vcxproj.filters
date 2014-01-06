@@ -199,21 +199,13 @@
     <Text Include="window_config.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Assets\Shaders\color_vs.hlsl" />
-    <FxCompile Include="Assets\Shaders\color_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\bitmap_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\bitmap_ps.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow_vs.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\depth_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\depth_ps.hlsl" />
-    <FxCompile Include="Assets\Shaders\mesh_2l_ps.hlsl" />
-    <FxCompile Include="Assets\Shaders\mesh_2l_vs.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow2_ps.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow2_vs.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow2_bump_ps.hlsl" />
-    <FxCompile Include="Assets\Shaders\shadow2_bump_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\shadowStruct_bump_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\shadowStruct_bump_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadowStruct_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\shadowStruct_vs.hlsl" />
   </ItemGroup>
 </Project>
