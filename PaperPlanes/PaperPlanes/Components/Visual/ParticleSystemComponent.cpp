@@ -25,6 +25,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
       m_timeBetweenEmissions(),
       m_timeSinceLastEmission(),
       m_systemLifetime(),
+      m_currentLifetime(0.0f),
       m_startPosition(),
       m_startPositionDeviation(),
       m_startVelocity(),
@@ -37,11 +38,13 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
       m_sizeChangePerSec(),
       m_texture(0),
       m_tweakBarSetup(false),
-      m_effectName("NoEffectLoaded")
+      m_effectName("NoEffectLoaded"),
+      m_emitting(false)
 {
     LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
     InitBuffers(d3d);
     m_Shader = G_ShaderManager.GetShader("Particle");
+    Start();
 }
 
 
@@ -52,7 +55,8 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
       m_emissionFreq(40.0f),
       m_timeBetweenEmissions(1.0f / m_emissionFreq),
       m_timeSinceLastEmission(0.0f),
-      m_systemLifetime(-1.0f),
+      m_systemLifetime(10.0f),
+      m_currentLifetime(0.0f),
       m_startPosition(0.0f, 0.0f, 0.0f),
       m_startPositionDeviation(0.2f, 0.0f, 0.2f),
       m_startVelocity(0.0f, 2.0f, 0.0f),
@@ -107,6 +111,10 @@ bool ParticleSystemComponent::LoadFromFile(const std::string& filename, D3D& d3d
         else if(!token.compare("MaxParticleCount"))
         {
             value_iss >> m_maxParticleCount;
+        }
+        else if(!token.compare("SystemLifetime"))
+        {
+            value_iss >> m_systemLifetime;
         }
         else if(!token.compare("EmissionFreq"))
         {
@@ -257,22 +265,32 @@ void ParticleSystemComponent::Update(float time)
     }
 
     RemoveParticles(time);
-    EmitParticles(time);
+
+    /* The following is for the Stop() method to work as required, we want to still remove and 
+       update current particles but not emit anymore. */
+    if(m_emitting)
+    {
+        EmitParticles(time);
+    }
+
     UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance());
 
     for(Particle& p : m_engagedParticles)
     {
-        /*glm::vec3 test1 = p.velocity * time;
-        glm::vec3 test = p.position += p.velocity * time;*/
         p.position = p.position +  (p.velocity * time);
         p.color += m_colorChangePerSec * time;
         p.size += m_sizeChangePerSec * time;
-        /*p.color.a -= (m_fadePerSec * time);
-        p.color -= m_fadePerSec * time;*/
     }
 
-
-    
+    // Update current lifetime of the system, then check if it's been going long enough.
+    if(m_systemLifetime > 0.01f && m_emitting)
+    {
+        m_currentLifetime += time;
+        if(m_currentLifetime > m_systemLifetime)
+        {
+            Stop();
+        }
+    }
 }
 
 
@@ -291,7 +309,7 @@ void ParticleSystemComponent::Draw(D3D& d3d)
     glm::vec3 camPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
     float angle = atan2(this->GetParent().GetPos().x - camPos.x, 
                             this->GetParent().GetPos().z - camPos.z) * (180.0f / glm::pi<float>());
-    matBuffer.modelMatrix = glm::rotate(matBuffer.modelMatrix, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    matBuffer.modelMatrix = glm::rotate(matBuffer.modelMatrix, 180.0f-angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
     m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer, 
                                    sizeof(matBuffer), 0);
@@ -332,6 +350,13 @@ void ParticleSystemComponent::RemoveParticles(float time)
             ++it;
         }
     }
+}
+
+
+void ParticleSystemComponent::KillAllParticles()
+{
+    m_engagedParticles.clear();
+    m_currentParticleCount = 0;
 }
 
 
@@ -527,6 +552,27 @@ bool ParticleSystemComponent::TweakBarSetup()
     return true;
 }
 
+
+void ParticleSystemComponent::Start()
+{
+    m_currentLifetime = 0.0f;
+    KillAllParticles();
+    m_emitting = true;
+}
+
+
+void ParticleSystemComponent::Stop()
+{
+    m_currentLifetime = 0.0f;
+    m_emitting = false;
+}
+
+void ParticleSystemComponent::HardStop()
+{
+    m_currentLifetime = 0.0f;
+    m_emitting = false;
+    KillAllParticles();
+}
 
 std::istream& operator>> (std::istream& in, glm::vec3& vec)
 {
