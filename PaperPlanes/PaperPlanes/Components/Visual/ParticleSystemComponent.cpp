@@ -10,8 +10,40 @@
 
 #include <algorithm>
 #include <time.h>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <sstream>
 
 extern TextureManager G_TextureManager; 
+
+ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFile)
+    : m_engagedParticles(),
+      m_maxParticleCount(),
+      m_currentParticleCount(),
+      m_emissionFreq(),
+      m_timeBetweenEmissions(),
+      m_timeSinceLastEmission(),
+      m_systemLifetime(),
+      m_startPosition(),
+      m_startPositionDeviation(),
+      m_startVelocity(),
+      m_startVelocityDeviation(),
+      m_startColor(),
+      m_startColorDeviation(),
+      m_colorChangePerSec(),
+      m_startSize(),
+      m_startSizeDeviation(),
+      m_sizeChangePerSec(),
+      m_texture(0),
+      m_tweakBarSetup(false),
+      m_effectName("NoEffectLoaded")
+{
+    LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
+    InitBuffers(d3d);
+    m_Shader = G_ShaderManager.GetShader("Particle");
+}
+
 
 ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
     : m_engagedParticles(),
@@ -32,17 +64,15 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
       m_startSizeDeviation(0.1f),
       m_sizeChangePerSec(0.05f),
       m_texture(0),
-      m_tweakBarSetup(false)
+      m_tweakBarSetup(false),
+      m_effectName("NoEffectLoaded")
 {
     m_texture = G_TextureManager.LoadTexture(d3d, L"flame.dds", "flame.dds");
     //m_texture = G_TextureManager.GetTexture("particle.dds");
-
-    srand(time(NULL));
+    
     InitBuffers(d3d);
 
     m_Shader = G_ShaderManager.GetShader("Particle");
-
-
 
 }
 
@@ -51,6 +81,84 @@ ParticleSystemComponent::~ParticleSystemComponent(void)
 {
     d3d_safe_release(m_vertexBuffer);
     d3d_safe_release(m_indexBuffer);
+}
+
+
+bool ParticleSystemComponent::LoadFromFile(const std::string& filename, D3D& d3d)
+{
+    std::ifstream input(filename);
+    if(!input.is_open())
+        return false;
+
+    std::string line;
+    std::istringstream value_iss;
+    std::string token;
+    std::string value;
+    while(input.good())
+    {
+        std::getline(input, token, '=');
+        std::getline(input, value);
+        value_iss = std::istringstream(value);
+
+        if(!token.compare("ParticleEffect"))
+        {
+            m_effectName = value;
+        }
+        else if(!token.compare("MaxParticleCount"))
+        {
+            value_iss >> m_maxParticleCount;
+        }
+        else if(!token.compare("EmissionFreq"))
+        {
+            value_iss >> m_emissionFreq;
+            m_timeBetweenEmissions = 1.0f / m_emissionFreq;
+        }
+        else if(!token.compare("StartPosition"))
+        {
+            value_iss >> m_startPosition;
+        }
+        else if(!token.compare("StartPositionDeviation"))
+        {
+            value_iss >> m_startPositionDeviation;
+        }
+        else if(!token.compare("StartVelocity"))
+        {
+            value_iss >> m_startVelocity;
+        }
+        else if(!token.compare("StartVelocityDeviation"))
+        {
+            value_iss >> m_startVelocityDeviation;
+        }
+        else if(!token.compare("StartColor"))
+        {
+            value_iss >> m_startColor;
+        }
+        else if(!token.compare("ColorChangePerSec"))
+        {
+            value_iss >> m_colorChangePerSec;
+        }
+        else if(!token.compare("StartSize"))
+        {
+            value_iss >> m_startSize;
+        }
+        else if(!token.compare("StartSizeDeviation"))
+        {
+            value_iss >> m_startSizeDeviation;
+        }
+        else if(!token.compare("SizeChangePerSec"))
+        {
+            value_iss >> m_sizeChangePerSec;
+        }
+        else if(!token.compare("Texture"))
+        {
+
+            std::string texStr;
+            value_iss >> texStr;
+            std::wstring wideStr = std::wstring(texStr.begin(), texStr.end());          
+            
+            m_texture = G_TextureManager.LoadTexture(d3d, &wideStr[0], texStr);
+        }
+    }
 }
 
 
@@ -417,4 +525,21 @@ bool ParticleSystemComponent::TweakBarSetup()
 
     TwDefine((tweakId + "/ParticleSystem opened=false ").c_str());
     return true;
+}
+
+
+std::istream& operator>> (std::istream& in, glm::vec3& vec)
+{
+    // {x, y, z}
+    char ch;
+    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch;
+    return in;
+}
+
+std::istream& operator>> (std::istream& in, glm::vec4& vec)
+{
+    // {x, y, z, w}
+    char ch;
+    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch >> vec.w >> ch;
+    return in;
 }

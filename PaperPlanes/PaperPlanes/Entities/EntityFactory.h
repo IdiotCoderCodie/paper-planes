@@ -60,5 +60,8 @@ public:
                                        int xPos, int yPos, const std::string& id);
 
     static Entity* CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& id);
+
+    static Entity* CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& effectFile,
+                                              const std::string& id);
 };
 

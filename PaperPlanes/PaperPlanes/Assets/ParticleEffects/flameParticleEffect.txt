@@ -1,0 +1,14 @@
+ParticleEffect=PlaneCrashFire
+MaxParticleCount=100
+EmissionFreq=20
+StartPosition={0.0, 0.0, 0.0}
+StartPositionDeviation={0.1, 0.0, 0.1}
+StartVelocity={0.0, 2.0, 0.0}
+StartVelocityDeviation={0.3, 0.1, 0.3}
+StartColor={1.0, 1.0, 0.5, 1.0}
+StartColorDeviation={0.1, 0.1, 0.0, 0.0}
+ColorChangePerSec={-1.2, -1.6, -1.6, -1.6}
+StartSize=0.3
+StartSizeDeviation=0.1
+SizeChangePerSec=0.05
+Texture=flame.dds

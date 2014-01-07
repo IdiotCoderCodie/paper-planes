@@ -21,6 +21,7 @@ private:
     };
 
 public:
+    ParticleSystemComponent(D3D& d3d, std::string effectFile);
     ParticleSystemComponent(D3D& d3d);
     ~ParticleSystemComponent(void);
 
@@ -33,6 +34,8 @@ public:
     void Start();
 
 private:
+    bool LoadFromFile(const std::string& filename, D3D& d3d);
+
     bool InitBuffers(D3D& d3d);
 
     /**
@@ -71,6 +74,7 @@ private:
     float                  m_startSizeDeviation;
     float                  m_sizeChangePerSec;
     Texture*               m_texture;
+    std::string            m_effectName;
 
     int                    m_vertexCount;
     int                    m_indexCount;
@@ -80,4 +84,7 @@ private:
 
     bool                   m_tweakBarSetup;
 };
+
+std::istream& operator>> (std::istream& in, glm::vec3& vec);
+std::istream& operator>> (std::istream& in, glm::vec4& vec);
 
