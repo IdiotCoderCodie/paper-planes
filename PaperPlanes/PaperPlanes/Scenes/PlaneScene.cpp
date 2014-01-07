@@ -12,6 +12,7 @@
 
 #include "SceneManager.h"
 extern TextureManager G_TextureManager;
+extern ShaderManager G_ShaderManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr)
@@ -37,7 +38,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
                                                   glm::vec3(5.0f, 10.0f, 0.0f)));
     
-    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------  
 
 
     //----------------------------------------------------------------------------------------------

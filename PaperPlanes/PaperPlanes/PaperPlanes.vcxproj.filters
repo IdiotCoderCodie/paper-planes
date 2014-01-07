@@ -57,9 +57,6 @@
     <ClCompile Include="Components\Light\LightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assets\Textures\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\PlaneScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,9 +67,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Visual\VisualMeshComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Textures\Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Assets\Models\StaticMesh.cpp">
@@ -93,13 +87,19 @@
     <ClCompile Include="Components\Physics\PhysicsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assets\Textures\TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Entities\EntityFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Visual\ParticleSystemComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Textures\Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Textures\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Textures\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,9 +146,6 @@
     <ClInclude Include="Components\Light\LightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Textures\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\PlaneScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Visual\VisualMeshComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Assets\Textures\Bitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Assets\Models\StaticMesh.h">
@@ -191,13 +185,19 @@
     <ClInclude Include="Components\Physics\PhysicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Textures\TextureManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\EntityFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Visual\ParticleSystemComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Textures\Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Textures\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Textures\TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

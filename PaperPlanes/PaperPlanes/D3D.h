@@ -44,6 +44,9 @@ public:
     ID3D11DepthStencilView* GetDepthStencilView() { return m_depthStencilView; }
     void SetBackBufferRenderTarget();
 
+    void EnableAlphaBlending();
+    void DisableAlphaBlending();
+
 private:
     bool                        m_initialized;
     bool                        m_vsyncEnabled;
@@ -60,5 +63,8 @@ private:
     ID3D11RasterizerState*      m_rasterState;
     int                         m_screenWidth;
     int                         m_screenHeight;
+
+    ID3D11BlendState*           m_alphaEnableBlendingState;
+    ID3D11BlendState*           m_alphaDisableBlendingState;
 };
 

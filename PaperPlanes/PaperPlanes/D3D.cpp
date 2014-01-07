@@ -1,4 +1,5 @@
 #include "D3D.h"
+#include "d3d_safe_release.h"
 
 #include <AntTweakBar.h>
 
@@ -42,9 +43,8 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 {
 	HRESULT result; //used to test things are created ok.
 
-//--------------------------------------------------------------------------------------------------
-// Fetch the numerator and denominator for refresh rate and video card description.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // Fetch the numerator and denominator for refresh rate and video card description.
     // Create DirectX Graphics Interface factory.
 	IDXGIFactory* factory;
     result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
@@ -122,13 +122,11 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 
     factory->Release();
     factory = 0;
-//--------------------------------------------------------------------------------------------------
-// Done fetching the numerator and denominator for refresh rate and video card description.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Set up SwapChain description and create swap chain.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Set up SwapChain description and create swap chain.
     DXGI_SWAP_CHAIN_DESC swapChainDesc;
     ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
     
@@ -169,13 +167,11 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
                 &m_deviceContext);
     if(FAILED(result))
         return false;
-//--------------------------------------------------------------------------------------------------
-// Done setting up swap chain.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Set up render target view.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Set up render target view.
     ID3D11Texture2D* backBufferPtr;
     result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
 	if(FAILED(result))
@@ -188,13 +184,11 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 
     backBufferPtr->Release();
     backBufferPtr = 0;
-//--------------------------------------------------------------------------------------------------
-// Done creating render target view.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Set up depthStencilBuffer.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Set up depthStencilBuffer.
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
     ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
     
@@ -245,13 +239,12 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 
     // Set depth stencil state.
     m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
-//--------------------------------------------------------------------------------------------------
-// Done create depth stencil state.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Create second depth stencil state with depth disabled. (for 2D rendering)
-//--------------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+    // Create second depth stencil state with depth disabled. (for 2D rendering)
     D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
     ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
 
@@ -274,14 +267,12 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
                             &m_depthDisabledStencilState);
     if(FAILED(result))
         return false;
-//--------------------------------------------------------------------------------------------------
-// Done creating depth disabled depthstencilstate.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Create description of the view of the depth stencil buffer.
-// Do this so D3D knows to use the depth buffer as a depth stencil texture.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Create description of the view of the depth stencil buffer.
+    // Do this so D3D knows to use the depth buffer as a depth stencil texture.
     D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
     ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
@@ -296,13 +287,11 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 
     // Bind render target view and depth stencil buffer to output render pipeline.
     m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-//--------------------------------------------------------------------------------------------------
-// Done creating description of the view of the depth stencil buffer.
-//--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Create rasterizer state and viewport.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Create rasterizer state and viewport.
     D3D11_RASTERIZER_DESC rasterDesc;
     rasterDesc.AntialiasedLineEnable    = false;
 	rasterDesc.CullMode                 = D3D11_CULL_BACK;
@@ -322,19 +311,45 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
     m_deviceContext->RSSetState(m_rasterState);
 
     // Set up viewport.
-     D3D11_VIEWPORT viewport;
-     viewport.Width     = (float)screenWidth;
-     viewport.Height    = (float)screenHeight;
-     viewport.MinDepth  = 0.0f;
-     viewport.MaxDepth  = 1.0f;
-     viewport.TopLeftX  = 0.0f;
-     viewport.TopLeftY  = 0.0f;
+    D3D11_VIEWPORT viewport;
+    viewport.Width     = (float)screenWidth;
+    viewport.Height    = (float)screenHeight;
+    viewport.MinDepth  = 0.0f;
+    viewport.MaxDepth  = 1.0f;
+    viewport.TopLeftX  = 0.0f;
+    viewport.TopLeftY  = 0.0f;
 
-     m_deviceContext->RSSetViewports(1, &viewport);
+    m_deviceContext->RSSetViewports(1, &viewport);
+    //----------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------
-// Done creating rasterizer state and viewport.
-//--------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Create blend states.
+    D3D11_BLEND_DESC blendStateDesc;
+    ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
+    blendStateDesc.RenderTarget[0].BlendEnable           = TRUE;
+    blendStateDesc.RenderTarget[0].SrcBlend              = D3D11_BLEND_ONE;
+    blendStateDesc.RenderTarget[0].DestBlend             = D3D11_BLEND_ONE;
+    blendStateDesc.RenderTarget[0].BlendOp               = D3D11_BLEND_OP_ADD;
+    blendStateDesc.RenderTarget[0].SrcBlendAlpha         = D3D11_BLEND_ONE;
+    blendStateDesc.RenderTarget[0].DestBlendAlpha        = D3D11_BLEND_ZERO;
+    blendStateDesc.RenderTarget[0].BlendOpAlpha          = D3D11_BLEND_OP_ADD;
+    blendStateDesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+    result = m_device->CreateBlendState(&blendStateDesc, &m_alphaEnableBlendingState);
+    if(FAILED(result))
+    {
+        return false;
+    }
+
+    blendStateDesc.RenderTarget[0].BlendEnable = FALSE;
+    result = m_device->CreateBlendState(&blendStateDesc, &m_alphaDisableBlendingState);
+    if(FAILED(result))
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+
     return true;
 }
 
@@ -399,6 +414,9 @@ void D3D::Shutdown()
 		m_swapChain->Release();
 		m_swapChain = 0;
 	}
+
+    d3d_safe_release(m_alphaEnableBlendingState);
+    d3d_safe_release(m_alphaDisableBlendingState);
 }
 
 
@@ -462,4 +480,27 @@ void D3D::ClearDepthStencilView()
 void D3D::SetBackBufferRenderTarget()
 {
     m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+}
+
+
+void D3D::EnableAlphaBlending()
+{
+    float blendFactor[4];
+    blendFactor[0] = 0.0f;
+    blendFactor[1] = 0.0f;
+    blendFactor[2] = 0.0f;
+    blendFactor[3] = 0.0f;
+
+    m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+}
+
+void D3D::DisableAlphaBlending()
+{
+     float blendFactor[4];
+    blendFactor[0] = 0.0f;
+    blendFactor[1] = 0.0f;
+    blendFactor[2] = 0.0f;
+    blendFactor[3] = 0.0f;
+
+    m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
 }

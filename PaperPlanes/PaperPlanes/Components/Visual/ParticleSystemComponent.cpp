@@ -16,23 +16,26 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
     : m_particlePool(),
       m_engagedParticles(),
      // m_eligibleParticles(),
-      m_maxParticleCount(100),
+      m_maxParticleCount(1000),
       m_currentParticleCount(0),
-      m_emissionFreq(1.0f),
+      m_emissionFreq(50.0f),
       m_timeBetweenEmissions(1.0f / m_emissionFreq),
       m_timeSinceLastEmission(0.0f),
       m_systemLifetime(-1.0f),
       m_startPosition(0.0f, 0.0f, 0.0f),
       m_startPositionDeviation(0.0f),
-      m_startVelocity(0.0f, 1.0f, 0.0f),
-      m_startVelocityDeviation(1.0f),
-      m_startColor(0.5f, 0.0f, 0.0f, 1.0f),
-      m_startColorDeviation(0.5f, 0.0f, 0.0f, 1.0f),
-      m_startSize(1.0f),
+      m_startVelocity(0.0f, 0.2f, 0.0f),
+      m_startVelocityDeviation(0.4f, 0.1f, 0.4f),
+      m_startColor(1.0f, 1.0f, 1.0f, 1.0f),
+      m_startColorDeviation(0.2f, 0.0f, 0.0f, 1.0f),
+      m_colorChangePerSec(-0.2f, -0.4f, -0.8f, -0.5f),
+      m_fadeTime(4.0f),
+      m_fadePerSec(1.0f / m_fadeTime),
+      m_startSize(0.10f),
       m_startSizeDeviation(0.0f),
       m_texture(0)
 {
-    m_texture = G_TextureManager.LoadTexture(d3d, L"errorTexture.dds", "errorTexture.dds");
+    m_texture = G_TextureManager.LoadTexture(d3d, L"star.dds", "star.dds");
     //m_texture = G_TextureManager.GetTexture("particle.dds");
 
     // Fill the particle pool with the maximum number of particles, also add them all to elibible.
@@ -154,6 +157,9 @@ void ParticleSystemComponent::Update(float time)
         /*glm::vec3 test1 = p.velocity * time;
         glm::vec3 test = p.position += p.velocity * time;*/
         p.position = p.position +  (p.velocity * time);
+        p.color += m_colorChangePerSec * time;
+        /*p.color.a -= (m_fadePerSec * time);
+        p.color -= m_fadePerSec * time;*/
     }
 }
 
@@ -186,7 +192,9 @@ void ParticleSystemComponent::Draw(D3D& d3d)
 
     d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    d3d.EnableAlphaBlending();
     m_Shader->RenderShader(d3d, m_indexCount);
+    d3d.DisableAlphaBlending();
 }
 
 

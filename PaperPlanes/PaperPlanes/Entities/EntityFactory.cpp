@@ -172,5 +172,6 @@ Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const 
     Entity* newEntity = new Entity(scene, id);
     newEntity->SetComponent(new ParticleSystemComponent(d3d));
     scene.AddEntity(newEntity);
+    newEntity->RotateGlobalY(180.0f);
     return newEntity;
 }

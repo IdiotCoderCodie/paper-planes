@@ -66,6 +66,9 @@ private:
     glm::vec3              m_startVelocityDeviation;
     glm::vec4              m_startColor;
     glm::vec4              m_startColorDeviation;
+    glm::vec4              m_colorChangePerSec;
+    float                  m_fadeTime;
+    float                  m_fadePerSec;
     float                  m_startSize;
     float                  m_startSizeDeviation;
     Texture*               m_texture;
