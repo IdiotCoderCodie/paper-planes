@@ -13,42 +13,36 @@
 extern TextureManager G_TextureManager; 
 
 ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
-    : m_particlePool(),
-      m_engagedParticles(),
-     // m_eligibleParticles(),
+    : m_engagedParticles(),
       m_maxParticleCount(1000),
       m_currentParticleCount(0),
-      m_emissionFreq(50.0f),
+      m_emissionFreq(40.0f),
       m_timeBetweenEmissions(1.0f / m_emissionFreq),
       m_timeSinceLastEmission(0.0f),
       m_systemLifetime(-1.0f),
       m_startPosition(0.0f, 0.0f, 0.0f),
-      m_startPositionDeviation(0.0f),
-      m_startVelocity(0.0f, 0.2f, 0.0f),
-      m_startVelocityDeviation(0.4f, 0.1f, 0.4f),
-      m_startColor(1.0f, 1.0f, 1.0f, 1.0f),
-      m_startColorDeviation(0.2f, 0.0f, 0.0f, 1.0f),
-      m_colorChangePerSec(-0.2f, -0.4f, -0.8f, -0.5f),
-      m_fadeTime(4.0f),
-      m_fadePerSec(1.0f / m_fadeTime),
-      m_startSize(0.10f),
-      m_startSizeDeviation(0.0f),
-      m_texture(0)
+      m_startPositionDeviation(0.2f, 0.0f, 0.2f),
+      m_startVelocity(0.0f, 2.0f, 0.0f),
+      m_startVelocityDeviation(0.3f, 0.1f, 0.3f),
+      m_startColor(1.0f, 1.0f, 0.5f, 1.0f),
+      m_startColorDeviation(0.1f, 0.1f, 0.0f, 1.0f),
+      m_colorChangePerSec(-1.20f, -1.6f, -1.6f, -1.6f),
+      m_startSize(0.30f),
+      m_startSizeDeviation(0.1f),
+      m_sizeChangePerSec(0.05f),
+      m_texture(0),
+      m_tweakBarSetup(false)
 {
-    m_texture = G_TextureManager.LoadTexture(d3d, L"star.dds", "star.dds");
+    m_texture = G_TextureManager.LoadTexture(d3d, L"flame.dds", "flame.dds");
     //m_texture = G_TextureManager.GetTexture("particle.dds");
 
-    // Fill the particle pool with the maximum number of particles, also add them all to elibible.
-    for (int i = 0; i < m_maxParticleCount; i++)
-    {
-        m_particlePool.push_back(Particle());
-        m_particlePool[i].active = false;
-        
-    }
     srand(time(NULL));
     InitBuffers(d3d);
 
     m_Shader = G_ShaderManager.GetShader("Particle");
+
+
+
 }
 
 
@@ -148,6 +142,11 @@ bool ParticleSystemComponent::InitBuffers(D3D& d3d)
 
 void ParticleSystemComponent::Update(float time)
 {
+    if(!m_tweakBarSetup)
+    {
+        m_tweakBarSetup = TweakBarSetup();
+    }
+
     RemoveParticles(time);
     EmitParticles(time);
     UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance());
@@ -158,6 +157,7 @@ void ParticleSystemComponent::Update(float time)
         glm::vec3 test = p.position += p.velocity * time;*/
         p.position = p.position +  (p.velocity * time);
         p.color += m_colorChangePerSec * time;
+        p.size += m_sizeChangePerSec * time;
         /*p.color.a -= (m_fadePerSec * time);
         p.color -= m_fadePerSec * time;*/
     }
@@ -166,7 +166,6 @@ void ParticleSystemComponent::Update(float time)
 
 void ParticleSystemComponent::Draw(D3D& d3d)
 {
-
     //----------------------------------------------------------------------------------------------
     // Get matrices and put in buffer format.
     ConstantBuffers::MVPBuffer matBuffer =
@@ -193,8 +192,10 @@ void ParticleSystemComponent::Draw(D3D& d3d)
     d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     d3d.EnableAlphaBlending();
+    //d3d.TurnZBufferOff();
     m_Shader->RenderShader(d3d, m_indexCount);
     d3d.DisableAlphaBlending();
+    //d3d.TurnZBufferOn();
 }
 
 
@@ -203,14 +204,15 @@ void ParticleSystemComponent::RemoveParticles(float time)
     // Currently, for testing, remove all particles which go so far away from the start. (3.0).
     for(auto it = m_engagedParticles.begin(); it != m_engagedParticles.end(); )
     {
-        if(glm::distance(it->position, GetParent().GetPos()) > 25.0f)
+        if(it->color.r < 0.01f && it->color.g < 0.01f && it->color.b < 0.01f)
         {
-            // If the distance is greater than (5.0f), erase this particle.
             it = m_engagedParticles.erase(it);
             m_currentParticleCount--;
         }
         else
+        {
             ++it;
+        }
     }
 }
 
@@ -230,21 +232,18 @@ void ParticleSystemComponent::EmitParticles(float time)
 
     for (int i = 0; (i < particlesToEmit) && (m_currentParticleCount < m_maxParticleCount); i++)
     {
-        if(m_particlePool.size() > 0)
-        {
-            Particle newParticle;
-            InitNewEmission(newParticle);
+        Particle newParticle;
+        InitNewEmission(newParticle);
             
-            // Find where the particle should go (ordered back->front).
-            auto it = std::find_if(m_engagedParticles.begin(), m_engagedParticles.end(), 
-                                    [&](Particle const& particle) {
-                                        return newParticle.position.z < particle.position.z;
-                                    });
-
-            // Insert the new particle in designated position.
-            m_engagedParticles.insert(it, newParticle);
-            m_currentParticleCount++;
-        }
+        // Find where the particle should go (ordered back->front).
+        auto it = std::find_if(m_engagedParticles.begin(), m_engagedParticles.end(), 
+                                [&](Particle const& particle) {
+                                    return newParticle.position.z < particle.position.z;
+                                });
+          
+        // Insert the new particle in designated position.
+        m_engagedParticles.insert(it, newParticle);
+        m_currentParticleCount++;
     }
 }
 
@@ -267,6 +266,9 @@ void ParticleSystemComponent::InitNewEmission(Particle& newEmission)
     newEmission.color.x += (((float)(rand() % 1000) / 500.0f) - 1.0f) * m_startColorDeviation.x;
     newEmission.color.y += (((float)(rand() % 1000) / 500.0f) - 1.0f) * m_startColorDeviation.y;
     newEmission.color.z += (((float)(rand() % 1000) / 500.0f) - 1.0f) * m_startColorDeviation.z;
+
+    newEmission.size = m_startSize;
+    newEmission.size += (((float)(rand() % 1000) / 500.0f) - 1.0f) * m_startSizeDeviation;
    /* newEmission.color.x += (((float)rand()-(float)rand()) / RAND_MAX) * m_startColorDeviation.x;
     newEmission.color.y += (((float)rand()-(float)rand()) / RAND_MAX) * m_startColorDeviation.y;
     newEmission.color.z += (((float)rand()-(float)rand()) / RAND_MAX) * m_startColorDeviation.z;*/
@@ -283,32 +285,32 @@ bool ParticleSystemComponent::UpdateBuffers(D3D& d3d)
     for(Particle p : m_engagedParticles)
     {
         // Bottom left.
-        m_vertices[index].position = p.position + glm::vec3(-m_startSize, -m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(-p.size, -p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(0.0f, 1.0f);
         m_vertices[index].color    = p.color;
         index++;
         // Top left.
-        m_vertices[index].position = p.position + glm::vec3(-m_startSize, +m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(-p.size, +p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(0.0f, 0.0f);
         m_vertices[index].color    = p.color;
         index++;
         // Bottom right.
-        m_vertices[index].position = p.position + glm::vec3(+m_startSize, -m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(+p.size, -p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(1.0f, 1.0f);
         m_vertices[index].color    = p.color;
         index++;
         // Bottom right.
-        m_vertices[index].position = p.position + glm::vec3(+m_startSize, -m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(+p.size, -p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(1.0f, 1.0f);
         m_vertices[index].color    = p.color;
         index++;
         // Top left.
-        m_vertices[index].position = p.position + glm::vec3(-m_startSize, +m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(-p.size, +p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(0.0f, 0.0f);
         m_vertices[index].color    = p.color;
         index++;
         // Top right.
-        m_vertices[index].position = p.position + glm::vec3(+m_startSize, +m_startSize, 0.0f);
+        m_vertices[index].position = p.position + glm::vec3(+p.size, +p.size, 0.0f);
         m_vertices[index].uv       = glm::vec2(1.0f, 0.0f);
         m_vertices[index].color    = p.color;
         index++;
@@ -333,3 +335,76 @@ bool ParticleSystemComponent::UpdateBuffers(D3D& d3d)
     return true;
 }
 
+
+bool ParticleSystemComponent::TweakBarSetup()
+{
+    TwBar* tweakBar = GetParent().GetTweakBar();
+    if(!tweakBar)
+    {
+        return false;
+    }
+
+    std::string tweakId = GetParent().GetID();
+
+    TwAddVarRO(tweakBar, "Particle Count:", TW_TYPE_INT32, &m_currentParticleCount, 
+               "group='ParticleSystem'");
+    TwAddVarRW(tweakBar, "Emit Every (s):", TW_TYPE_FLOAT, &m_timeBetweenEmissions, 
+               "group='ParticleSystem' step=0.01");
+    
+    // Start Position
+    TwAddVarRW(tweakBar, "StartPos X", TW_TYPE_FLOAT, &m_startPosition.x, 
+               "group='StartPosition' step=0.1");
+    TwAddVarRW(tweakBar, "StartPos Y", TW_TYPE_FLOAT, &m_startPosition.y, 
+               "group='StartPosition' step=0.1");
+    TwAddVarRW(tweakBar, "StartPos Z", TW_TYPE_FLOAT, &m_startPosition.z, 
+               "group='StartPosition' step=0.1");
+    TwDefine((tweakId + "/StartPosition group='ParticleSystem'").c_str());
+
+    // Start PositionDeviation
+    TwAddVarRW(tweakBar, "StartPosDev X", TW_TYPE_FLOAT, &m_startPositionDeviation.x, 
+               "group='StartPositionDeviation' step=0.1");
+    TwAddVarRW(tweakBar, "StartPosDev Y", TW_TYPE_FLOAT, &m_startPositionDeviation.y, 
+               "group='StartPositionDeviation' step=0.1");
+    TwAddVarRW(tweakBar, "StartPosDev Z", TW_TYPE_FLOAT, &m_startPositionDeviation.z, 
+               "group='StartPositionDeviation' step=0.1");
+    TwDefine((tweakId + "/StartPositionDeviation group='ParticleSystem'").c_str());
+
+    // Start Velocity.
+    TwAddVarRW(tweakBar, "StartVelocity", TW_TYPE_DIR3F, &m_startVelocity, 
+               "group='ParticleSystem'");
+
+    // Start Velocity Deviation
+    TwAddVarRW(tweakBar, "X", TW_TYPE_FLOAT, &m_startVelocityDeviation.x, 
+               "group='StartVelocityDeviation' step=0.1");
+    TwAddVarRW(tweakBar, "Y", TW_TYPE_FLOAT, &m_startVelocityDeviation.y, 
+               "group='StartVelocityDeviation' step=0.1");
+    TwAddVarRW(tweakBar, "Z", TW_TYPE_FLOAT, &m_startVelocityDeviation.z, 
+               "group='StartVelocityDeviation' step=0.1");
+    TwDefine((tweakId + "/StartVelocityDeviation group='ParticleSystem'").c_str());
+
+
+    // Start Color
+    TwAddVarRW(tweakBar, "StartColor", TW_TYPE_COLOR4F, &m_startColor, 
+               "group='Color'");
+    TwAddVarRW(tweakBar, "StartColorDev", TW_TYPE_COLOR4F, &m_startColorDeviation, 
+               "group='Color'");
+    TwAddVarRW(tweakBar, "Red", TW_TYPE_FLOAT, &m_startVelocityDeviation.x, 
+               "group='ColorChangePerSec' step=0.01");
+    TwAddVarRW(tweakBar, "Green", TW_TYPE_FLOAT, &m_startVelocityDeviation.y, 
+               "group='ColorChangePerSec' step=0.01");
+    TwAddVarRW(tweakBar, "Blue", TW_TYPE_FLOAT, &m_startVelocityDeviation.z, 
+               "group='ColorChangePerSec' step=0.01");
+    TwDefine((tweakId + "/ColorChangePerSec group='Color'").c_str());
+    TwDefine((tweakId + "/Color group='ParticleSystem'").c_str());
+
+    TwAddVarRW(tweakBar, "StartSize", TW_TYPE_FLOAT, &m_startSize, 
+               "group='Size' step=0.01 ");
+    TwAddVarRW(tweakBar, "StartSizeDev", TW_TYPE_FLOAT, &m_startSizeDeviation, 
+               "group='Size' step=0.01 ");
+    TwAddVarRW(tweakBar, "sizeChangePerSec", TW_TYPE_FLOAT, &m_sizeChangePerSec, 
+               "group='Size' step=0.01 ");
+    TwDefine((tweakId + "/Size group='ParticleSystem'").c_str());
+
+    TwDefine((tweakId + "/ParticleSystem opened=false ").c_str());
+    return true;
+}

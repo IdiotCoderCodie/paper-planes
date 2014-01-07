@@ -11,6 +11,7 @@ private:
         glm::vec3 position;
         glm::vec4 color;
         glm::vec3 velocity;
+        float size;
     };
     struct VertexType
     {
@@ -49,11 +50,10 @@ private:
 
     bool UpdateBuffers(D3D& d3d);
 
+    bool TweakBarSetup();
+
 private:
-    std::vector<Particle>  m_particlePool;
     std::vector<Particle>  m_engagedParticles;
-    //std::vector<Particle*> m_engagedParticles;
-    //std::vector<Particle*> m_eligibleParticles;
     unsigned int           m_maxParticleCount;
     unsigned int           m_currentParticleCount;
     float                  m_emissionFreq;
@@ -67,17 +67,17 @@ private:
     glm::vec4              m_startColor;
     glm::vec4              m_startColorDeviation;
     glm::vec4              m_colorChangePerSec;
-    float                  m_fadeTime;
-    float                  m_fadePerSec;
     float                  m_startSize;
     float                  m_startSizeDeviation;
+    float                  m_sizeChangePerSec;
     Texture*               m_texture;
-   // float                  m_timeTilNextEmission;
 
     int                    m_vertexCount;
     int                    m_indexCount;
     VertexType*            m_vertices;
     ID3D11Buffer*          m_vertexBuffer;
     ID3D11Buffer*          m_indexBuffer;
+
+    bool                   m_tweakBarSetup;
 };
 

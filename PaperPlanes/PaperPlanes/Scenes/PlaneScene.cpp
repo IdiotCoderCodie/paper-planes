@@ -20,6 +20,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
 
+
+
+
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
     EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", 
@@ -27,6 +30,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                               GetShadowMaps(), glm::vec3(0.0f), glm::vec3(50.0f), 
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
+    
 
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
@@ -39,7 +43,6 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                   glm::vec3(5.0f, 10.0f, 0.0f)));
     
     //----------------------------------------------------------------------------------------------  
-
 
     //----------------------------------------------------------------------------------------------
     // Test Particle System
@@ -58,7 +61,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Light entity
     Entity* redLight =
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f),   // ambient.
-                                                glm::vec4(0.7f, 0.0f, 0.0f, 0.2f),     // diffuse.
+                                                glm::vec4(0.35f, 0.0f, 0.0f, 0.2f),     // diffuse.
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
                                                 glm::vec3(+1.0f, 0.0f, -10.0f),        // position.
                                                 "redLight");
@@ -68,7 +71,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Light entity no.2
     Entity* greenLight = 
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f),   // ambient.
-                                            glm::vec4(0.0f, 0.7f, 0.0f, 0.2f),         // diffuse.
+                                            glm::vec4(0.0f, 0.35f, 0.0f, 0.2f),         // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(-1.0f, 0.0f, -10.0f),            // position.
                                             "greenLight");
@@ -79,7 +82,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Light entity no.3
     Entity* blueLight = 
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.0f, 0.02f, 1.0f), // ambient.
-                                            glm::vec4(0.0f, 0.0f, 0.7f, 0.2f),        // diffuse.
+                                            glm::vec4(0.0f, 0.0f, 0.35f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(0.0f, +0.5f, -10.0f),            // position.
                                             "blueLight");
@@ -89,7 +92,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Light entity no.4
     Entity* whiteLight = 
     EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-                                            glm::vec4(0.3f, 0.3f, 0.3f, 0.2f),        // diffuse.
+                                            glm::vec4(0.1f, 0.1f, 0.1f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(0.0f, -0.5f, -10.0f),            // position.
                                             "whiteLight");
