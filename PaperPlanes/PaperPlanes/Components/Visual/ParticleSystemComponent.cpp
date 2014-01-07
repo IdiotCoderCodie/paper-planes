@@ -23,7 +23,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
       m_timeSinceLastEmission(0.0f),
       m_systemLifetime(-1.0f),
       m_startPosition(0.0f, 0.0f, 0.0f),
-      m_startPositionDeviation(10.0f),
+      m_startPositionDeviation(0.0f),
       m_startVelocity(0.0f, 1.0f, 0.0f),
       m_startVelocityDeviation(1.0f),
       m_startColor(0.5f, 0.0f, 0.0f, 1.0f),
@@ -149,11 +149,11 @@ void ParticleSystemComponent::Update(float time)
     EmitParticles(time);
     UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance());
 
-    for(Particle p : m_engagedParticles)
+    for(Particle& p : m_engagedParticles)
     {
-        glm::vec3 test1 = p.velocity * time;
-        glm::vec3 test = p.position += p.velocity * time;
-        p.position += p.velocity * time;
+        /*glm::vec3 test1 = p.velocity * time;
+        glm::vec3 test = p.position += p.velocity * time;*/
+        p.position = p.position +  (p.velocity * time);
     }
 }
 
