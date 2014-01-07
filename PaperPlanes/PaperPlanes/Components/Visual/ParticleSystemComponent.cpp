@@ -6,6 +6,7 @@
 #include "../../Assets/Textures/TextureManager.h"
 #include "../../Components/Camera/CameraComponent.h"
 #include "../../d3d_safe_release.h"
+#include "../../glm/gtc/constants.hpp"
 
 #include <algorithm>
 #include <time.h>
@@ -161,6 +162,9 @@ void ParticleSystemComponent::Update(float time)
         /*p.color.a -= (m_fadePerSec * time);
         p.color -= m_fadePerSec * time;*/
     }
+
+
+    
 }
 
 
@@ -174,6 +178,12 @@ void ParticleSystemComponent::Draw(D3D& d3d)
         glm::transpose(GetParent().GetParent().GetActiveCamera()->GetViewMatrix()),
         glm::transpose(GetParent().GetParent().GetActiveCamera()->GetProjMatrix())
     };
+
+    // Billboarding.
+    glm::vec3 camPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
+    float angle = atan2(this->GetParent().GetPos().x - camPos.x, 
+                            this->GetParent().GetPos().z - camPos.z) * (180.0f / glm::pi<float>());
+    matBuffer.modelMatrix = glm::rotate(matBuffer.modelMatrix, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
     m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer, 
                                    sizeof(matBuffer), 0);
@@ -388,11 +398,11 @@ bool ParticleSystemComponent::TweakBarSetup()
                "group='Color'");
     TwAddVarRW(tweakBar, "StartColorDev", TW_TYPE_COLOR4F, &m_startColorDeviation, 
                "group='Color'");
-    TwAddVarRW(tweakBar, "Red", TW_TYPE_FLOAT, &m_startVelocityDeviation.x, 
+    TwAddVarRW(tweakBar, "Red", TW_TYPE_FLOAT, &m_colorChangePerSec.x, 
                "group='ColorChangePerSec' step=0.01");
-    TwAddVarRW(tweakBar, "Green", TW_TYPE_FLOAT, &m_startVelocityDeviation.y, 
+    TwAddVarRW(tweakBar, "Green", TW_TYPE_FLOAT, &m_colorChangePerSec.y, 
                "group='ColorChangePerSec' step=0.01");
-    TwAddVarRW(tweakBar, "Blue", TW_TYPE_FLOAT, &m_startVelocityDeviation.z, 
+    TwAddVarRW(tweakBar, "Blue", TW_TYPE_FLOAT, &m_colorChangePerSec.z, 
                "group='ColorChangePerSec' step=0.01");
     TwDefine((tweakId + "/ColorChangePerSec group='Color'").c_str());
     TwDefine((tweakId + "/Color group='ParticleSystem'").c_str());
