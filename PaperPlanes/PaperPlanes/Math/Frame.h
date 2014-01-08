@@ -29,6 +29,10 @@ public:
 	// Move the frame right (or left if negative delta).
 	void MoveRight(float delta); 
 
+    void MoveGlobalX(float delta);
+    void MoveGlobalY(float delta);
+    void MoveGlobalZ(float delta);
+
 	void RotateLocalX(const float delta);
 	void RotateLocalY(const float delta);
 	void RotateLocalZ(const float delta);

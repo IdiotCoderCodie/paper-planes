@@ -52,6 +52,9 @@ public:
     void MoveForward(float delta)               { m_Transform.MoveForward(delta) ; }
     void MoveUp(float delta)                    { m_Transform.MoveUp(delta); }
     void MoveRight(float delta)                 { m_Transform.MoveRight(delta); }
+    void MoveGlobalX(float delta)               { m_Transform.MoveGlobalX(delta); }
+    void MoveGlobalY(float delta)               { m_Transform.MoveGlobalY(delta); }
+    void MoveGlobalZ(float delta)               { m_Transform.MoveGlobalZ(delta); }
 
     void RotateLocalX(float delta)              { m_Transform.RotateLocalX(delta); }
     void RotateLocalY(float delta)              { m_Transform.RotateLocalY(delta); }

@@ -9,6 +9,8 @@
 #include "../Components/Physics/FreeRoamFpComponent.h"
 #include "../Assets/Textures/TextureManager.h"
 #include "../Entities/EntityFactory.h"
+#include "../Components/Physics/FollowPathComponent.h"
+
 
 #include "SceneManager.h"
 extern TextureManager G_TextureManager;
@@ -31,6 +33,27 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
     
+    //----------------------------------------------------------------------------------------------
+    // Testing FollowPathComponent
+    Entity* follower =
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"crumpledPaper1024.dds",
+        GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "cubeFollowingPath");
+    FollowPathComponent* pathComp = new FollowPathComponent();
+    follower->SetComponent(pathComp);
+
+    for(int i = 0; i < 5; i++)
+    {
+        Entity* newNode =
+        EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(1.0f + 1.0f * i, i * (i /5.0f), 0.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+        pathComp->AddNode(newNode);
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+
 
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.

@@ -65,6 +65,23 @@ void Frame::MoveRight(float delta)
 	m_Position		+= cross * delta;
 }
 
+
+void Frame::MoveGlobalX(float delta)
+{
+    m_Position += glm::vec3(delta, 0.0f, 0.0f);
+}
+
+void Frame::MoveGlobalY(float delta)
+{
+    m_Position += glm::vec3(0.0f, delta, 0.0f);
+}
+
+void Frame::MoveGlobalZ(float delta)
+{
+    m_Position += glm::vec3(0.0f, 0.0f, delta);
+}
+
+
 // Rotates around the current X axis [cross(m_Up, m_Forward)].
 void Frame::RotateLocalX(const float delta)
 {

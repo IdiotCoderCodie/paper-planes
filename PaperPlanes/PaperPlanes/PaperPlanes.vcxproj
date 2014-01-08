@@ -94,6 +94,7 @@
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Components\Physics\FreeRoamFpComponent.cpp" />
     <ClCompile Include="Entities\EntityFactory.cpp" />
+    <ClCompile Include="Components\Physics\FollowPathComponent.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="HiResTimer.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Components\Physics\FreeRoamFpComponent.h" />
     <ClInclude Include="Entities\EntityFactory.h" />
+    <ClInclude Include="Components\Physics\FollowPathComponent.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="HiResTimer.h" />
     <ClInclude Include="InputManager.h" />
