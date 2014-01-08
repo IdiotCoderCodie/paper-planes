@@ -41,6 +41,28 @@ Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& amb
 }
 
 
+Entity* EntityFactory::CreateSpotlightEntity(Scene& scene, const glm::vec4& ambient, 
+                                              const glm::vec4& diffuse, const glm::vec4& specular,
+                                              const glm::vec3& position, float spotCutoff, 
+                                              float spotExponent,
+                                              const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+    LightComponent* lightComp = new LightComponent(ambient, diffuse, specular, 
+                                                   spotCutoff, spotExponent);
+    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
+    newEntity->SetComponent(lightComp);
+    scene.AddEntity(newEntity);
+    newEntity->MoveForward(position.z);
+    newEntity->MoveRight(position.x);
+    newEntity->MoveUp(position.y);
+
+    return newEntity;
+}
+
+
+
+
 Entity* EntityFactory::CreateMeshEntity(Scene& scene, D3D& d3d, const std::string& objFilename, 
                                         WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
                                         const glm::vec3& position, const glm::vec3& scale,

@@ -39,6 +39,13 @@ public:
         return CreatePointlightEntity(scene, ambient, diffuse, specular, glm::vec3(0.0f), id);
     }
 
+    static Entity* CreateSpotlightEntity(Scene& scene, const glm::vec4& ambient, 
+                                              const glm::vec4& diffuse, const glm::vec4& specular,
+                                              const glm::vec3& position, float spotCutoff, 
+                                              float spotExponent,
+                                              const std::string& id);
+
+
     static Entity* CreateMeshEntity(Scene& scene, D3D& d3d, const std::string& objFilename, 
                                     WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
                                     const glm::vec3& position, const glm::vec3& scale,

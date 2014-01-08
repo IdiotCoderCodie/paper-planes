@@ -30,9 +30,13 @@ public:
 private:
     int GetNextNode();
 
+    glm::vec3 CalculateBezierPoint(float t, const glm::vec3& p0, const glm::vec3& p1, 
+                                   const glm::vec3& p2, const glm::vec3& p3) const;
+
 private:
     std::vector<Entity const*> m_nodes;
     int                        m_nextNode;
     float                      m_speed;
+    float                      m_t;
 };
 

@@ -40,17 +40,50 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
         GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "cubeFollowingPath");
     FollowPathComponent* pathComp = new FollowPathComponent();
     follower->SetComponent(pathComp);
-
-    for(int i = 0; i < 5; i++)
-    {
-        Entity* newNode =
-        EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(1.0f + 1.0f * i, i * (i /5.0f), 0.0f), 
+    
+    int i = 0;
+    Entity* newNode = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(0.0f), 
                                         glm::vec3(0.1f),
                                         "Node " + std::to_string(i));
-        pathComp->AddNode(newNode);
-    }
-
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(5.0f, 0.0f, 0.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(5.0f, 5.0f, 0.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(0.0f, 10.0f, 5.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(5.0f, 10.0f, 5.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
+    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+                                        GetShadowMaps(), glm::vec3(5.0f, 10.0f, 10.0f), 
+                                        glm::vec3(0.1f),
+                                        "Node " + std::to_string(i));
+    i++;
+    pathComp->AddNode(newNode);
 
     //----------------------------------------------------------------------------------------------
 
@@ -84,10 +117,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity
     Entity* redLight =
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f),   // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f),   // ambient.
                                                 glm::vec4(0.35f, 0.0f, 0.0f, 0.2f),     // diffuse.
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
-                                                glm::vec3(+1.0f, 0.0f, -10.0f),        // position.
+                                                glm::vec3(5.0f, 0.0f, -25.0f),        // position.
+                                                30.0f,
+                                                16.0f,
                                                 "redLight");
 
     //redLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f, 90.0f, 0.0f)));
@@ -96,10 +131,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
     Entity* greenLight = 
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f),   // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f),   // ambient.
                                             glm::vec4(0.0f, 0.35f, 0.0f, 0.2f),         // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(-25.0f, 0.0f, -25.0f),            // position.
+                                            glm::vec3(-5.0f, 0.0f, -25.0f),            // position.
+                                            30.0f,
+                                            16.0f,
                                             "greenLight");
     //greenLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f, -80.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
@@ -107,10 +144,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.3
     Entity* blueLight = 
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.0f, 0.0f, 0.02f, 1.0f), // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.0f, 0.0f, 0.02f, 1.0f), // ambient.
                                             glm::vec4(0.0f, 0.0f, 0.35f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, +0.5f, -10.0f),            // position.
+                                            glm::vec3(0.0f, +5.0f, -25.0f),            // position.
+                                            30.0f,
+                                            16.0f,
                                             "blueLight");
    // blueLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(80.0f, 0.0f, 50.0f)));
     //----------------------------------------------------------------------------------------------
@@ -118,10 +157,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.4
     Entity* whiteLight = 
-    EntityFactory::CreatePointlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
                                             glm::vec4(0.1f, 0.1f, 0.1f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, -0.5f, -10.0f),            // position.
+                                            glm::vec3(0.0f, -5.0f, -25.0f),            // position.
+                                            30.0f,
+                                            16.0f,
                                             "whiteLight");
    // whiteLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(-80.0f, 40.0f, -20.0f)));
     //----------------------------------------------------------------------------------------------
