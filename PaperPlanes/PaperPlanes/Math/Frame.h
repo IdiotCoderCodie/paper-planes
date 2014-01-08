@@ -40,6 +40,7 @@ public:
     void SetScaleX(float x) { m_Scale.x = x; }
     void SetScaleY(float y) { m_Scale.y = y; }
     void SetScaleZ(float z) { m_Scale.z = z; }
+    const glm::vec3& GetScale() const { return m_Scale; }
 
 private:
 	glm::mat4 m_Matrix;

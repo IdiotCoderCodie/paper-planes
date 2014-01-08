@@ -17,6 +17,8 @@ class LightComponent : public Component
 public:
     LightComponent(void);
     LightComponent(const glm::vec4& ambient, const glm::vec4& diffuse, const glm::vec4& specular);
+    LightComponent(const glm::vec4& ambient, const glm::vec4& diffuse, const glm::vec4& specular,
+                   float spotCutoff, float spotExponent);
     virtual ~LightComponent(void);
 
     void FamilyID(componentId_t& out) const     { out = "LightComponent"; }
@@ -38,6 +40,12 @@ public:
     void Enable()           { m_active = true; }
     bool Disable()          { m_active = false; }
 
+    float GetSpotCutoff() const { return m_spotCutoff; }
+    void SetSpotCutoff(float cutoff) {  m_spotCutoff = cutoff; }
+
+    float GetSpotExponent() const { return m_spotExponent; }
+    void SetSpotExponent(float exp) { m_spotExponent = exp; }
+
     // Functions for shadow mapping.
 
     void GenerateProjectionMatrix(float near, float far);
@@ -47,17 +55,19 @@ public:
 
     virtual void Update(float time);
     
+    bool TweakBarSetup();
 
 private:
     bool m_active;
     glm::vec4 m_ambient;
     glm::vec4 m_diffuse;
     glm::vec4 m_specular;
-    
+    float     m_spotCutoff;
+    float     m_spotExponent;
     // Used for shadow mapping.
     glm::mat4 m_viewMatrix;
     glm::mat4 m_projectionMatrix;
 
-
+    bool      m_tweakBarSetup;
 };
 

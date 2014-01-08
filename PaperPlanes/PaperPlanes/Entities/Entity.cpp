@@ -30,6 +30,9 @@ Entity::Entity(Scene& parent, const entityId_t& id)
     TwAddVarRO(m_tweakBar, "Up", TW_TYPE_DIR3F, &m_Transform.GetUp(),
         " group='Transform' ");
 
+    TwAddVarRO(m_tweakBar, "Scale", TW_TYPE_DIR3F, &m_Transform.GetScale(), 
+        "group='Transform' readonly='false' step=0.1");
+
     // Iconify the tweak bar.
     TwDefine((id + " iconified=true ").c_str());
 }

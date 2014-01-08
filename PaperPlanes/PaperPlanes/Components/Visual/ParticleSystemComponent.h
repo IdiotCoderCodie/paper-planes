@@ -106,4 +106,3 @@ private:
 
 std::istream& operator>> (std::istream& in, glm::vec3& vec);
 std::istream& operator>> (std::istream& in, glm::vec4& vec);
-

@@ -58,7 +58,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
             // Light is active.
             // Get the light vector.
             float3 lightVec = normalize(input.lightPos[index]);
-            
+            //float3 lightVec = lights[index].position.xyz - pos;
             float NdotL = max(dot(norm, lightVec), 0.0);
                   
             if(index < MAX_SHADOWCASTING_LIGHTS)
@@ -90,7 +90,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
 
                         // Calculate spot attenuation.
                         float3 spotDir = normalize(lights[index].position - lights[index].spotDirection);
-                        float cosCurAngle = dot(-lightVec, normalize(lights[index].spotDirection));
+                        float cosCurAngle = dot(lightVec, -normalize(lights[index].spotDirection));
                         float cosOuterAngle = saturate(cos(LightBuffer[index].spotCutoff));
                         float cosInnerAngle = saturate(cos((1.0 - (lights[index].spotExponent / 128.0)) *
                                                                    lights[index].spotCutoff));
