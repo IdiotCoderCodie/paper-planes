@@ -5,7 +5,10 @@ FollowPathComponent::FollowPathComponent(void)
     : m_nodes(),
       m_nextNode(3),
       m_speed(1.0f),
-      m_t(0.0f)
+      m_t(0.0f),
+      m_delayed(false),
+      m_currentDelayTime(0.0f),
+      m_reverse(false)
 {
 }
 
@@ -17,59 +20,110 @@ FollowPathComponent::~FollowPathComponent(void)
 
 void FollowPathComponent::Update(float time)
 {
+    if(m_delayed)
+    {
+        // If delayed, increment current delay time. Then check if it's ready to go on to the next 
+        // node. If it is, get the next node.
+        m_currentDelayTime += time;
+        if(m_currentDelayTime > m_nodes[m_nextNode].delay)
+        {
+            m_currentDelayTime = 0.0f;
+            m_delayed = false;
+            GetNextNode(); // Now get the next destination.
+        }
+        return;
+    }
+
     if(m_nodes.size() > m_nextNode)
     {
-        m_t += time * 1.0f;
-        glm::vec3 nextPoint = CalculateBezierPoint(m_t, 
-            m_nodes[m_nextNode-3]->GetPos(), // p0
-            m_nodes[m_nextNode-2]->GetPos(), // p1
-            m_nodes[m_nextNode-1]->GetPos(), // p2
-            m_nodes[m_nextNode]->GetPos());  // p3
+        m_t += time;
+        float t = m_t / m_nodes[m_nextNode].timeToReach;
 
-        GetParent().SetPos(nextPoint);
-/*
-
-        glm::vec3 velocity = m_nodes[m_nextNode]->GetPos() - GetParent().GetPos();
-        velocity = glm::normalize(velocity) * m_speed * time;
-
-        GetParent().MoveGlobalX(velocity.x);
-        GetParent().MoveGlobalY(velocity.y);
-        GetParent().MoveGlobalZ(velocity.z);*/
-
-        if(m_t >= 1.0f)
+        glm::vec3 nextPoint;
+        if(m_reverse)
         {
-            GetNextNode();
-            m_t = 0.0f;
+            nextPoint = CalculateBezierPoint(t, 
+            m_nodes[m_nextNode+3].position, // p0
+            m_nodes[m_nextNode+2].position, // p1
+            m_nodes[m_nextNode+1].position, // p2
+            m_nodes[m_nextNode].position);  // p3
+        }
+        else
+        {
+            nextPoint = CalculateBezierPoint(t, 
+            m_nodes[m_nextNode-3].position, // p0
+            m_nodes[m_nextNode-2].position, // p1
+            m_nodes[m_nextNode-1].position, // p2
+            m_nodes[m_nextNode].position);  // p3
         }
 
-        //if( glm::distance( m_nodes[m_nextNode]->GetPos(), GetParent().GetPos()) < 0.05f)
-        //{
-        //    // Reached the destination... get next node to head to.
-        //    GetNextNode();
-        //}
+        GetParent().SetPos(nextPoint);
+
+        if(t >= 1.0f)
+        {
+            // Arrived at node. Now check if there is a delay on it before getting next destination.
+            if(m_nodes[m_nextNode].delay > 0.0001f)
+            {
+                m_delayed = true;
+                m_currentDelayTime = 0.0f;
+            }
+            else
+            {
+                GetNextNode();
+            }
+            m_t = 0.0f;           
+        }
     }
 }
 
 
 int FollowPathComponent::GetNextNode()
 {
-    m_nextNode += 3;
-    if(m_nextNode >= m_nodes.size())
+    if(m_reverse)
     {
-        m_nextNode = 3;
+        m_nextNode -= 3;
+        if(m_nextNode < 0) 
+        {
+            // Gone beyond the scope, must be time to switch direction again.
+            m_nextNode = 3;
+            m_reverse = false;
+        }
     }
+    else
+    {
+        m_nextNode += 3;
+        if(m_nextNode >= m_nodes.size())
+        {
+            // Gone beyond the scope, must be time to reverse.
+            m_nextNode -= 6;
+            m_reverse = true;
+        }
+    }
+    
     return m_nextNode;
 }
 
 
-void FollowPathComponent::AddNode(Entity const* newNode)
+void FollowPathComponent::AddNode(const glm::vec3& position, float arrivalTime, float delay)
+{
+    Node node = 
+    {
+        position,
+        arrivalTime,
+        delay
+    };
+    m_nodes.push_back(node);
+}
+
+
+void FollowPathComponent::AddNode(Entity const* nodeEnt)
 {
     // Check the pointer given is not null before pushing onto the vector.
-    if(!newNode)
+    if(!nodeEnt)
     {
         return;
     }
-    m_nodes.push_back(newNode);
+    AddNode(nodeEnt->GetPos(), 1.0f, 0.0f);
 }
 
 

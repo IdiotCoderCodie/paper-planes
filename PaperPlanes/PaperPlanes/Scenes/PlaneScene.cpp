@@ -45,45 +45,45 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* newNode = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(0.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
-    pathComp->AddNode(newNode);
+    pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(5.0f, 0.0f, 0.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
     pathComp->AddNode(newNode);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(5.0f, 5.0f, 0.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
     pathComp->AddNode(newNode);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
-    pathComp->AddNode(newNode);
+    pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(0.0f, 10.0f, 5.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
     pathComp->AddNode(newNode);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(5.0f, 10.0f, 5.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
     pathComp->AddNode(newNode);
     newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
                                         GetShadowMaps(), glm::vec3(5.0f, 10.0f, 10.0f), 
                                         glm::vec3(0.1f),
-                                        "Node " + std::to_string(i));
+                                        "Node" + std::to_string(i));
     i++;
-    pathComp->AddNode(newNode);
+    pathComp->AddNode(newNode->GetPos(), 5.0f, 2.0f);
 
     //----------------------------------------------------------------------------------------------
 
