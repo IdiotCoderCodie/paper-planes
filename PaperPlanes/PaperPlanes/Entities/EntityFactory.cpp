@@ -8,6 +8,8 @@
 #include "../Components/Visual/VisualMeshComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Visual/ParticleSystemComponent.h"
+#include "../Components/Collision/CollisionComponent.h"
+#include "../Components/BehaviourControllers/PaperPlaneBC.h"
 
 
 extern TextureManager G_TextureManager;
@@ -205,5 +207,51 @@ Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const 
     newEntity->SetComponent(new ParticleSystemComponent(d3d, file));
     scene.AddEntity(newEntity);
     //newEntity->RotateGlobalY(180.0f);
+    return newEntity;
+}
+
+
+Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position, 
+                                              std::vector<RenderTarget*>& shadowMaps, 
+                                              const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+    //newEntity->SetComponent(new ParticleSystemComponent(d3d, "flameParticleEffect.txt"));
+
+    // Load texture.
+    Texture* tex = G_TextureManager.GetTexture("crumpledPaper1024.dds");
+    if(!tex)
+    {
+        tex = G_TextureManager.LoadTexture(d3d, L"crumpledPaper1024.dds", "crumpledPaper1024.dds");
+    }
+
+    // Create the mesh component.
+    VisualMeshComponent* mesh = new VisualMeshComponent(d3d, "Assets\\Models\\sphere.obj", *tex, 
+                                                        shadowMaps);
+    mesh->EnableCastShadows();
+    mesh->EnableRecieveShadows();
+    newEntity->SetComponent(mesh);
+    mesh = 0;
+    tex = 0;
+
+    // Move to designated position in the world.
+    newEntity->MoveGlobalX(position.x);
+    newEntity->MoveGlobalY(position.y);
+    newEntity->MoveGlobalZ(position.z);
+
+    // Add Collision Component.
+    CollisionComponentDesc collisionDesc = 
+    {
+        CollisionType::BoundingSphere,
+        1.0f,
+        0.5f,
+        0.5f,
+        0.5f
+    };
+    newEntity->SetComponent(new CollisionComponent(collisionDesc));
+    newEntity->SetComponent(new PaperPlaneBC(d3d));
+
+    scene.AddEntity(newEntity);
+
     return newEntity;
 }

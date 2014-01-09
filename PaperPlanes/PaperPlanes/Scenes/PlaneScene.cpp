@@ -34,95 +34,105 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
     
-    //----------------------------------------------------------------------------------------------
-    // Testing FollowPathComponent
-    Entity* follower =
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"crumpledPaper1024.dds",
-        GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "cubeFollowingPath");
-    FollowPathComponent* pathComp = new FollowPathComponent();
-    follower->SetComponent(pathComp);
+    ////----------------------------------------------------------------------------------------------
+    //// Testing FollowPathComponent
+    //Entity* follower =
+    //EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"crumpledPaper1024.dds",
+    //    GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "cubeFollowingPath");
+    //FollowPathComponent* pathComp = new FollowPathComponent();
+    //follower->SetComponent(pathComp);
+    //
+    //int i = 0;
+    //Entity* newNode = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(0.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(5.0f, 0.0f, 0.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(5.0f, 5.0f, 0.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(0.0f, 10.0f, 5.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(5.0f, 10.0f, 5.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode);
+    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
+    //                                    GetShadowMaps(), glm::vec3(5.0f, 10.0f, 10.0f), 
+    //                                    glm::vec3(0.1f),
+    //                                    "Node" + std::to_string(i));
+    //i++;
+    //pathComp->AddNode(newNode->GetPos(), 5.0f, 2.0f);
+
+    ////----------------------------------------------------------------------------------------------
+
+
+   // //----------------------------------------------------------------------------------------------
+   // // Test Occluding Sphere.
+   // Entity* sphere = 
+   // EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
+   //                                           L"crumpledPaper1024.dds",
+   //                                           GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
+   //                                           glm::vec3(2.5f), "sphere");
+   ///* sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+   //                                               glm::vec3(5.0f, 10.0f, 0.0f)));    */
+   // CollisionComponentDesc desc =
+   // {
+   //     CollisionType::BoundingSphere,
+   //     2.5f,
+   // };
+   // sphere->SetComponent(new CollisionComponent(desc));
+
+   // Entity* sphere2 = 
+   // EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
+   //                                           L"crumpledPaper1024.dds",
+   //                                           GetShadowMaps(), glm::vec3(7.0f, 0.0f, -3.0f), 
+   //                                           glm::vec3(1.0f), "sphere2");
+   // 
+   // desc.radius = 1.0f;
+
+   // sphere2->SetComponent(new CollisionComponent(desc));
+   // //----------------------------------------------------------------------------------------------      
+
+
     
-    int i = 0;
-    Entity* newNode = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(0.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(5.0f, 0.0f, 0.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(5.0f, 5.0f, 0.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(0.0f, 10.0f, 5.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(5.0f, 10.0f, 5.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode);
-    newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-                                        GetShadowMaps(), glm::vec3(5.0f, 10.0f, 10.0f), 
-                                        glm::vec3(0.1f),
-                                        "Node" + std::to_string(i));
-    i++;
-    pathComp->AddNode(newNode->GetPos(), 5.0f, 2.0f);
-
-    //----------------------------------------------------------------------------------------------
 
 
     //----------------------------------------------------------------------------------------------
-    // Test Occluding Sphere.
-    Entity* sphere = 
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
-                                              L"crumpledPaper1024.dds",
-                                              GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
-                                              glm::vec3(2.5f), "sphere");
-   /* sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                                                  glm::vec3(5.0f, 10.0f, 0.0f)));    */
-    CollisionComponentDesc desc =
-    {
-        CollisionType::BoundingSphere,
-        2.5f,
-    };
-    sphere->SetComponent(new CollisionComponent(desc));
-
-    Entity* sphere2 = 
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
-                                              L"crumpledPaper1024.dds",
-                                              GetShadowMaps(), glm::vec3(7.0f, 0.0f, -3.0f), 
-                                              glm::vec3(1.0f), "sphere2");
-    
-    desc.radius = 1.0f;
-
-    sphere2->SetComponent(new CollisionComponent(desc));
-    //----------------------------------------------------------------------------------------------  
-
-
-    //----------------------------------------------------------------------------------------------
-    // Test Particle System
-    EntityFactory::CreateParticleSystemEntity(*this, d3d, "flameParticleEffect.txt", 
-                                              "particleSystem");
+    // Testing PaperPlaneEntity
+    EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(0.0f, 0.0f, 0.0f), GetShadowMaps(),
+                                          "testPlane1");
+    EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(5.0f, 0.0f, 0.0f), GetShadowMaps(),
+                                          "testPlane2");
     //----------------------------------------------------------------------------------------------
 
+    ////----------------------------------------------------------------------------------------------
+    //// Test Particle System
+    //EntityFactory::CreateParticleSystemEntity(*this, d3d, "flameParticleEffect.txt", 
+    //                                          "particleSystem");
+    ////----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     // Camera entity.

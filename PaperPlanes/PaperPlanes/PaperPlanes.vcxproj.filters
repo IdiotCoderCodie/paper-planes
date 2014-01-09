@@ -108,6 +108,9 @@
     <ClCompile Include="Components\Collision\CollisionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\BehaviourControllers\PaperPlaneBC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -212,9 +215,13 @@
     <ClInclude Include="Components\Collision\CollisionComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\BehaviourControllers\PaperPlaneBC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
+    <Text Include="Assets\ParticleEffects\flameParticleEffect.txt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shaders\bitmap_vs.hlsl" />

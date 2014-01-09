@@ -12,5 +12,5 @@ public:
 
 private:
     Entity* m_drawRenderTargetEntity;
+    std::vector<Entity*> m_planes;
 };
-

@@ -46,6 +46,8 @@ public:
      */
     void HardStop();
 
+    const std::string& GetEffectName() { return m_effectName; }
+
 private:
     bool LoadFromFile(const std::string& filename, D3D& d3d);
 

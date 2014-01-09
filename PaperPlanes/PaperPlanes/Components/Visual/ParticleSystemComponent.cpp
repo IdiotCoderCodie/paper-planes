@@ -44,7 +44,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
     LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
     InitBuffers(d3d);
     m_Shader = G_ShaderManager.GetShader("Particle");
-    Start();
+    //Start();
 }
 
 
@@ -304,7 +304,9 @@ void ParticleSystemComponent::Draw(D3D& d3d)
     float angle = atan2(this->GetParent().GetPos().x - camPos.x, 
                             this->GetParent().GetPos().z - camPos.z) * (180.0f / glm::pi<float>());
    
+    // Do this to rotate about the particle system's axes. 
     Frame transform = GetParent().GetTransform();
+    transform.SetPosition(transform.GetPosition() - m_startPosition);
     transform.RotateGlobalY(180.0f+angle);
 
     ConstantBuffers::MVPBuffer matBuffer =

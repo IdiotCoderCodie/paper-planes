@@ -70,5 +70,11 @@ public:
 
     static Entity* CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& effectFile,
                                               const std::string& id);
+
+
+    static Entity* CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position,
+                                          std::vector<RenderTarget*>& shadowMaps,
+                                          const std::string& id);
+
 };
 

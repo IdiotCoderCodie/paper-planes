@@ -106,6 +106,7 @@
     <ClCompile Include="Components\Camera\PerspectiveCamComponent.cpp" />
     <ClCompile Include="Components\Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Components\Visual\ParticleSystemComponent.cpp" />
+    <ClCompile Include="Components\BehaviourControllers\PaperPlaneBC.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Scenes\PlaneScene.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Components\Camera\PerspectiveCamComponent.h" />
     <ClInclude Include="Components\Physics\PhysicsComponent.h" />
     <ClInclude Include="Components\Visual\ParticleSystemComponent.h" />
+    <ClInclude Include="Components\BehaviourControllers\PaperPlaneBC.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Scenes\PlaneScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Assets\Shaders\ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Assets\ParticleEffects\flameParticleEffect.txt" />
     <Text Include="window_config.txt">
       <DeploymentContent>true</DeploymentContent>
     </Text>
