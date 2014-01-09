@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClCompile Include="Assets\Textures\Bitmap.cpp" />
     <ClCompile Include="Assets\Textures\TextureManager.cpp" />
+    <ClCompile Include="Components\Collision\CollisionComponent.cpp" />
     <ClCompile Include="Components\Camera\CameraComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="D3D.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Assets\Shaders\ShaderResources\sampler_desc.h" />
     <ClInclude Include="Assets\Textures\Bitmap.h" />
     <ClInclude Include="Assets\Textures\TextureManager.h" />
+    <ClInclude Include="Components\Collision\CollisionComponent.h" />
     <ClInclude Include="Components\Camera\CameraComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="D3D.h" />

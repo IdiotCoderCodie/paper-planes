@@ -10,6 +10,7 @@
 #include "../Assets/Textures/TextureManager.h"
 #include "../Entities/EntityFactory.h"
 #include "../Components/Physics/FollowPathComponent.h"
+#include "../Components/Collision/CollisionComponent.h"
 
 
 #include "SceneManager.h"
@@ -91,12 +92,28 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Test Occluding Sphere.
     Entity* sphere = 
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\plane2.obj", 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
                                               L"crumpledPaper1024.dds",
                                               GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
-                                              glm::vec3(2.5f), "occluderSphere");
-    sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
-                                                  glm::vec3(5.0f, 10.0f, 0.0f)));    
+                                              glm::vec3(2.5f), "sphere");
+   /* sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+                                                  glm::vec3(5.0f, 10.0f, 0.0f)));    */
+    CollisionComponentDesc desc =
+    {
+        CollisionType::BoundingSphere,
+        2.5f,
+    };
+    sphere->SetComponent(new CollisionComponent(desc));
+
+    Entity* sphere2 = 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
+                                              L"crumpledPaper1024.dds",
+                                              GetShadowMaps(), glm::vec3(7.0f, 0.0f, -3.0f), 
+                                              glm::vec3(1.0f), "sphere2");
+    
+    desc.radius = 1.0f;
+
+    sphere2->SetComponent(new CollisionComponent(desc));
     //----------------------------------------------------------------------------------------------  
 
 

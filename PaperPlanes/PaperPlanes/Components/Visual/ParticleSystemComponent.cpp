@@ -298,18 +298,21 @@ void ParticleSystemComponent::Draw(D3D& d3d)
 {
     //----------------------------------------------------------------------------------------------
     // Get matrices and put in buffer format.
-    ConstantBuffers::MVPBuffer matBuffer =
-    {
-        glm::transpose(GetParent().GetTransform().GetMatrix()),
-        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetViewMatrix()),
-        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetProjMatrix())
-    };
-
+    
     // Billboarding.
     glm::vec3 camPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
     float angle = atan2(this->GetParent().GetPos().x - camPos.x, 
                             this->GetParent().GetPos().z - camPos.z) * (180.0f / glm::pi<float>());
-    matBuffer.modelMatrix = glm::rotate(matBuffer.modelMatrix, 180.0f-angle, glm::vec3(0.0f, 1.0f, 0.0f));
+   
+    Frame transform = GetParent().GetTransform();
+    transform.RotateGlobalY(180.0f+angle);
+
+    ConstantBuffers::MVPBuffer matBuffer =
+    {
+        glm::transpose(transform.GetMatrix()),
+        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetViewMatrix()),
+        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetProjMatrix())
+    };
 
     m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer, 
                                    sizeof(matBuffer), 0);
