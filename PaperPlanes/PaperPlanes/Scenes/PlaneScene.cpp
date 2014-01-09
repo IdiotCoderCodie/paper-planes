@@ -11,7 +11,9 @@
 #include "../Entities/EntityFactory.h"
 #include "../Components/Physics/FollowPathComponent.h"
 #include "../Components/Collision/CollisionComponent.h"
+#include "../Components/Visual/ParticleSystemComponent.h"
 
+#include <sstream>
 
 #include "SceneManager.h"
 extern TextureManager G_TextureManager;
@@ -117,15 +119,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
    // //----------------------------------------------------------------------------------------------      
 
 
-    
-
-
     //----------------------------------------------------------------------------------------------
     // Testing PaperPlaneEntity
-    EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(0.0f, 0.0f, 0.0f), GetShadowMaps(),
+    /*EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(0.0f, 0.0f, 0.0f), GetShadowMaps(),
                                           "testPlane1");
     EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(5.0f, 0.0f, 0.0f), GetShadowMaps(),
-                                          "testPlane2");
+                                          "testPlane2");*/
     //----------------------------------------------------------------------------------------------
 
     ////----------------------------------------------------------------------------------------------
@@ -150,7 +149,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                 glm::vec3(5.0f, 0.0f, -25.0f),        // position.
                                                 30.0f,
                                                 16.0f,
-                                                "redLight");
+                                                "redLig ht");
 
     //redLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f, 90.0f, 0.0f)));
 	//----------------------------------------------------------------------------------------------
@@ -209,6 +208,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //                               GetParent().GetD3DInstance().GetScreenHeight(), 101, 0,
     //                               "light2ShadowMapBmp");
     ////----------------------------------------------------------------------------------------------  
+
+    LoadPlanes(d3d);
 }
 
 
@@ -248,7 +249,7 @@ void PlaneScene::Draw(D3D& d3d)
     }
 
     // Clear buffers to draw 3D scene.
-    d3d.BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
+    d3d.BeginScene(0.6f, 0.6f, 0.6f, 1.0f);
 
     // Reset to drawing to back buffer.
     d3d.SetBackBufferRenderTarget();    
@@ -256,3 +257,75 @@ void PlaneScene::Draw(D3D& d3d)
     // Now render 3D scene.
     Scene::Draw(d3d);
 }
+
+
+void PlaneScene::LoadPlanes(D3D& d3d)
+{
+    const std::string filename = "Assets\\Data\\planeData.txt";
+    std::ifstream input(filename);
+    if(!input.is_open())
+    {
+        return;
+    }
+
+    std::vector<FollowPathComponent::Node> currPlaneNodes;
+    std::string token;
+    std::string value;
+    std::istringstream value_iss;
+    //bool readingNodes = false;
+    glm::vec3 currPlanePos;
+    int planeNum = 0;
+    while(input.good())
+    {
+        std::getline(input, token, '=');
+        std::getline(input, value);
+        value_iss = std::istringstream(value);
+
+        if(!strcmp(token.c_str(), "Plane"))
+        {
+            value_iss >> currPlanePos;
+            //if(readingNodes)
+            //{
+            //    // Reached next planes data, create plane!
+            //    EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
+            //                                          currPlaneNodes, 
+            //                                          "Plane" + std::to_string(planeNum));
+            //    planeNum++;
+            //    currPlaneNodes.clear();
+            //}
+            //readingNodes = true;
+        }
+        else if(!strcmp(token.c_str(), "Node"))
+        {
+            FollowPathComponent::Node newNode;
+            char ch;
+            value_iss >> newNode.position >> ch/*,*/ >> newNode.timeToReach >> ch >> newNode.delay;
+            currPlaneNodes.push_back(newNode);
+        }
+        else if(!strcmp(token.c_str(), "EndPlane"))
+        {
+            EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
+                                                      currPlaneNodes, 
+                                                      "Plane" + std::to_string(planeNum));
+                planeNum++;
+                currPlaneNodes.clear();
+               // readingNodes = false;
+        }
+    }
+}
+
+//std::istream& operator>> (std::istream& in, glm::vec3& vec)
+//{
+//    // {x, y, z}
+//    char ch;
+//    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch;
+//    return in;
+//}
+//
+//std::istream& operator>> (std::istream& in, glm::vec4& vec)
+//{
+//    // {x, y, z, w}
+//    char ch;
+//    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch >> vec.w >> ch;
+//    return in;
+//}

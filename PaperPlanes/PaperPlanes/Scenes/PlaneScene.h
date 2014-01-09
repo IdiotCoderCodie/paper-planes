@@ -11,6 +11,11 @@ public:
     void Draw(D3D& d3d);
 
 private:
+    void LoadPlanes(D3D& d3d);
+
+private:
     Entity* m_drawRenderTargetEntity;
     std::vector<Entity*> m_planes;
 };
+
+

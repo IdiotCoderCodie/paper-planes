@@ -1,9 +1,9 @@
 #pragma once
 #include "Entity.h"
 #include "../RenderTarget.h"
+#include "../Components/Physics/FollowPathComponent.h"
 #include <string>
 #include <vector>
-
 
 
 class EntityFactory
@@ -74,7 +74,7 @@ public:
 
     static Entity* CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position,
                                           std::vector<RenderTarget*>& shadowMaps,
+                                          std::vector<FollowPathComponent::Node>& pathNodes,
                                           const std::string& id);
 
 };
-

@@ -5,17 +5,18 @@
 
 // STL
 #include <vector>
-struct Node
-{
-    glm::vec3 position;
-    float timeToReach;
-    float delay;
-};
+
 
 class FollowPathComponent : public Component
 {
 public:
-    
+    struct Node
+    {
+        glm::vec3 position;
+        float timeToReach;
+        float delay;
+    };
+
     FollowPathComponent(void);
     ~FollowPathComponent(void);
 

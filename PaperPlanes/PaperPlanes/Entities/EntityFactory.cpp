@@ -200,7 +200,8 @@ Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const 
     return newEntity;
 }
 
-Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& file, 
+Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& file,
+                                                  
                                                   const std::string& id)
 {
     Entity* newEntity = new Entity(scene, id);
@@ -213,6 +214,7 @@ Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const 
 
 Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position, 
                                               std::vector<RenderTarget*>& shadowMaps, 
+                                              std::vector<FollowPathComponent::Node>& pathNodes,
                                               const std::string& id)
 {
     Entity* newEntity = new Entity(scene, id);
@@ -239,6 +241,7 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
     newEntity->MoveGlobalY(position.y);
     newEntity->MoveGlobalZ(position.z);
 
+    //----------------------------------------------------------------------------------------------
     // Add Collision Component.
     CollisionComponentDesc collisionDesc = 
     {
@@ -249,7 +252,20 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
         0.5f
     };
     newEntity->SetComponent(new CollisionComponent(collisionDesc));
+    //----------------------------------------------------------------------------------------------
+
     newEntity->SetComponent(new PaperPlaneBC(d3d));
+
+    //----------------------------------------------------------------------------------------------
+    // Setup the path component.
+    FollowPathComponent* pathComp = new FollowPathComponent();
+    newEntity->SetComponent(pathComp);
+    // Add all the path points.
+    for(FollowPathComponent::Node& node : pathNodes)
+    {
+        pathComp->AddNode(node.position, node.timeToReach, node.delay);
+    }
+    //----------------------------------------------------------------------------------------------
 
     scene.AddEntity(newEntity);
 
