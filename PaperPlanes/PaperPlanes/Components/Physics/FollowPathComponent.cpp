@@ -1,5 +1,11 @@
 #include "FollowPathComponent.h"
 #include "../../glm/gtx/rotate_vector.hpp"
+#include "../../Assets/Shaders/ShaderManager.h"
+#include "../../Assets/Shaders/ShaderResources/constant_buffers.h"
+#include "../../Scenes/Scene.h"
+#include "../Camera/CameraComponent.h"
+
+extern ShaderManager G_ShaderManager;
 
 FollowPathComponent::FollowPathComponent(void)
     : m_nodes(),
@@ -168,4 +174,124 @@ glm::vec3 FollowPathComponent::CalculateBezierPoint(float t, const glm::vec3& p0
     point += ttt * p3;
 
     return point;
+}
+
+
+void FollowPathComponent::Restart()
+{
+    m_delayed = false;
+    m_nextNode = 3;
+    m_reverse = false;
+    m_t = 0.0f;
+    m_currentDelayTime = 0.0f;
+}
+
+
+void FollowPathComponent::InitDebugBuffers(D3D& d3d)
+{
+    std::vector<glm::vec3> vertices;
+   
+    // Create the vertices for the path.
+    for(int i = 0; i < m_nodes.size() - 3; i += 3)
+    {
+        if((i + 3) < m_nodes.size())
+        {
+            for(float t = 0.0f; t < 1.01f; t+= 0.05f)
+            {
+                vertices.push_back(CalculateBezierPoint(t, m_nodes[i].position, 
+                                                        m_nodes[i+1].position, 
+                                                        m_nodes[i+2].position, 
+                                                        m_nodes[i+3].position));
+            }
+        }
+    }
+
+    m_indexNum = vertices.size();
+    unsigned long* indices = new unsigned long[m_indexNum];
+    for(int i = 0; i < m_indexNum; i++)
+    {
+        indices[i] = i;
+    }
+
+    D3D11_BUFFER_DESC vertexBufferDesc =
+    {
+        sizeof(glm::vec3) * m_indexNum, // ByteWidth
+        D3D11_USAGE_DEFAULT,                // Usage
+        D3D11_BIND_VERTEX_BUFFER,           // BindFlags
+        0,                                  // CPUAccessFlags
+        0,                                  // MiscFlags
+        0                                   // StructureByteStride
+    };
+
+    D3D11_SUBRESOURCE_DATA vertexData =
+    {
+        &vertices[0],   // pSysMem
+        0,              // SysMemPitch
+        0,              // SysMemSlicePitch
+    };
+
+    HRESULT hr = d3d.GetDevice().CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
+    if(FAILED(hr))
+    {
+        delete[] indices;
+        indices = 0;
+        return;
+    }
+
+    D3D11_BUFFER_DESC indexBufferDesc = 
+    {
+        sizeof(unsigned long) * m_indexNum, // ByteWidth
+        D3D11_USAGE_DEFAULT,                    // Usage
+        D3D11_BIND_INDEX_BUFFER,                // BindFlags
+        0,                                      // CPUAccessFlags
+        0,                                      // MiscFlags
+        0       
+    };
+
+    D3D11_SUBRESOURCE_DATA indexData = 
+    {
+        indices,    // pSysMem
+        0,          // SysMemPitch
+        0           // SysMemSlicePitch
+    };
+
+    hr = d3d.GetDevice().CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+    if(FAILED(hr))
+    {
+        delete[] indices;
+        indices = 0;
+        return;
+    }
+
+    delete[] indices;
+    indices = 0;
+}
+
+void FollowPathComponent::Draw(D3D& d3d)
+{
+    unsigned int stride = sizeof(glm::vec3);
+    unsigned int offset = 0;
+
+    // Set vertex buffer to active in the input assembler.
+    d3d.GetDeviceContext().IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+    // Set index buffer.
+    d3d.GetDeviceContext().IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+    // Set type of primitive to read vertex data as.
+    d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+    
+    Shader* shader = G_ShaderManager.GetShader("Lines");
+    ConstantBuffers::MVPBuffer matrixBuffer = 
+    {
+        glm::transpose(glm::mat4(1.0f)),
+        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetViewMatrix()),
+        glm::transpose(GetParent().GetParent().GetActiveCamera()->GetProjMatrix())
+    };
+
+    shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), &matrixBuffer, 
+                                 sizeof(matrixBuffer), 0);
+
+    shader->RenderShader(d3d, m_indexNum);
 }

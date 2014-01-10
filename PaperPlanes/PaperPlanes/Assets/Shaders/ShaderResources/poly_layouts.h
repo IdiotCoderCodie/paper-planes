@@ -3,6 +3,19 @@
 
 namespace PolyLayouts
 {
+    static D3D11_INPUT_ELEMENT_DESC POS3[1] =
+    {
+        { 
+            "POSITION",                     // Semantic Name
+            0,                              // Semantic Index
+            DXGI_FORMAT_R32G32B32_FLOAT,    // Format
+            0,                              // Input Slot
+            0,                              // Aligned Byte Offset
+            D3D11_INPUT_PER_VERTEX_DATA,    // Input Slot Class
+            0                               // Instance Data Step Rate
+        }
+    };
+
     static D3D11_INPUT_ELEMENT_DESC POS3_TEX2[2] =
     {
         { 

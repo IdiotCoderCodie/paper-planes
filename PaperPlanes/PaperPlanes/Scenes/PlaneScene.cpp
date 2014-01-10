@@ -222,11 +222,11 @@ PlaneScene::~PlaneScene(void)
 void PlaneScene::Draw(D3D& d3d)
 {
     //
-    m_camComponent->SetTransform(m_planes[0]->GetTransform());
-   // m_camComponent->SetPos(m_planes[0]->GetPos());
-    m_camComponent->MoveUp(0.3f);
-    m_camComponent->MoveRight(0.05f);
-    m_camComponent->MoveForward(-2.0f);
+   // m_camComponent->SetTransform(m_planes[0]->GetTransform());
+   //// m_camComponent->SetPos(m_planes[0]->GetPos());
+   // m_camComponent->MoveUp(0.3f);
+   // m_camComponent->MoveRight(0.05f);
+   // m_camComponent->MoveForward(-2.0f);
 
     //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
 

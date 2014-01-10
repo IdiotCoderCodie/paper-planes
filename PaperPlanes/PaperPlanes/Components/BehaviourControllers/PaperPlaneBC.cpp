@@ -35,16 +35,7 @@ void PaperPlaneBC::UpdateFire(float time)
             if(collisionComp->IsColliding())
             {
                 m_fireSystem.Start();
-                m_onFire = true;
-                //// Plane is colliding with something, set it on fire (if not already).
-                //fireComp = 
-                //    (ParticleSystemComponent*)GetParent().GetComponent("VisualComponent", 
-                //                                                       "ParticleSystemComponent");
-                //if(fireComp)
-                //{
-                //    fireComp->Start();
-                //    m_onFire;
-                //}
+                m_onFire = true;              
             }
         }
     }
@@ -63,6 +54,13 @@ void PaperPlaneBC::UpdateFire(float time)
                 fireComp->Stop();
             }*/
             // TODO: Get Path component and respawn!
+            FollowPathComponent* pathComp = 
+                (FollowPathComponent*)GetParent().GetComponent("PathComponent");
+            if(pathComp)
+            {
+                pathComp->Restart();
+            }
+
         }
     }
 }
