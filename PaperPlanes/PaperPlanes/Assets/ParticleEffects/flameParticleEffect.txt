@@ -1,6 +1,6 @@
 ParticleEffect=PlaneCrashFire
 MaxParticleCount=100
-EmissionFreq=20
+EmissionFreq=0
 SystemLifetime=-10.0
 StartPosition={0.0, 0.0, 0.0}
 StartPositionDeviation={0.1, 0.0, 0.1}

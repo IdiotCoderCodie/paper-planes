@@ -16,6 +16,5 @@ private:
 private:
     Entity* m_drawRenderTargetEntity;
     std::vector<Entity*> m_planes;
+    Entity* m_camComponent;
 };
-
-

@@ -1,5 +1,5 @@
 #include "FollowPathComponent.h"
-
+#include "../../glm/gtx/rotate_vector.hpp"
 
 FollowPathComponent::FollowPathComponent(void)
     : m_nodes(),
@@ -57,8 +57,27 @@ void FollowPathComponent::Update(float time)
             m_nodes[m_nextNode].position);  // p3
         }
 
-        GetParent().SetPos(nextPoint);
+        glm::vec3 a = glm::normalize(GetParent().GetTransform().GetForward());
+        glm::vec3 b = glm::normalize(nextPoint - GetParent().GetPos());
+        float cosX = glm::dot(a, b);
+        cosX = cosX / (glm::length(a) * glm::length(b));
 
+        float x = glm::acos(cosX); // Not sure if need to convert cosX to radians.
+
+        glm::vec3 rotationAxis = glm::normalize(glm::cross(a, b));
+
+        Frame transform = GetParent().GetTransform();
+        glm::vec3 currUp = transform.GetUp();
+        glm::vec3 currForward = transform.GetForward();
+        
+        glm::vec3 newForward = glm::rotate(currForward, x, rotationAxis);
+        transform.SetForward(newForward);
+        glm::vec3 newUp = glm::rotate(currUp, x, rotationAxis);
+        transform.SetUp(newUp);
+
+        GetParent().SetTransform(transform);
+        GetParent().SetPos(nextPoint);
+      
         if(t >= 1.0f)
         {
             // Arrived at node. Now check if there is a delay on it before getting next destination.

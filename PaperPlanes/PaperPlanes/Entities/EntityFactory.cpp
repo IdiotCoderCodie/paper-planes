@@ -228,7 +228,7 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
     }
 
     // Create the mesh component.
-    VisualMeshComponent* mesh = new VisualMeshComponent(d3d, "Assets\\Models\\sphere.obj", *tex, 
+    VisualMeshComponent* mesh = new VisualMeshComponent(d3d, "Assets\\Models\\plane.obj", *tex, 
                                                         shadowMaps);
     mesh->EnableCastShadows();
     mesh->EnableRecieveShadows();

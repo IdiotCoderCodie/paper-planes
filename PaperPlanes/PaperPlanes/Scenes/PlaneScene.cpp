@@ -137,6 +137,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     // Camera entity.
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
                         / (float)GetParent().GetD3DInstance().GetScreenHeight();
+    m_camComponent = 
     EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f, "camera1"); 
     //----------------------------------------------------------------------------------------------
 
@@ -185,8 +186,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* whiteLight = 
     EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
                                             glm::vec4(0.1f, 0.1f, 0.1f, 0.2f),        // diffuse.
-                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, -5.0f, -25.0f),            // position.
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+                                            glm::vec3(0.0f, -5.0f, -25.0f),           // position.
                                             30.0f,
                                             16.0f,
                                             "whiteLight");
@@ -221,6 +222,11 @@ PlaneScene::~PlaneScene(void)
 void PlaneScene::Draw(D3D& d3d)
 {
     //
+    m_camComponent->SetTransform(m_planes[0]->GetTransform());
+   // m_camComponent->SetPos(m_planes[0]->GetPos());
+    m_camComponent->MoveUp(0.3f);
+    m_camComponent->MoveRight(0.05f);
+    m_camComponent->MoveForward(-2.0f);
 
     //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
 
@@ -284,16 +290,6 @@ void PlaneScene::LoadPlanes(D3D& d3d)
         if(!strcmp(token.c_str(), "Plane"))
         {
             value_iss >> currPlanePos;
-            //if(readingNodes)
-            //{
-            //    // Reached next planes data, create plane!
-            //    EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
-            //                                          currPlaneNodes, 
-            //                                          "Plane" + std::to_string(planeNum));
-            //    planeNum++;
-            //    currPlaneNodes.clear();
-            //}
-            //readingNodes = true;
         }
         else if(!strcmp(token.c_str(), "Node"))
         {
@@ -304,28 +300,13 @@ void PlaneScene::LoadPlanes(D3D& d3d)
         }
         else if(!strcmp(token.c_str(), "EndPlane"))
         {
-            EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
+            Entity* plane = EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
                                                       currPlaneNodes, 
                                                       "Plane" + std::to_string(planeNum));
-                planeNum++;
-                currPlaneNodes.clear();
+            planeNum++;
+            currPlaneNodes.clear();
+            m_planes.push_back(plane);
                // readingNodes = false;
         }
     }
 }
-
-//std::istream& operator>> (std::istream& in, glm::vec3& vec)
-//{
-//    // {x, y, z}
-//    char ch;
-//    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch;
-//    return in;
-//}
-//
-//std::istream& operator>> (std::istream& in, glm::vec4& vec)
-//{
-//    // {x, y, z, w}
-//    char ch;
-//    in >> ch >> vec.x >> ch >> vec.y >> ch >> vec.z >> ch >> vec.w >> ch;
-//    return in;
-//}
