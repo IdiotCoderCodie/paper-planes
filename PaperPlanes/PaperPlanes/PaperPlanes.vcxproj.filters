@@ -234,5 +234,7 @@
     <FxCompile Include="Assets\Shaders\shadowStruct_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\particle_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\particle_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\lines_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\lines_ps.hlsl" />
   </ItemGroup>
 </Project>

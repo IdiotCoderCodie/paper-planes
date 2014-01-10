@@ -2,6 +2,7 @@
 // My Includes
 #include "../Component.h"
 #include "../../Entities/Entity.h"
+#include "../../D3D.h"
 
 // STL
 #include <vector>
@@ -25,6 +26,8 @@ public:
 
     void Update(float time);
 
+    void Draw(D3D& d3d);
+
     /**
      * Add Node with given params.
      */
@@ -45,11 +48,22 @@ public:
      */
     void ClearNodes();
 
+    /**
+     * Restarts. Puts the entity back to the beginning of the path.
+     */
+    void Restart();
+
+    /**
+     * To be called after all nodes have been added to the path. Used to draw path lines.
+     */
+    void InitDebugBuffers(D3D& d3d);
 private:
     int GetNextNode();
 
     glm::vec3 CalculateBezierPoint(float t, const glm::vec3& p0, const glm::vec3& p1, 
                                    const glm::vec3& p2, const glm::vec3& p3) const;
+
+    
 
 private:
     std::vector<Node>          m_nodes;
@@ -60,5 +74,9 @@ private:
     bool                       m_delayed;
     float                      m_currentDelayTime;
     bool                       m_reverse;
+
+    ID3D11Buffer*              m_vertexBuffer;
+    ID3D11Buffer*              m_indexBuffer;
+    int                        m_indexNum;
 };
 
