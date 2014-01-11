@@ -1,5 +1,5 @@
 #define MAX_SHADOWCASTING_LIGHTS 4
-#define BIAS 0.001
+#define BIAS 0.0001
 
 SamplerState SampleTypeClamp : register(s0);
 SamplerState SampleTypeWrap  : register(s1);
