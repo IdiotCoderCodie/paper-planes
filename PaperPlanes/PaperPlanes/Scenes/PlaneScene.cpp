@@ -30,9 +30,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
-    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInvT.obj", 
                                               L"grassTex.dds",/* L"buttonFabric.dds",*/
-                                              GetShadowMaps(), glm::vec3(0.0f), glm::vec3(50.0f), 
+                                              GetShadowMaps(), glm::vec3(0.0f), glm::vec3(100.0f), 
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
     
@@ -93,11 +93,11 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
    // //----------------------------------------------------------------------------------------------
    // // Test Occluding Sphere.
-   // Entity* sphere = 
-   // EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
-   //                                           L"crumpledPaper1024.dds",
-   //                                           GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
-   //                                           glm::vec3(2.5f), "sphere");
+    Entity* sphere = 
+    EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
+                                              L"crumpledPaper1024.dds",
+                                              GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
+                                              glm::vec3(2.5f), "sphere");
    ///* sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
    //                                               glm::vec3(5.0f, 10.0f, 0.0f)));    */
    // CollisionComponentDesc desc =
@@ -150,7 +150,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                 glm::vec3(5.0f, 0.0f, -25.0f),        // position.
                                                 30.0f,
                                                 16.0f,
-                                                "redLig ht");
+                                                "redLight");
 
     //redLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f, 90.0f, 0.0f)));
 	//----------------------------------------------------------------------------------------------
@@ -178,6 +178,11 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                             30.0f,
                                             16.0f,
                                             "blueLight");
+    blueLight->RotateLocalY(-135.0f);
+    blueLight->RotateLocalX(+45.0f);
+    blueLight->MoveGlobalX(+50.0f);
+    blueLight->MoveGlobalY(+50.0f);
+    blueLight->MoveGlobalZ(+50.0f);
    // blueLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(80.0f, 0.0f, 50.0f)));
     //----------------------------------------------------------------------------------------------
 
@@ -187,10 +192,17 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
                                             glm::vec4(0.1f, 0.1f, 0.1f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-                                            glm::vec3(0.0f, -5.0f, -25.0f),           // position.
+                                            glm::vec3(0.0f, 0.0f, 0.0f),           // position.
                                             30.0f,
                                             16.0f,
                                             "whiteLight");
+    whiteLight->RotateLocalY(45.0f);
+    whiteLight->RotateLocalX(-45.0f);
+    whiteLight->MoveGlobalX(-50.0f);
+    whiteLight->MoveGlobalY(-50.0f);
+    whiteLight->MoveGlobalZ(-50.0f);
+   /* whiteLight->RotateLocalY(45.0f);
+    whiteLight->RotateLocalX(45.0f);*/
    // whiteLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(-80.0f, 40.0f, -20.0f)));
     //----------------------------------------------------------------------------------------------
     
@@ -222,11 +234,11 @@ PlaneScene::~PlaneScene(void)
 void PlaneScene::Draw(D3D& d3d)
 {
     //
-   // m_camComponent->SetTransform(m_planes[0]->GetTransform());
-   //// m_camComponent->SetPos(m_planes[0]->GetPos());
-   // m_camComponent->MoveUp(0.3f);
-   // m_camComponent->MoveRight(0.05f);
-   // m_camComponent->MoveForward(-2.0f);
+    //m_camComponent->SetTransform(m_planes[0]->GetTransform());
+    //m_camComponent->SetPos(glm::vec3(0.0f));
+    /*m_camComponent->MoveUp(0.3f);
+    m_camComponent->MoveRight(0.05f);*/
+    //m_camComponent->MoveForward(-100.0f);
 
     //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
 

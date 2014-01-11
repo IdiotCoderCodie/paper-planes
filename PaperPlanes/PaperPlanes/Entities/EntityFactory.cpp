@@ -32,7 +32,7 @@ Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& amb
 {
     Entity* newEntity = new Entity(scene, id);
     LightComponent* lightComp = new LightComponent(ambient, diffuse, specular);
-    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
+    lightComp->GenerateProjectionMatrix(5.0f, 200.0f);
     newEntity->SetComponent(lightComp);
     scene.AddEntity(newEntity);
     newEntity->MoveForward(position.z);
@@ -52,7 +52,7 @@ Entity* EntityFactory::CreateSpotlightEntity(Scene& scene, const glm::vec4& ambi
     Entity* newEntity = new Entity(scene, id);
     LightComponent* lightComp = new LightComponent(ambient, diffuse, specular, 
                                                    spotCutoff, spotExponent);
-    lightComp->GenerateProjectionMatrix(1.0f, 100.0f);
+    lightComp->GenerateProjectionMatrix(5.0f, 200.0f);
     newEntity->SetComponent(lightComp);
     scene.AddEntity(newEntity);
     newEntity->MoveForward(position.z);
@@ -217,6 +217,8 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
                                               std::vector<FollowPathComponent::Node>& pathNodes,
                                               const std::string& id)
 {
+    static int numPaperPlanes = 0;
+    numPaperPlanes++;
     Entity* newEntity = new Entity(scene, id);
     //newEntity->SetComponent(new ParticleSystemComponent(d3d, "flameParticleEffect.txt"));
 
@@ -227,9 +229,13 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
         tex = G_TextureManager.LoadTexture(d3d, L"crumpledPaper1024.dds", "crumpledPaper1024.dds");
     }
 
+    const std::string plane1 = "Assets\\Models\\plane.obj";
+    const std::string plane2 = "Assets\\Models\\plane2.obj";
+
     // Create the mesh component.
-    VisualMeshComponent* mesh = new VisualMeshComponent(d3d, "Assets\\Models\\plane.obj", *tex, 
-                                                        shadowMaps);
+    VisualMeshComponent* mesh = new VisualMeshComponent(d3d, 
+                                                (numPaperPlanes % 2 ? plane1 : plane2), 
+                                                *tex, shadowMaps);
     mesh->EnableCastShadows();
     mesh->EnableRecieveShadows();
     newEntity->SetComponent(mesh);
@@ -240,6 +246,10 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
     newEntity->MoveGlobalX(position.x);
     newEntity->MoveGlobalY(position.y);
     newEntity->MoveGlobalZ(position.z);
+
+    newEntity->SetScaleX(3.0f);
+    newEntity->SetScaleY(3.0f);
+    newEntity->SetScaleZ(3.0f);
 
     //----------------------------------------------------------------------------------------------
     // Add Collision Component.

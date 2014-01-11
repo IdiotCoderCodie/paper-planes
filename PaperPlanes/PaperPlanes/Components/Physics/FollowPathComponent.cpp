@@ -46,9 +46,15 @@ void FollowPathComponent::Update(float time)
         float t = m_t / m_nodes[m_nextNode].timeToReach;
 
         glm::vec3 nextPoint;
+        glm::vec3 refPoint;
         if(m_reverse)
         {
             nextPoint = CalculateBezierPoint(t, 
+            m_nodes[m_nextNode+3].position, // p0
+            m_nodes[m_nextNode+2].position, // p1
+            m_nodes[m_nextNode+1].position, // p2
+            m_nodes[m_nextNode].position);  // p3
+            refPoint = CalculateBezierPoint(t+0.05f, 
             m_nodes[m_nextNode+3].position, // p0
             m_nodes[m_nextNode+2].position, // p1
             m_nodes[m_nextNode+1].position, // p2
@@ -61,27 +67,33 @@ void FollowPathComponent::Update(float time)
             m_nodes[m_nextNode-2].position, // p1
             m_nodes[m_nextNode-1].position, // p2
             m_nodes[m_nextNode].position);  // p3
+            refPoint = CalculateBezierPoint(t+0.05f, 
+            m_nodes[m_nextNode-3].position, // p0
+            m_nodes[m_nextNode-2].position, // p1
+            m_nodes[m_nextNode-1].position, // p2
+            m_nodes[m_nextNode].position);  // p3
         }
 
-        glm::vec3 a = glm::normalize(GetParent().GetTransform().GetForward());
-        glm::vec3 b = glm::normalize(nextPoint - GetParent().GetPos());
+        glm::vec3 a = GetParent().GetTransform().GetForward();
+        glm::vec3 b = refPoint - GetParent().GetPos();
         float cosX = glm::dot(a, b);
         cosX = cosX / (glm::length(a) * glm::length(b));
 
-        float x = glm::acos(cosX); // Not sure if need to convert cosX to radians.
-
+        float x = glm::acos(glm::max(glm::min(cosX, 1.0f), -1.0f)); // Not sure if need to convert cosX to radians.
+        x = x * 10.0f;
         glm::vec3 rotationAxis = glm::normalize(glm::cross(a, b));
 
         Frame transform = GetParent().GetTransform();
-        glm::vec3 currUp = transform.GetUp();
-        glm::vec3 currForward = transform.GetForward();
+        glm::vec3 currUp = glm::normalize(transform.GetUp());
+        glm::vec3 currForward = glm::normalize(transform.GetForward());
         
         glm::vec3 newForward = glm::rotate(currForward, x, rotationAxis);
-        transform.SetForward(newForward);
+        transform.SetForward(glm::normalize(newForward));
         glm::vec3 newUp = glm::rotate(currUp, x, rotationAxis);
-        transform.SetUp(newUp);
+        transform.SetUp(glm::normalize(newUp));
 
         GetParent().SetTransform(transform);
+
         GetParent().SetPos(nextPoint);
       
         if(t >= 1.0f)
@@ -196,7 +208,7 @@ void FollowPathComponent::InitDebugBuffers(D3D& d3d)
     {
         if((i + 3) < m_nodes.size())
         {
-            for(float t = 0.0f; t < 1.01f; t+= 0.05f)
+            for(float t = 0.0f; t < 1.001f; t+= 0.05f)
             {
                 vertices.push_back(CalculateBezierPoint(t, m_nodes[i].position, 
                                                         m_nodes[i+1].position, 
