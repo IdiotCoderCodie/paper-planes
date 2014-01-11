@@ -157,6 +157,7 @@
     <ClInclude Include="Assets\Shaders\ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Assets\Data\planeData.txt" />
     <Text Include="Assets\ParticleEffects\flameParticleEffect.txt" />
     <Text Include="window_config.txt">
       <DeploymentContent>true</DeploymentContent>

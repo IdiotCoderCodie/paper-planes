@@ -31,7 +31,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
     EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInvT.obj", 
-                                              L"grassTex.dds",/* L"buttonFabric.dds",*/
+                                              L"airfields.dds",/* L"buttonFabric.dds",*/
                                               GetShadowMaps(), glm::vec3(0.0f), glm::vec3(100.0f), 
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
@@ -151,7 +151,11 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                                 30.0f,
                                                 16.0f,
                                                 "redLight");
-
+    redLight->RotateLocalY(-45.0f);
+    redLight->RotateLocalX(-45.0f);
+    redLight->MoveGlobalX(+50.0f);
+    redLight->MoveGlobalY(-50.0f);
+    redLight->MoveGlobalZ(-50.0f);
     //redLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f, 90.0f, 0.0f)));
 	//----------------------------------------------------------------------------------------------
     
@@ -165,6 +169,11 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                                             30.0f,
                                             16.0f,
                                             "greenLight");
+    greenLight->RotateLocalY(135.0f);
+    greenLight->RotateLocalX(+45.0f);
+    greenLight->MoveGlobalX(-50.0f);
+    greenLight->MoveGlobalY(+50.0f);
+    greenLight->MoveGlobalZ(+50.0f);
     //greenLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f, -80.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
@@ -234,10 +243,11 @@ PlaneScene::~PlaneScene(void)
 void PlaneScene::Draw(D3D& d3d)
 {
     //
-    //m_camComponent->SetTransform(m_planes[0]->GetTransform());
-    //m_camComponent->SetPos(glm::vec3(0.0f));
-    /*m_camComponent->MoveUp(0.3f);
-    m_camComponent->MoveRight(0.05f);*/
+    //m_camComponent->SetTransform(m_planes[1]->GetTransform());
+   // m_camComponent->SetPos(m_planes[3]->GetPos());
+   // m_camComponent->MoveUp(0.5f);
+   // m_camComponent->MoveForward(-5.0f);
+    //m_camComponent->MoveRight(0.05f);
     //m_camComponent->MoveForward(-100.0f);
 
     //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());

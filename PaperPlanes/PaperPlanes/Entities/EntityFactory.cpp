@@ -18,7 +18,7 @@ Entity* EntityFactory::CreatePerspectiveFpCameraEntity(Scene& scene, float fov, 
 {
     Entity* newEntity = new Entity(scene, id);
     newEntity->SetComponent(new PerspectiveCamComponent(fov, aspect, pNear, pFar));
-    newEntity->SetComponent(new FreeRoamFpComponent(10.0f, 50.0f, 50.0f));
+    newEntity->SetComponent(new FreeRoamFpComponent(30.0f, 75.0f, 75.0f));
     scene.AddEntity(newEntity);
     newEntity->MoveForward(-10.0f);
     return newEntity;

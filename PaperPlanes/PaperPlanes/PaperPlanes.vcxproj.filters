@@ -222,6 +222,7 @@
   <ItemGroup>
     <Text Include="window_config.txt" />
     <Text Include="Assets\ParticleEffects\flameParticleEffect.txt" />
+    <Text Include="Assets\Data\planeData.txt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shaders\bitmap_vs.hlsl" />
