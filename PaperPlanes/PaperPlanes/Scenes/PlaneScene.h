@@ -9,6 +9,7 @@ public:
     ~PlaneScene(void);
 
     void Draw(D3D& d3d);
+    void Update(double time);
 
 private:
     void LoadPlanes(D3D& d3d);
@@ -17,4 +18,8 @@ private:
     Entity* m_drawRenderTargetEntity;
     std::vector<Entity*> m_planes;
     Entity* m_camComponent;
+    Entity* m_airfieldCam;
+    Entity* m_planeFollowCam;
+    int m_planeToFollow;
+    bool m_prevF4Pressed;
 };

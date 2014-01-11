@@ -19,6 +19,13 @@ public:
                                                    const std::string& id);
 
     /**
+     * Creates an entity with a PerspectiveCamComponent attached.
+     */
+    static  Entity* CreatePerspectiveCameraEntity(Scene& scene, float fov, float aspect, 
+                                                  float near, float far, 
+                                                  glm::vec3& position, const std::string& id);
+
+    /**
      * Creates an entity with a point light component attached, and adds it to 'scene' at position
      * 'position'.
      * Returns: A pointer to the newly created entity.

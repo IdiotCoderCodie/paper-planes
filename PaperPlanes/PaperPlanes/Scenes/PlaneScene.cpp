@@ -20,7 +20,12 @@ extern TextureManager G_TextureManager;
 extern ShaderManager G_ShaderManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
-    : Scene(name, sceneMgr)
+    : Scene(name, sceneMgr),
+    m_camComponent(0),
+    m_airfieldCam(0),
+    m_planeFollowCam(0),
+    m_planeToFollow(0),
+    m_prevF4Pressed(false)
 {
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
@@ -30,66 +35,18 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
+    /*EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cubeInvT.obj", 
+                                              L"airfields.dds", L"buttonFabric.dds",
+                                              GetShadowMaps(), glm::vec3(0.0f), glm::vec3(100.0f), 
+                                              "mainCube");
+*/
     EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInvT.obj", 
-                                              L"airfields.dds",/* L"buttonFabric.dds",*/
+                                              L"airfields.dds", /*L"buttonFabric.dds",*/
                                               GetShadowMaps(), glm::vec3(0.0f), glm::vec3(100.0f), 
                                               "mainCube");
     //----------------------------------------------------------------------------------------------
     
-    ////----------------------------------------------------------------------------------------------
-    //// Testing FollowPathComponent
-    //Entity* follower =
-    //EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"crumpledPaper1024.dds",
-    //    GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "cubeFollowingPath");
-    //FollowPathComponent* pathComp = new FollowPathComponent();
-    //follower->SetComponent(pathComp);
-    //
-    //int i = 0;
-    //Entity* newNode = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(0.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(5.0f, 0.0f, 0.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(5.0f, 5.0f, 0.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode->GetPos(), 5.0f, 3.0f);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(0.0f, 10.0f, 5.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(5.0f, 10.0f, 5.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode);
-    //newNode =  EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"tim.dds",
-    //                                    GetShadowMaps(), glm::vec3(5.0f, 10.0f, 10.0f), 
-    //                                    glm::vec3(0.1f),
-    //                                    "Node" + std::to_string(i));
-    //i++;
-    //pathComp->AddNode(newNode->GetPos(), 5.0f, 2.0f);
-
-    ////----------------------------------------------------------------------------------------------
-
+   
 
    // //----------------------------------------------------------------------------------------------
    // // Test Occluding Sphere.
@@ -118,28 +75,32 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
    // sphere2->SetComponent(new CollisionComponent(desc));
    // //----------------------------------------------------------------------------------------------      
 
+    
+   
 
     //----------------------------------------------------------------------------------------------
-    // Testing PaperPlaneEntity
-    /*EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(0.0f, 0.0f, 0.0f), GetShadowMaps(),
-                                          "testPlane1");
-    EntityFactory::CreatePaperPlaneEntity(*this, d3d, glm::vec3(5.0f, 0.0f, 0.0f), GetShadowMaps(),
-                                          "testPlane2");*/
-    //----------------------------------------------------------------------------------------------
-
-    ////----------------------------------------------------------------------------------------------
-    //// Test Particle System
-    //EntityFactory::CreateParticleSystemEntity(*this, d3d, "flameParticleEffect.txt", 
-    //                                          "particleSystem");
-    ////----------------------------------------------------------------------------------------------
-
-    //----------------------------------------------------------------------------------------------
-    // Camera entity.
+    // Cameras.
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
                         / (float)GetParent().GetD3DInstance().GetScreenHeight();
+
     m_camComponent = 
     EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f, "camera1"); 
+
+    m_airfieldCam =
+        EntityFactory::CreatePerspectiveCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f,
+            glm::vec3(-3.0f, 22.0f, 49.0f), "airfieldCam");
+
+    m_airfieldCam->RotateGlobalY(180.0f);
+    m_airfieldCam->RotateLocalX(85.0f);
+
+    m_planeFollowCam = 
+        EntityFactory::CreatePerspectiveCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f,
+            glm::vec3(0.0f), "followCam");
     //----------------------------------------------------------------------------------------------
+
+    
+
+
 
     //----------------------------------------------------------------------------------------------
     // Light entity
@@ -237,26 +198,53 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
 
 PlaneScene::~PlaneScene(void)
 {
+    
+}
 
+
+void PlaneScene::Update(double time)
+{
+    Scene::Update(time);
+
+    if(G_InputManager.IsKeyPressed(DIK_F1))
+    {
+        SetActiveCamera((CameraComponent*)m_camComponent->GetComponent("CameraComponent"));
+    }
+    if(G_InputManager.IsKeyPressed(DIK_F2))
+    {
+        SetActiveCamera((CameraComponent*)m_airfieldCam->GetComponent("CameraComponent"));
+    } 
+    if(G_InputManager.IsKeyPressed(DIK_F3))
+    {
+        SetActiveCamera((CameraComponent*)m_planeFollowCam->GetComponent("CameraComponent"));
+    }
+
+    m_planeFollowCam->SetTransform(m_planes[m_planeToFollow]->GetTransform());
+   /* m_planeFollowCam->SetPos(m_planes[m_planeToFollow]->GetPos());*/
+    //m_planeFollowCam->MoveGlobalY(1.0f);
+    m_planeFollowCam->MoveForward(-2.0f);
+    m_planeFollowCam->MoveUp(0.5f);
+
+    bool isF4Pressed = G_InputManager.IsKeyPressed(DIK_F4);
+    if(isF4Pressed && !m_prevF4Pressed)
+    {
+        m_planeToFollow++;
+        if(m_planeToFollow >= m_planes.size())
+        {
+            m_planeToFollow = 0;
+        }
+    }
+    m_prevF4Pressed = isF4Pressed;
 }
 
 void PlaneScene::Draw(D3D& d3d)
 {
-    //
-    //m_camComponent->SetTransform(m_planes[1]->GetTransform());
-   // m_camComponent->SetPos(m_planes[3]->GetPos());
-   // m_camComponent->MoveUp(0.5f);
-   // m_camComponent->MoveForward(-5.0f);
-    //m_camComponent->MoveRight(0.05f);
-    //m_camComponent->MoveForward(-100.0f);
-
-    //GetShadowMaps()[0]->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
-
-    GetShadowMaps()[0]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
+    
+    for(int i = 0; i < GetShadowMaps().size(); i++)
+    {
+        GetShadowMaps()[i]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
                                           1.0f, 1.0f, 1.0f, 1.0f);
-
-    GetShadowMaps()[1]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
-                                          1.0f, 1.0f, 1.0f, 1.0f);
+    }
 
     // Render all things, but the renderTarget entity.
     for(auto ent : GetEntities())

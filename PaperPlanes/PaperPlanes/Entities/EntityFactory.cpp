@@ -25,6 +25,20 @@ Entity* EntityFactory::CreatePerspectiveFpCameraEntity(Scene& scene, float fov, 
 }
 
 
+Entity* EntityFactory::CreatePerspectiveCameraEntity(Scene& scene, float fov, float aspect, 
+                                                     float pNear, float pFar, 
+                                                     glm::vec3& position, const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+    newEntity->SetComponent(new PerspectiveCamComponent(fov, aspect, pNear, pFar));
+    scene.AddEntity(newEntity);
+    newEntity->MoveGlobalX(position.x);
+    newEntity->MoveGlobalY(position.y);
+    newEntity->MoveGlobalZ(position.z);
+    return newEntity;
+}
+
+
 Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& ambient, 
                                               const glm::vec4& diffuse, const glm::vec4& specular,
                                               const glm::vec3& position,
@@ -46,8 +60,7 @@ Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& amb
 Entity* EntityFactory::CreateSpotlightEntity(Scene& scene, const glm::vec4& ambient, 
                                               const glm::vec4& diffuse, const glm::vec4& specular,
                                               const glm::vec3& position, float spotCutoff, 
-                                              float spotExponent,
-                                              const std::string& id)
+                                              float spotExponent, const std::string& id)
 {
     Entity* newEntity = new Entity(scene, id);
     LightComponent* lightComp = new LightComponent(ambient, diffuse, specular, 
@@ -61,8 +74,6 @@ Entity* EntityFactory::CreateSpotlightEntity(Scene& scene, const glm::vec4& ambi
 
     return newEntity;
 }
-
-
 
 
 Entity* EntityFactory::CreateMeshEntity(Scene& scene, D3D& d3d, const std::string& objFilename, 

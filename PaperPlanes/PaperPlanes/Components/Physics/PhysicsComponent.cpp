@@ -82,6 +82,6 @@ void PhysicsComponent::Update(float time)
 
     m_angularVelocity += m_angularAccel * time;
     GetParent().RotateLocalX(m_angularVelocity.x * time);
-    GetParent().RotateGlobalY(m_angularVelocity.y * time);
+    GetParent().RotateLocalY(m_angularVelocity.y * time);
     GetParent().RotateLocalZ(m_angularVelocity.z * time);
 }
