@@ -1,5 +1,5 @@
 #pragma once
-#define DIRECTINPUT_VERSION 0x0800
+const int DIRECTINPUT_VERSION = 0x0800;
 
 #include <dinput.h>
 
@@ -16,11 +16,11 @@ public:
 
     bool Update();
 
-    void GetMouseLocation(int mouseX, int mouseY) { mouseX = m_mouseX; mouseY = m_mouseY; }
+    void GetMouseLocation(int& mouseX, int& mouseY) const { mouseX = m_mouseX; mouseY = m_mouseY; }
 
-    bool IsEscapeKeyPressed() { return m_keyboardState[DIK_ESCAPE] & 0x80; }
+    bool IsEscapeKeyPressed() const { return m_keyboardState[DIK_ESCAPE] & 0x80; }
 
-    bool IsKeyPressed(unsigned char keyId);// { return m_keyboardState[keyId] & 0x80; }
+    bool IsKeyPressed(unsigned char keyId) const;// { return m_keyboardState[keyId] & 0x80; }
 
 // Private Functions
 private:

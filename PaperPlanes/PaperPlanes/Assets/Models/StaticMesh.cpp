@@ -401,7 +401,7 @@ void StaticMesh::CalculateModelVectors()
 
 void StaticMesh::CalculateTangentBinormal(const VertexFormat& vert1, const VertexFormat& vert2, 
                                           const VertexFormat& vert3, glm::vec3& tangent, 
-                                          glm::vec3& binormal)
+                                          glm::vec3& binormal) const
 {
     // Calculate the two vectors for the face.
     glm::vec3 vec1(vert2.position - vert1.position);
@@ -432,7 +432,7 @@ void StaticMesh::CalculateTangentBinormal(const VertexFormat& vert1, const Verte
 
 
 void StaticMesh::CalculateNormal(const glm::vec3& tangent, const glm::vec3& binormal, 
-                                 glm::vec3& normal)
+                                 glm::vec3& normal) const
 {
     // Cross product of tangent and binormal.
     normal = glm::normalize(glm::cross(tangent, binormal));

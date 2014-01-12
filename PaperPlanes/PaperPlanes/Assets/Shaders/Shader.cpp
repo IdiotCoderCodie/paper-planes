@@ -173,7 +173,7 @@ bool Shader::SetPixelShader(D3D& d3d, HWND hwnd, WCHAR* filename, CHAR* entryPoi
 }
 
 
-bool Shader::AddSamplerState(D3D& d3d, const std::string& identity, D3D11_SAMPLER_DESC& samplerDesc)
+bool Shader::AddSamplerState(D3D& d3d, const std::string& identity, const D3D11_SAMPLER_DESC& samplerDesc)
 {
     if(m_samplerStates.find(identity) != m_samplerStates.end())
     {
@@ -197,7 +197,7 @@ bool Shader::AddSamplerState(D3D& d3d, const std::string& identity, D3D11_SAMPLE
 }
 
 
-bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_BUFFER_DESC& bufferDesc)
+bool Shader::AddBuffer(D3D& d3d, const std::string& identity, const D3D11_BUFFER_DESC& bufferDesc)
 {
     // Check if a buffer with this identity already exists.
     if(m_buffers.find(identity) != m_buffers.end())
@@ -259,7 +259,7 @@ bool Shader::AddStructuredBuffer(D3D& d3d, const std::string& identity, UINT str
     return true;
 }
 
-ID3D11ShaderResourceView* Shader::GetBufferSRV(std::string& identity)
+ID3D11ShaderResourceView* Shader::GetBufferSRV(const std::string& identity)
 {
     if(m_bufferSRVs.find(identity) != m_bufferSRVs.end())
     {
@@ -465,7 +465,7 @@ bool Shader::SetStructuredBufferData(D3D& d3d, std::string& id, void* data, size
 }
 
 
-void Shader::RenderShader(D3D& d3d, int indexCount)
+void Shader::RenderShader(D3D& d3d, int indexCount) const
 {
     // Set the vertex input layout.
     if(!m_inputLayout)

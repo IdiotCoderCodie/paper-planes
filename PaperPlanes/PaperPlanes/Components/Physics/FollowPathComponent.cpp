@@ -26,6 +26,17 @@ FollowPathComponent::~FollowPathComponent(void)
 }
 
 
+void FollowPathComponent::FamilyID(componentId_t& out) const 
+{ 
+    out = "PathComponent"; 
+}
+
+void FollowPathComponent::ComponentID(componentId_t& out) const 
+{ 
+    out = "BasicPathComponent"; 
+}
+
+
 void FollowPathComponent::Update(float time)
 {
     if(m_delayed)
@@ -210,13 +221,21 @@ void FollowPathComponent::InitDebugBuffers(D3D& d3d)
     {
         if((i + 3) < m_nodes.size())
         {
-            for(float t = 0.0f; t < 1.001f; t+= 0.05f)
+            for(int t = 0; t < 21; t++)
+            {
+                float ft = t / 20.0f;
+                 vertices.push_back(CalculateBezierPoint(ft, m_nodes[i].position, 
+                                                        m_nodes[i+1].position, 
+                                                        m_nodes[i+2].position, 
+                                                        m_nodes[i+3].position));
+            }
+           /* for(float t = 0.0f; t < 1.001f; t+= 0.05f)
             {
                 vertices.push_back(CalculateBezierPoint(t, m_nodes[i].position, 
                                                         m_nodes[i+1].position, 
                                                         m_nodes[i+2].position, 
                                                         m_nodes[i+3].position));
-            }
+            }*/
         }
     }
 

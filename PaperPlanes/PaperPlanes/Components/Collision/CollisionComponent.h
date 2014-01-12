@@ -20,18 +20,18 @@ struct CollisionComponentDesc
 class CollisionComponent : public Component
 {
 public:
-    explicit CollisionComponent(CollisionComponentDesc& desc);
+    explicit CollisionComponent(const CollisionComponentDesc& desc);
     ~CollisionComponent(void);
 
-    void FamilyID(componentId_t& id) const            { id = "CollisionComponent"; }
-    virtual void ComponentID(componentId_t& id) const { id = "BasicCollisionComponent"; }
+    void FamilyID(componentId_t& id) const;
+    virtual void ComponentID(componentId_t& id) const;
 
     virtual void Update(float time);
 
-    void SetCollisionComponentDesc(CollisionComponentDesc& desc) { m_desc = desc; }
-    const CollisionComponentDesc& GetCollisionComponentDesc() { return m_desc; }
+    void SetCollisionComponentDesc(const CollisionComponentDesc& desc) { m_desc = desc; }
+    const CollisionComponentDesc& GetCollisionComponentDesc() const { return m_desc; }
 
-    bool IsColliding()                { return m_colliding; }
+    bool IsColliding() const          { return m_colliding; }
     void SetColliding(bool colliding) { m_colliding = colliding; }
 
     bool CheckCollision(CollisionComponent* other);

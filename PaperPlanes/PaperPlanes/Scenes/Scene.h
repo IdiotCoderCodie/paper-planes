@@ -16,14 +16,14 @@ public:
     Scene(const std::string& name, SceneManager* sceneMgr);
     virtual ~Scene();
 
-    const std::string& GetSceneName() { return m_Name; }
+    const std::string& GetSceneName() const { return m_Name; }
 
     void AddEntity(Entity* entity);
 
-    const CameraComponent* GetActiveCamera()                  { return m_ActiveCamera; }
+    const CameraComponent* GetActiveCamera() const            { return m_ActiveCamera; }
     void SetActiveCamera(CameraComponent* const newActiveCam) { m_ActiveCamera = newActiveCam; }
 
-    const std::vector<Component*>& GetLights() { return m_Lights; }
+    const std::vector<Component*>& GetLights() const { return m_Lights; }
 
     SceneManager& GetParent() { return *m_Parent; }
 

@@ -24,3 +24,7 @@ PerspectiveCamComponent::~PerspectiveCamComponent(void)
 {
 }
 
+void PerspectiveCamComponent::ComponentID(componentId_t& out) const 
+{ 
+    out = "PerspectiveCameraComponent"; 
+}

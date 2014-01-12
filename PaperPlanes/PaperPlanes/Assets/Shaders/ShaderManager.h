@@ -16,7 +16,7 @@ public:
 
     Shader* GetShader(const std::string& id);
 
-    bool IsLoaded() { return m_loaded; }
+    bool IsLoaded() const { return m_loaded; }
 
     ~ShaderManager(void);
 

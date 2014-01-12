@@ -22,8 +22,8 @@ namespace EntityFactory
      * Creates an entity with a PerspectiveCamComponent attached.
      */
     Entity* CreatePerspectiveCameraEntity(Scene& scene, float fov, float aspect, 
-                                                  float near, float far, 
-                                                  glm::vec3& position, const std::string& id);
+                                          float near, float far, 
+                                          const glm::vec3& position, const std::string& id);
 
     /**
      * Creates an entity with a point light component attached, and adds it to 'scene' at position
@@ -79,9 +79,9 @@ namespace EntityFactory
                                               const std::string& id);
 
 
-    Entity* CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position,
-                                          std::vector<RenderTarget*>& shadowMaps,
-                                          std::vector<FollowPathComponent::Node>& pathNodes,
-                                          const std::string& id);
+    Entity* CreatePaperPlaneEntity(Scene& scene, D3D& d3d, const glm::vec3& position,
+                                   std::vector<RenderTarget*>& shadowMaps,
+                                   const std::vector<FollowPathComponent::Node>& pathNodes,
+                                   const std::string& id);
 
 };

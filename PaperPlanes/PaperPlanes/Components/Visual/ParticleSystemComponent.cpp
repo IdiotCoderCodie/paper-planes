@@ -49,7 +49,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
 {
     LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
     InitBuffers(d3d);
-    SetShader(*G_ShaderManager().GetShader("Particle"));
+    SetShader(G_ShaderManager().GetShader("Particle"));
     //Start();
 }
 
@@ -88,7 +88,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
     
     InitBuffers(d3d);
 
-    SetShader(*G_ShaderManager().GetShader("Particle"));
+    SetShader(G_ShaderManager().GetShader("Particle"));
 
 }
 
@@ -104,6 +104,12 @@ ParticleSystemComponent::~ParticleSystemComponent(void)
     {
     }
     delete[] m_vertices;
+}
+
+
+void ParticleSystemComponent::ComponentID(componentId_t& out) const 
+{ 
+    out = "ParticleSystemComponent"; 
 }
 
 
@@ -418,7 +424,7 @@ void ParticleSystemComponent::EmitParticles(float time)
 }
 
 
-void ParticleSystemComponent::InitNewEmission(Particle& newEmission)
+void ParticleSystemComponent::InitNewEmission(Particle& newEmission) const
 {
     newEmission.active = true;
 
@@ -445,7 +451,7 @@ void ParticleSystemComponent::InitNewEmission(Particle& newEmission)
 }
 
 
-bool ParticleSystemComponent::UpdateBuffers(D3D& d3d)
+bool ParticleSystemComponent::UpdateBuffers(D3D& d3d) const
 {
     memset(m_vertices, 0, (sizeof(VertexType) * m_vertexCount));
 

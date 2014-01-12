@@ -80,7 +80,7 @@ void RenderTarget::SetRenderTarget(ID3D11DeviceContext* deviceContext,
 
 void RenderTarget::ClearRenderTarget(ID3D11DeviceContext* deviceContext, 
                                      ID3D11DepthStencilView* depthStencilView,
-                                     float r, float g, float b, float a)
+                                     float r, float g, float b, float a) const
 {
     float color[4];
     color[0] = r;

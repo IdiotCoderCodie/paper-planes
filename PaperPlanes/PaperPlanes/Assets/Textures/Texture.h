@@ -12,7 +12,7 @@ public:
 
     bool Load(D3D& d3d, WCHAR* filename);
 	// Returns a pointer to the ShaderResourceView of the texture.
-	ID3D11ShaderResourceView* GetTexture() { return m_texture; }
+	ID3D11ShaderResourceView* GetTexture() const { return m_texture; }
 
 private:
 	ID3D11ShaderResourceView* m_texture;

@@ -5,8 +5,8 @@ Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidt
     :   m_texture(texture.GetTexture()),
         m_vertexBuffer(0), m_indexBuffer(0),
         m_vertexCount(0), m_indexCount(0),
-        m_bitmapWidth(width), m_bitmapHeight(height),
-        m_screenWidth(screenWidth), m_screenHeight(screenHeight)      
+        m_screenWidth(screenWidth), m_screenHeight(screenHeight),      
+        m_bitmapWidth(width), m_bitmapHeight(height)       
 {
     Init(&d3d.GetDevice());
 }
@@ -16,8 +16,8 @@ Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int heigh
     : m_texture(texture),
       m_vertexBuffer(0), m_indexBuffer(0),
       m_vertexCount(0), m_indexCount(0),
-      m_bitmapWidth(width), m_bitmapHeight(height),
-      m_screenWidth(screenWidth), m_screenHeight(screenHeight)      
+      m_screenWidth(screenWidth), m_screenHeight(screenHeight),
+      m_bitmapWidth(width), m_bitmapHeight(height)
 {
     Init(&d3d.GetDevice());
 }
@@ -107,7 +107,7 @@ bool Bitmap::Init(ID3D11Device* device)
 }
 
 
-bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY)
+bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY) const
 {
     float left = (float)((m_screenWidth / 2) * -1) + (float)positionX;
 

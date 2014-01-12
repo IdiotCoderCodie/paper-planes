@@ -218,7 +218,7 @@ void InputManager::ProcessInput()
 }
 
 
-bool InputManager::IsKeyPressed(unsigned char key)
+bool InputManager::IsKeyPressed(unsigned char key) const
 {
 	return m_keyboardState[key] & 0x80;
 }

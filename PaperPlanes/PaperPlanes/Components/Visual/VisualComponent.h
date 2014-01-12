@@ -11,11 +11,11 @@ public:
 
     virtual ~VisualComponent();
 
-    virtual void FamilyID(componentId_t& out) const { out = "VisualComponent"; }
+    virtual void FamilyID(componentId_t& out) const;
 
     //virtual void Draw(D3D& d3d);
 
-    void SetShader(Shader& shader) { m_Shader = &shader; }
+    void SetShader(Shader* shader) { m_Shader = &*(shader); }
     const Shader& GetShader() const { return *m_Shader; }
     Shader& GetShader() { return *m_Shader; }
     //Shader& GetShader() { return *m_Shader; }

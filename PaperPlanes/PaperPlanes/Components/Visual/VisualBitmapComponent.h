@@ -17,7 +17,7 @@ public:
                           int screenWidth, int screenHeight);
     ~VisualBitmapComponent(void);
 
-    virtual void ComponentID(componentId_t& out) const { out = "VisualBitmapComponent"; }
+    virtual void ComponentID(componentId_t& out) const;
 
     virtual void Update(float time);
 

@@ -24,7 +24,7 @@ Texture* TextureManager::GetTexture(const std::string& key)
 }
 
 
-Texture* TextureManager::LoadTexture(D3D& d3d, WCHAR* filename, const std::string& key)
+Texture* TextureManager::LoadTexture(D3D& d3d, const WCHAR* filename, const std::string& key)
 {
     /*std::wstring ws(filename);
     std::string  ss(ws.begin(), ws.end());*/

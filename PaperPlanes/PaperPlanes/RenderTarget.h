@@ -12,7 +12,7 @@ public:
     void SetRenderTarget(ID3D11DeviceContext* devContext, ID3D11DepthStencilView* depthStencilView);
 
     void ClearRenderTarget(ID3D11DeviceContext* devContext, ID3D11DepthStencilView* depthStencilView
-                         , float r, float g, float b, float a);
+                         , float r, float g, float b, float a) const;
 
     ID3D11ShaderResourceView* GetShaderResourceView() const { return m_shaderResourceView; }
 

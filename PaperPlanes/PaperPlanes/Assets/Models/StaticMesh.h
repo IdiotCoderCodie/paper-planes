@@ -59,7 +59,7 @@ public:
     void SetVertexCount(int vertexCount) { m_vertexCount = vertexCount; }
     void SetIndexCount(int indexCount) { m_indexCount = indexCount; }
 
-    bool DoesContainTanBin() { return m_includeTanBin; }
+    bool DoesContainTanBin() const { return m_includeTanBin; }
 
     /**
      * Uses CalculateTangentBinormal and CalculateNormal functions to calculate the tangent,
@@ -72,11 +72,11 @@ public:
      */
     void CalculateTangentBinormal(const VertexFormat& vert1, const VertexFormat& vert2, 
                                   const VertexFormat& vert3, glm::vec3& tangent, 
-                                  glm::vec3& binormal);
+                                  glm::vec3& binormal) const;
     /**
      * Calculates the normal from the given tangent and binormal. Result stored in 'normal' param.
      */
-    void CalculateNormal(const glm::vec3& tangent, const glm::vec3& binormal, glm::vec3& normal);
+    void CalculateNormal(const glm::vec3& tangent, const glm::vec3& binormal, glm::vec3& normal) const;
 
 private:
     std::string                     m_filename;

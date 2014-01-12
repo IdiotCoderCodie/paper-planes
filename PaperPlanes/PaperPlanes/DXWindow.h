@@ -13,7 +13,7 @@ public:
     bool IsInitialized();
     void Run();
 
-    LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
+    LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam) const;
 
     // Private Functions
 private:

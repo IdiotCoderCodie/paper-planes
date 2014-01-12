@@ -1,7 +1,7 @@
 #include "FreeRoamFpComponent.h"
 
-#define FLOAT_ZERO_DELTA 0.00001f
-#define CHECK_FLOAT_ZERO(X) ((X > -FLOAT_ZERO_DELTA) && (X < FLOAT_ZERO_DELTA))
+static const float FLOAT_ZERO_DELTA = 0.00001f;
+//#define CHECK_FLOAT_ZERO(X) ((X > -FLOAT_ZERO_DELTA) && (X < FLOAT_ZERO_DELTA))
 
 FreeRoamFpComponent::FreeRoamFpComponent(void)
     : PhysicsComponent(),
@@ -40,6 +40,12 @@ FreeRoamFpComponent::FreeRoamFpComponent(float moveAccel, float turnSensitivityX
 
 FreeRoamFpComponent::~FreeRoamFpComponent(void)
 {
+}
+
+
+void FreeRoamFpComponent::ComponentID(componentId_t& out) const  
+{ 
+    out = "FreeRoamFpPhysicsComponent"; 
 }
 
 

@@ -9,13 +9,14 @@
 
 
 Frame::Frame(void)
-	:	m_Position(glm::vec3(0.0f, 0.0f, 0.0f)), m_Forward(glm::vec3(0.0f, 0.0f, 1.0f)),
-		m_Up(glm::vec3(0.0f, 1.0f, 0.0f)), m_Scale(1.0f, 1.0f, 1.0f)
+	:	m_Matrix(1.0f), m_Position(glm::vec3(0.0f, 0.0f, 0.0f)), m_Up(glm::vec3(0.0f, 1.0f, 0.0f)),
+        m_Forward(glm::vec3(0.0f, 0.0f, 1.0f)), m_Rotation(1.0f), m_Scale(1.0f, 1.0f, 1.0f)
 {
 }
 
 Frame::Frame(const glm::vec3& position, const glm::vec3& forward, const glm::vec3& up)
-	: m_Position(position), m_Forward(forward), m_Up(up), m_Scale(1.0f, 1.0f, 1.0f)
+	: m_Matrix(1.0f), m_Position(position), m_Up(up), m_Forward(forward), m_Rotation(1.0f),
+      m_Scale(1.0f, 1.0f, 1.0f)
 {
 }
 

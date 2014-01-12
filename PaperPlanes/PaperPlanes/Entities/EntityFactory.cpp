@@ -27,7 +27,7 @@ Entity* EntityFactory::CreatePerspectiveFpCameraEntity(Scene& scene, float fov, 
 
 Entity* EntityFactory::CreatePerspectiveCameraEntity(Scene& scene, float fov, float aspect, 
                                                      float pNear, float pFar, 
-                                                     glm::vec3& position, const std::string& id)
+                                                     const glm::vec3& position, const std::string& id)
 {
     Entity* newEntity = new Entity(scene, id);
     newEntity->SetComponent(new PerspectiveCamComponent(fov, aspect, pNear, pFar));
@@ -204,7 +204,7 @@ Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResou
     
     newEntity->MoveRight(-xPos);
     newEntity->MoveUp(-yPos);
-
+    scene.AddEntity(newEntity);
     return newEntity;
 }
 
@@ -230,9 +230,9 @@ Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const 
 }
 
 
-Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3& position, 
+Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, const glm::vec3& position, 
                                               std::vector<RenderTarget*>& shadowMaps, 
-                                              std::vector<FollowPathComponent::Node>& pathNodes,
+                                              const std::vector<FollowPathComponent::Node>& pathNodes,
                                               const std::string& id)
 {
     static int numPaperPlanes = 0;
@@ -289,7 +289,7 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
     FollowPathComponent* pathComp = new FollowPathComponent();
     newEntity->SetComponent(pathComp);
     // Add all the path points.
-    for(FollowPathComponent::Node& node : pathNodes)
+    for(const FollowPathComponent::Node& node : pathNodes)
     {
         pathComp->AddNode(node.position, node.timeToReach, node.delay);
     }

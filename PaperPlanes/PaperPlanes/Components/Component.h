@@ -19,11 +19,11 @@ public:
     virtual void ComponentID(componentId_t& out) const = 0;
 
     // Param "time" signifies time elapsed since the last update call.
-    virtual void Update(float time) {};
+    virtual void Update(float time);
 
-    virtual void Draw(D3D& d3d) {};
+    virtual void Draw(D3D& d3d);
 
-    void SetParent(Entity& ent)     { m_Parent = &ent; }
+    void SetParent(Entity* ent)     { m_Parent = &(*ent); }
     Entity& GetParent() const { return *m_Parent; }
 
 private:

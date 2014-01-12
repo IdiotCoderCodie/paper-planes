@@ -5,8 +5,8 @@
 
 
 SceneManager::SceneManager(D3D& d3d)
-    :   m_ActiveScene(0),
-        m_Scenes(),
+    :   m_Scenes(), 
+        m_ActiveScene(0),
         m_d3d(d3d)
 {
     G_ShaderManager().LoadShaders(d3d, "");

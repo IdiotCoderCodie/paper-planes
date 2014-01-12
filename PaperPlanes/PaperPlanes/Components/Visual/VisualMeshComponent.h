@@ -15,13 +15,13 @@ public:
                         Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
     ~VisualMeshComponent(void);
 
-    virtual void ComponentID(componentId_t& out) const { out = "VisualMeshComponent"; }
+    virtual void ComponentID(componentId_t& out) const;
 
-    bool DoesCastShadows()          { return m_castShadows; }
+    bool DoesCastShadows() const    { return m_castShadows; }
     void EnableCastShadows()        { m_castShadows = true; }
     void DisableCastShadows()       { m_castShadows = false; }
 
-    bool DoesRecieveShadows()       { return m_recieveShadows; }
+    bool DoesRecieveShadows() const { return m_recieveShadows; }
     void EnableRecieveShadows()     { m_recieveShadows = true; }
     void DisableRecieveShadows()    { m_recieveShadows = false; }
 

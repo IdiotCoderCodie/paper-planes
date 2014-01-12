@@ -2,9 +2,9 @@
 #include "../../Entities/Entity.h"
 
 PaperPlaneBC::PaperPlaneBC(D3D& d3d)
-    : m_fireSystem(d3d, "flameParticleEffect.txt"),
-    m_onFire(false),
-    m_fireTime(0.0f)
+    :   m_onFire(false),             
+        m_fireTime(0.0f),
+        m_fireSystem(d3d, "flameParticleEffect.txt")
 {
 }
 
@@ -14,10 +14,21 @@ PaperPlaneBC::~PaperPlaneBC(void)
 }
 
 
+void PaperPlaneBC::FamilyID(componentId_t& idOut) const    
+{ 
+    idOut = "PaperPlaneBC"; 
+}
+
+void PaperPlaneBC::ComponentID(componentId_t& idOut) const 
+{ 
+    idOut = "PaperPlaneBC"; 
+}
+
+
 void PaperPlaneBC::Update(float time)
 {
     // Ensure the particle system's parent is set as the same as this components before updating.
-    m_fireSystem.SetParent(this->GetParent());
+    m_fireSystem.SetParent(&this->GetParent());
     m_fireSystem.Update(time);
 
     UpdateFire(time);   

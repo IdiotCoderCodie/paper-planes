@@ -35,13 +35,13 @@ public:
     void TurnZBufferOn();
     void TurnZBufferOff();
 
-    int GetScreenWidth()    { return m_screenWidth; }
-    int GetScreenHeight()   { return m_screenHeight; }
+    int GetScreenWidth() const   { return m_screenWidth; }
+    int GetScreenHeight() const  { return m_screenHeight; }
 
-    bool IsInitialized() { return m_initialized; }
+    bool IsInitialized() const   { return m_initialized; }
 
     void ClearDepthStencilView();
-    ID3D11DepthStencilView* GetDepthStencilView() { return m_depthStencilView; }
+    ID3D11DepthStencilView* GetDepthStencilView() const { return m_depthStencilView; }
     void SetBackBufferRenderTarget();
 
     void EnableAlphaBlending();

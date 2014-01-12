@@ -48,14 +48,14 @@ public:
      * Creates a sampler state from the description provided and adds it to the list. Add the
      * sampler states in the correct order as they are in the shader file.
      */
-    bool AddSamplerState(D3D& d3d, const std::string& identity, D3D11_SAMPLER_DESC& samplerDesc);
+    bool AddSamplerState(D3D& d3d, const std::string& identity, const D3D11_SAMPLER_DESC& samplerDesc);
 
     /**
      * Creates and adds a buffer using "bufferDesc".
      * Stores pointer to this buffer in map of buffers, accessible through "identity" key.
      * Returns whether this action was a success or not.
      */
-    bool AddBuffer      (D3D& d3d, const std::string& identity, D3D11_BUFFER_DESC& bufferDesc);
+    bool AddBuffer      (D3D& d3d, const std::string& identity, const D3D11_BUFFER_DESC& bufferDesc);
     /**
      * Creates and adds a buffer using the description parameters given.
      * Stores pointer to this buffer in map of buffers, accessible through "identity" key.
@@ -84,9 +84,9 @@ public:
     bool SetStructuredBufferData(D3D& d3d, std::string& id, void* data, size_t size);
 
 
-    void RenderShader   (D3D& d3d, int indexCount);
+    void RenderShader   (D3D& d3d, int indexCount) const;
 
-    ID3D11ShaderResourceView* GetBufferSRV(std::string& identity);
+    ID3D11ShaderResourceView* GetBufferSRV(const std::string& identity);
 
 private:
     void OutputShaderErrorMessage(ID3D10Blob* errMsg, HWND hwnd, WCHAR* shaderFilename) const;

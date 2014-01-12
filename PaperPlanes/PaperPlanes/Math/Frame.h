@@ -12,11 +12,11 @@ public:
 	void SetPosition(float x, float y, float z) { m_Position = glm::vec3(x, y, z); }
 	const glm::vec3& GetPosition() const { return m_Position; }
 
-	void SetForward(glm::vec3& forward) { m_Forward = forward; }
+	void SetForward(const glm::vec3& forward) { m_Forward = forward; }
 	void SetForward(float x, float y, float z) { m_Forward = glm::vec3(x, y, z); }
 	const glm::vec3& GetForward() const { return m_Forward; }
 
-	void SetUp(glm::vec3& up) { m_Up = up; }
+	void SetUp(const glm::vec3& up) { m_Up = up; }
 	void SetUp(float x, float y, float z) { m_Up = glm::vec3(x, y, z); }
 	const glm::vec3& GetUp() const { return m_Up; }
 

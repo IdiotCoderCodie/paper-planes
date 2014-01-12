@@ -21,8 +21,8 @@ public:
     FollowPathComponent(void);
     ~FollowPathComponent(void);
 
-    void FamilyID(componentId_t& out) const { out = "PathComponent"; }
-    void ComponentID(componentId_t& out) const { out = "BasicPathComponent"; }
+    void FamilyID(componentId_t& out) const;
+    void ComponentID(componentId_t& out) const;
 
     void Update(float time);
 

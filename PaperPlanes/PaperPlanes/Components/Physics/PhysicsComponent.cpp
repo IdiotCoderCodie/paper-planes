@@ -73,6 +73,18 @@ PhysicsComponent::~PhysicsComponent(void)
 {
 }
 
+
+void PhysicsComponent::FamilyID(componentId_t& out) const     
+{ 
+    out = "PhysicsComponent"; 
+}
+
+void PhysicsComponent::ComponentID(componentId_t& out) const  
+{ 
+    out = "BasicPhysicsComponent"; 
+}
+
+
 void PhysicsComponent::Update(float time)
 {
     m_velocity += (m_acceleration * time);

@@ -16,7 +16,7 @@ public:
      * Attempts to load the texture at "filename" and store it in the texture map.
      * Returns: The loaded texture, or nullptr if it could not be loaded.
      */
-    Texture* LoadTexture(D3D& d3d, WCHAR* filename, const std::string& key);
+    Texture* LoadTexture(D3D& d3d, const WCHAR* filename, const std::string& key);
     /**
      * Fetches the texture with matching "key". 
      * Returns nullptr if a matching texture was not found.

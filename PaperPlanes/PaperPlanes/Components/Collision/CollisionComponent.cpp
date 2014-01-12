@@ -2,7 +2,7 @@
 #include "../../Entities/Entity.h"
 #include "../../Scenes/Scene.h"
 
-CollisionComponent::CollisionComponent(CollisionComponentDesc& desc)
+CollisionComponent::CollisionComponent(const CollisionComponentDesc& desc)
     : m_desc(desc),
       m_colliding(false),
       m_collidingWith(0)
@@ -13,6 +13,18 @@ CollisionComponent::CollisionComponent(CollisionComponentDesc& desc)
 CollisionComponent::~CollisionComponent(void)
 {
 }
+
+
+void CollisionComponent::FamilyID(componentId_t& id) const            
+{ 
+    id = "CollisionComponent"; 
+}
+
+void CollisionComponent::ComponentID(componentId_t& id) const 
+{ 
+    id = "BasicCollisionComponent";
+}
+
 
 void CollisionComponent::Update(float time)
 {

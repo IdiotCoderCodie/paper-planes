@@ -27,7 +27,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-   SetShader(*G_ShaderManager().GetShader("Normal_Shadows_Test"));
+   SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -45,12 +45,18 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-    SetShader(*G_ShaderManager().GetShader("Normal_Shadows_Test"));
+    SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
 VisualMeshComponent::~VisualMeshComponent(void)
 {
+}
+
+
+void VisualMeshComponent::ComponentID(componentId_t& out) const
+{ 
+    out = "VisualMeshComponent"; 
 }
 
 
@@ -200,11 +206,11 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 {
     if(m_mesh.DoesContainTanBin())
     {
-        SetShader(*G_ShaderManager().GetShader("Mesh_Bump_Shadows"));
+        SetShader(G_ShaderManager().GetShader("Mesh_Bump_Shadows"));
     }
     else
     {
-        SetShader(*G_ShaderManager().GetShader("Mesh_Shadows"));
+        SetShader(G_ShaderManager().GetShader("Mesh_Shadows"));
     }
 
 

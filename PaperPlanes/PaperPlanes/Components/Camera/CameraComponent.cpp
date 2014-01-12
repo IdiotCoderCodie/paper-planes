@@ -11,6 +11,10 @@ CameraComponent::~CameraComponent(void)
 {
 }
 
+void CameraComponent::FamilyID(componentId_t& out) const 
+{ 
+    out = "CameraComponent"; 
+}
 
 void CameraComponent::Update(float timeElapsed)
 {

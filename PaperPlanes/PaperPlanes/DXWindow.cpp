@@ -106,7 +106,7 @@ bool DXWindow::Frame()
 }
 
 
-LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam) const
 {
     /*switch(umsg)
     {

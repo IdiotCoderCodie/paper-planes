@@ -10,8 +10,8 @@ public:
     explicit PaperPlaneBC(D3D& d3d);
     ~PaperPlaneBC(void);
 
-    void FamilyID(componentId_t& idOut) const    { idOut = "PaperPlaneBC"; }
-    void ComponentID(componentId_t& idOut) const { idOut = "PaperPlaneBC"; }
+    void FamilyID(componentId_t& idOut) const;
+    void ComponentID(componentId_t& idOut) const;
 
     void Update(float time);
 

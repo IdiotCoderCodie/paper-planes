@@ -113,7 +113,7 @@ void Entity::SetComponent(Component* newComponent)
     temp = 0;
 
     // Add the component, setting it's parent.
-    newComponent->SetParent(*this);
+    newComponent->SetParent(this);
     m_Components[gocId] = newComponent;
 }
 

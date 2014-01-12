@@ -26,10 +26,10 @@ public:
     ~Bitmap(void);
 
     ID3D11ShaderResourceView* GetTextureShaderResourceView() const       { return m_texture; }
-    void GetTextureShaderResourceView(ID3D11ShaderResourceView* texture) { m_texture = texture; }
+    //void SetTextureShaderResourceView(ID3D11ShaderResourceView* texture) { m_texture = texture; }
 
 
-    bool UpdateBuffers(D3D& d3d, int positionX, int positionY);
+    bool UpdateBuffers(D3D& d3d, int positionX, int positionY) const;
 
     void Draw(D3D& d3d);
 

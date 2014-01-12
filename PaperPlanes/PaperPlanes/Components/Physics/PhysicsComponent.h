@@ -30,8 +30,8 @@ public:
     virtual ~PhysicsComponent(void);
 
 
-    void FamilyID(componentId_t& out) const     { out = "PhysicsComponent"; }
-    virtual void ComponentID(componentId_t& out) const  { out = "BasicPhysicsComponent"; }
+    void FamilyID(componentId_t& out) const;
+    virtual void ComponentID(componentId_t& out) const;
     
     virtual void Update(float time);
 

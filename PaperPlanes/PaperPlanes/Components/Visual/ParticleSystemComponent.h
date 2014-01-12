@@ -54,9 +54,11 @@ private:
         this->m_indexBuffer             = other.m_indexBuffer;
         this->m_tweakBarSetup           = this->m_tweakBarSetup;
         this->m_emitting                = false;
+
+        return *this;
     }
 
-    ParticleSystemComponent(ParticleSystemComponent& other) 
+    ParticleSystemComponent(const ParticleSystemComponent& other) 
     : m_engagedParticles(),
       m_maxParticleCount(),
       m_currentParticleCount(),
@@ -115,7 +117,7 @@ private:
     }
 
 public:
-    virtual void ComponentID(componentId_t& out) const { out = "ParticleSystemComponent"; }
+    virtual void ComponentID(componentId_t& out) const;
 
     virtual void Update(float time);
 
@@ -136,7 +138,7 @@ public:
      */
     void HardStop();
 
-    const std::string& GetEffectName() { return m_effectName; }
+    const std::string& GetEffectName() const { return m_effectName; }
 
 private:
     bool LoadFromFile(const std::string& filename, D3D& d3d);
@@ -158,9 +160,9 @@ private:
     /**
      * Called within EmitParticles. Initializes "newParticle" data.
      */
-    void InitNewEmission(Particle& newParticle);
+    void InitNewEmission(Particle& newParticle) const;
 
-    bool UpdateBuffers(D3D& d3d);
+    bool UpdateBuffers(D3D& d3d) const;
 
     bool TweakBarSetup();
 

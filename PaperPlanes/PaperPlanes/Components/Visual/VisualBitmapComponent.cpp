@@ -8,20 +8,26 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
                                              int width, int height, 
                                              int screenWidth, int screenHeight)
     :	VisualComponent(),
-        m_bitmap(d3d, srcTexture, width, height, screenWidth, screenHeight)
+        m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight)
 {
     if(!G_ShaderManager().IsLoaded())
     {
         G_ShaderManager().LoadShaders(d3d, "placeholder");
     }
 
-    SetShader(*G_ShaderManager().GetShader("Bitmap"));
+    SetShader(G_ShaderManager().GetShader("Bitmap"));
 }
 
 
 VisualBitmapComponent::~VisualBitmapComponent(void)
 {
 
+}
+
+
+void VisualBitmapComponent::ComponentID(componentId_t& out) const 
+{ 
+    out = "VisualBitmapComponent"; 
 }
 
 

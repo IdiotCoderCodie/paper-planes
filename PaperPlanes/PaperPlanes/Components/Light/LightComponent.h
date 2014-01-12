@@ -21,8 +21,8 @@ public:
                    float spotCutoff, float spotExponent);
     virtual ~LightComponent(void);
 
-    void FamilyID(componentId_t& out) const     { out = "LightComponent"; }
-    void ComponentID(componentId_t& out) const  { out = "SpotLightComponent"; } //Temporary.?
+    void FamilyID(componentId_t& out) const;
+    void ComponentID(componentId_t& out) const;
 
     const glm::vec4& GetAmbient() const                     { return m_ambient; }
     void SetAmbient(const glm::vec4 ambient)                { m_ambient = ambient; }
@@ -50,8 +50,8 @@ public:
 
     void GenerateProjectionMatrix(float near, float far);
 
-    const glm::mat4& GetViewMatrix() { return m_viewMatrix; }
-    const glm::mat4& GetProjMatrix() { return m_projectionMatrix; }
+    const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
+    const glm::mat4& GetProjMatrix() const { return m_projectionMatrix; }
 
     virtual void Update(float time);
     

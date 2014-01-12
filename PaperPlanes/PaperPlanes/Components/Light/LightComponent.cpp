@@ -10,18 +10,22 @@ LightComponent::LightComponent(void)
       m_specular(1.0f, 1.0f, 1.0f, 1.0f),
       m_spotCutoff(180.0f),
       m_spotExponent(0.0f),
+      m_viewMatrix(1.0f),
+      m_projectionMatrix(1.0f),
       m_tweakBarSetup(false)
 {
 }
 
 LightComponent::LightComponent(const glm::vec4& ambient, const glm::vec4& diffuse, 
                                const glm::vec4& specular)
-    : m_ambient(ambient), 
+    : m_active(true),
+      m_ambient(ambient), 
       m_diffuse(diffuse),
-      m_specular(specular),
-      m_active(true),
+      m_specular(specular),    
       m_spotCutoff(180.0f),
       m_spotExponent(0.0f),
+      m_viewMatrix(1.0f),
+      m_projectionMatrix(1.0f),
       m_tweakBarSetup(false)
 {
 }
@@ -44,6 +48,17 @@ LightComponent::LightComponent(const glm::vec4& ambient, const glm::vec4& diffus
 LightComponent::~LightComponent(void)
 {
 }
+
+
+void LightComponent::FamilyID(componentId_t& out) const     
+{ 
+    out = "LightComponent"; 
+}
+
+void LightComponent::ComponentID(componentId_t& out) const  
+{ 
+    out = "SpotLightComponent"; 
+} 
 
 
 void LightComponent::GenerateProjectionMatrix(float near, float far)

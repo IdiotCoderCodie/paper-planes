@@ -11,15 +11,15 @@ public:
     FreeRoamFpComponent(float moveAccel, float turnSensitivityX, float turnSensitivityY);
     ~FreeRoamFpComponent(void);
 
-    virtual void ComponentID(componentId_t& out) const  { out = "FreeRoamFpPhysicsComponent"; }
+    virtual void ComponentID(componentId_t& out) const; 
 
     virtual void Update(float time);
 
-    float GetTurnSensitivityX() { return m_turnSensitivityX; }
-    float GetTurnSensitivityY() { return m_turnSensitivityY; }
+    float GetTurnSensitivityX() const { return m_turnSensitivityX; }
+    float GetTurnSensitivityY() const { return m_turnSensitivityY; }
 
-    float GetMoveAcceleration() { return m_moveAcceleration; }
-    float GetMoveDeceleration() { return m_moveDeceleration; }
+    float GetMoveAcceleration() const { return m_moveAcceleration; }
+    float GetMoveDeceleration() const { return m_moveDeceleration; }
 
 private:
     float m_turnSensitivityX; // Determine the ratio between how much mouse moves and how much the
