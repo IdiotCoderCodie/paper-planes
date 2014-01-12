@@ -18,7 +18,7 @@
 
 //extern TextureManager G_TextureManager; 
 
-ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string& effectFile)
+ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, const std::string& effectFile)
     : m_engagedParticles(),
       m_maxParticleCount(),
       m_currentParticleCount(),

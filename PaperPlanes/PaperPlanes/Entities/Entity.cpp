@@ -80,6 +80,7 @@ Entity::~Entity(void)
      m_Transform = other.m_Transform;
      m_Components = other.m_Components;
      m_tweakBar = 0;
+     m_Parent;
      return *this;
  }
 

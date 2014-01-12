@@ -21,7 +21,7 @@ private:
     };
 
 public:
-    ParticleSystemComponent(D3D& d3d, std::string& effectFile);
+    ParticleSystemComponent(D3D& d3d, const std::string& effectFile);
     explicit ParticleSystemComponent(D3D& d3d);
     ~ParticleSystemComponent(void);
 private:

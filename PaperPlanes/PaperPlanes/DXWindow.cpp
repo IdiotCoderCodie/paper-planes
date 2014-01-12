@@ -49,7 +49,7 @@ DXWindow::~DXWindow(void)
 }
 
 
-bool DXWindow::IsInitialized()
+bool DXWindow::IsInitialized() const
 {
     if(!m_Graphics || !m_Graphics->IsInitialized())
         return false;
