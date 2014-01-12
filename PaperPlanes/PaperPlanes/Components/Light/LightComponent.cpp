@@ -33,10 +33,10 @@ LightComponent::LightComponent(const glm::vec4& ambient, const glm::vec4& diffus
 
 LightComponent::LightComponent(const glm::vec4& ambient, const glm::vec4& diffuse, const glm::vec4& specular,
                                float spotCutoff, float spotExponent)
-    : m_ambient(ambient),
+    : m_active(true),
+      m_ambient(ambient),
       m_diffuse(diffuse),
       m_specular(specular),
-      m_active(true),
       m_spotCutoff(spotCutoff),
       m_spotExponent(spotExponent),
       m_tweakBarSetup(false)

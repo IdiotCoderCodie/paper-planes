@@ -10,6 +10,9 @@ class SceneManager
 public:
     explicit SceneManager(D3D& d3d);
     ~SceneManager();
+private:
+    SceneManager& operator=(const SceneManager& other);
+public:
 
     // Sets the active scene with name matching "sceneName". 
     // Returns: Whether or not such a scene exists and was made active.
@@ -24,7 +27,9 @@ public:
 
     void ClearScenes();
 
+    const D3D& GetD3DInstance() const { return m_d3d; }
     D3D& GetD3DInstance() { return m_d3d; }
+
 
     void Update(double timeElapsed);
 

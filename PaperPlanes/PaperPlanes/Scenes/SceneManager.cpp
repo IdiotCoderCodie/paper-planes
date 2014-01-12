@@ -26,6 +26,15 @@ SceneManager::~SceneManager()
 }
 
 
+SceneManager& SceneManager::operator=(const SceneManager& other)
+{
+    m_Scenes = other.m_Scenes;
+    m_ActiveScene = other.m_ActiveScene;
+    m_d3d;
+    return *this;
+}
+
+
 bool SceneManager::SetActiveScene(const std::string& sceneName)
 {
     if(DoesSceneExist(sceneName))

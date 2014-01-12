@@ -15,6 +15,8 @@ public:
                         Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
     ~VisualMeshComponent(void);
 
+    VisualMeshComponent& operator=(const VisualMeshComponent& other);
+
     virtual void ComponentID(componentId_t& out) const;
 
     bool DoesCastShadows() const    { return m_castShadows; }

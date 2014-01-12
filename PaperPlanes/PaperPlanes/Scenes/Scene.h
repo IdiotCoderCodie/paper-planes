@@ -27,8 +27,10 @@ public:
 
     SceneManager& GetParent() { return *m_Parent; }
 
+    const std::vector<Entity*>& GetEntities() const { return m_Entities; }
     std::vector<Entity*>& GetEntities() { return m_Entities; }
 
+    const std::vector<RenderTarget*>& GetShadowMaps() const { return m_shadowMaps; }
     std::vector<RenderTarget*>& GetShadowMaps() { return m_shadowMaps; }
 
     virtual void Update(double time);

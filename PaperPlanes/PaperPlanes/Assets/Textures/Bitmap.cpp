@@ -1,7 +1,7 @@
 #include "Bitmap.h"
 #include "../../d3d_safe_release.h"
 
-Bitmap::Bitmap(D3D& d3d, Texture& texture, int width, int height, int screenWidth, int screenHeight)
+Bitmap::Bitmap(D3D& d3d, const Texture& texture, int width, int height, int screenWidth, int screenHeight)
     :   m_texture(texture.GetTexture()),
         m_vertexBuffer(0), m_indexBuffer(0),
         m_vertexCount(0), m_indexCount(0),

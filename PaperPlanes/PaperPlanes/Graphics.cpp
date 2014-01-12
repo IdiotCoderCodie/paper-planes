@@ -28,7 +28,7 @@ Graphics::~Graphics(void)
 }
 
 
-bool Graphics::IsInitialized()
+bool Graphics::IsInitialized() const
 {
     return m_d3d.IsInitialized();
 }

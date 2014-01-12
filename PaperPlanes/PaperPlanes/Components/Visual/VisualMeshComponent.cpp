@@ -54,6 +54,18 @@ VisualMeshComponent::~VisualMeshComponent(void)
 }
 
 
+VisualMeshComponent& VisualMeshComponent::operator=(const VisualMeshComponent& other)
+{
+    m_mesh = other.m_mesh;
+    m_texture;
+    m_bumpTexture;
+    m_shadowMaps;
+    m_castShadows = other.m_castShadows;
+    m_recieveShadows = other.m_recieveShadows;
+    return *this;
+}
+
+
 void VisualMeshComponent::ComponentID(componentId_t& out) const
 { 
     out = "VisualMeshComponent"; 

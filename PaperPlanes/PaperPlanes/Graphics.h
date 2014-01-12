@@ -12,7 +12,7 @@ public:
 
 	~Graphics(void);
 
-	bool IsInitialized();
+	bool IsInitialized() const;
 
 	bool Frame();
 

@@ -74,6 +74,15 @@ Entity::~Entity(void)
     }
 }
 
+ Entity& Entity::operator=(const Entity& other)
+ {
+     m_id = other.m_id;
+     m_Transform = other.m_Transform;
+     m_Components = other.m_Components;
+     m_tweakBar = 0;
+     return *this;
+ }
+
 
 Component* Entity::GetComponent(const componentId_t& familyId)
 {

@@ -41,7 +41,7 @@ void CollisionComponent::Update(float time)
 }
 
 
-bool CollisionComponent::CheckCollision(CollisionComponent* other)
+bool CollisionComponent::CheckCollision(const CollisionComponent* other)
 {
     if(this == other)
     {

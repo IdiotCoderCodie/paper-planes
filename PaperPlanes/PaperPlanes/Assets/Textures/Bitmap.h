@@ -20,7 +20,7 @@ namespace bitmap
 class Bitmap
 {
 public:
-    Bitmap(D3D& d3d, Texture& texture, int height, int width, int screenWidth, int screenHeight);
+    Bitmap(D3D& d3d, const Texture& texture, int height, int width, int screenWidth, int screenHeight);
     Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int height, int screenWidth,
            int screenHeight);
     ~Bitmap(void);

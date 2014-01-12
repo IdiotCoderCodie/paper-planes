@@ -25,7 +25,7 @@ public:
     void ComponentID(componentId_t& out) const;
 
     const glm::vec4& GetAmbient() const                     { return m_ambient; }
-    void SetAmbient(const glm::vec4 ambient)                { m_ambient = ambient; }
+    void SetAmbient(const glm::vec4& ambient)                { m_ambient = ambient; }
     void SetAmbient(float r, float g, float b, float a)     { m_ambient = glm::vec4(r, g, b, a); }
 
     const glm::vec4& GetDiffuse() const                     { return m_diffuse; }

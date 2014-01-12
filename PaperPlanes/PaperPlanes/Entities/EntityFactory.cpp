@@ -199,9 +199,9 @@ Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResou
                                        int width, int height, int screenWidth, int screenHeight,
                                        int xPos, int yPos, const std::string& id)
 {
-    Entity* newEntity = CreateBmpEntity(scene,d3d, srcTexture, width, height, screenWidth, 
-                                        screenHeight, id);
-    
+    Entity* newEntity = new Entity(scene, id);
+    newEntity->SetComponent(new VisualBitmapComponent(d3d, srcTexture, width, height, screenWidth,
+                                                      screenHeight)); 
     newEntity->MoveRight(-xPos);
     newEntity->MoveUp(-yPos);
     scene.AddEntity(newEntity);

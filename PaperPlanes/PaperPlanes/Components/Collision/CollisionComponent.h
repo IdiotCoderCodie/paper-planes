@@ -34,7 +34,7 @@ public:
     bool IsColliding() const          { return m_colliding; }
     void SetColliding(bool colliding) { m_colliding = colliding; }
 
-    bool CheckCollision(CollisionComponent* other);
+    bool CheckCollision(const CollisionComponent* other);
 
 private:
     CollisionComponentDesc  m_desc;
