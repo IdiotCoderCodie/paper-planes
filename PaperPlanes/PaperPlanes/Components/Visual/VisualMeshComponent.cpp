@@ -27,7 +27,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager().GetShader("Normal_Shadows_Test"));
+   SetShader(*G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -45,7 +45,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager().GetShader("Normal_Shadows_Test"));
+    SetShader(*G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -200,11 +200,11 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 {
     if(m_mesh.DoesContainTanBin())
     {
-        m_Shader = G_ShaderManager().GetShader("Mesh_Bump_Shadows");
+        SetShader(*G_ShaderManager().GetShader("Mesh_Bump_Shadows"));
     }
     else
     {
-        m_Shader = G_ShaderManager().GetShader("Mesh_Shadows");
+        SetShader(*G_ShaderManager().GetShader("Mesh_Shadows"));
     }
 
 
@@ -239,10 +239,10 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     }
 
     // Set the buffers using the data put into the structures above.
-    m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
+    GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
 
-    m_Shader->VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
+    GetShader().VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
             (void*)&lightPosBuffer, sizeof(lightPosBuffer), 1);
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -267,17 +267,17 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
         lightsBuffer[i].attenuation   = glm::vec3(0.0f, 0.0f, 0.0f);
     }
             
-    m_Shader->SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer, 
+    GetShader().SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer, 
                                         sizeof(lightsBuffer));
         
-    ID3D11ShaderResourceView* lightBuffer = m_Shader->GetBufferSRV(std::string("LightBuffer"));
+    ID3D11ShaderResourceView* lightBuffer = GetShader().GetBufferSRV(std::string("LightBuffer"));
     d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBuffer);
 
     // Set camera buffer data. (pixel shader).
     glm::vec4 cameraPos = 
         glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
 
-    m_Shader->PSSetConstBufferData(d3d, std::string("CameraBuffer"),
+    GetShader().PSSetConstBufferData(d3d, std::string("CameraBuffer"),
         (void*)&cameraPos, sizeof(glm::vec4), 0);           
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -309,5 +309,5 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 
 
     // Render shader.
-    m_Shader->RenderShader(d3d, m_mesh.GetIndexCount());
+    GetShader().RenderShader(d3d, m_mesh.GetIndexCount());
 }

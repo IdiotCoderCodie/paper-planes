@@ -44,7 +44,7 @@ D3D::~D3D(void)
 bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen)
 {
 	HRESULT result; //used to test things are created ok.
-
+    vsync;
     //----------------------------------------------------------------------------------------------
     // Fetch the numerator and denominator for refresh rate and video card description.
     // Create DirectX Graphics Interface factory.

@@ -16,8 +16,10 @@ public:
     //virtual void Draw(D3D& d3d);
 
     void SetShader(Shader& shader) { m_Shader = &shader; }
-    const Shader& GetShader() { return *m_Shader; }
+    const Shader& GetShader() const { return *m_Shader; }
+    Shader& GetShader() { return *m_Shader; }
+    //Shader& GetShader() { return *m_Shader; }
 
-protected:
+private:
     Shader* m_Shader;
 };

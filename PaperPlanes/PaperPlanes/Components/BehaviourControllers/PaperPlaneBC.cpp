@@ -29,7 +29,7 @@ void PaperPlaneBC::UpdateFire(float time)
     if(!m_onFire)
     {
         CollisionComponent* collisionComp = 
-            (CollisionComponent*)GetParent().GetComponent("CollisionComponent");
+            static_cast<CollisionComponent*>(GetParent().GetComponent("CollisionComponent"));
         if(collisionComp)
         {
             if(collisionComp->IsColliding())

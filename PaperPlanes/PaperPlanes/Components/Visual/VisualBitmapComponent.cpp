@@ -15,7 +15,7 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
         G_ShaderManager().LoadShaders(d3d, "placeholder");
     }
 
-    m_Shader = G_ShaderManager().GetShader("Bitmap");
+    SetShader(*G_ShaderManager().GetShader("Bitmap"));
 }
 
 
@@ -51,12 +51,12 @@ void VisualBitmapComponent::Draw(D3D& d3d)
                   0.0f, 0.0f, 0.01f/(0.01f - 100.0f), 1.0f)     
     };
 
-    m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
+    GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
 
     ID3D11ShaderResourceView* tex = m_bitmap.GetTextureShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
 
-    m_Shader->RenderShader(d3d, 6);
+    GetShader().RenderShader(d3d, 6);
     d3d.TurnZBufferOn();
 }

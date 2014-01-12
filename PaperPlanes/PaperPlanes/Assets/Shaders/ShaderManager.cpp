@@ -17,7 +17,7 @@ ShaderManager::~ShaderManager()
 bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 {
     // For now, don't load from config file. Just hard-code.
-
+    configFilename;
     //----------------------------------------------------------------------------------------------
     // Create shader for render pass to create shadows.
     m_shaders["Depth"] = Shader();

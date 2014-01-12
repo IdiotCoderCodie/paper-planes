@@ -27,7 +27,7 @@ private:
 	InputManager(const InputManager& other)
         : m_directInput(0), m_keyboard(0), m_mouse(0), m_keyboardState(), m_screenWidth(0),
           m_screenHeight(0), m_mouseX(0), m_mouseY(0)
-    {};
+    { m_mouseX = other.m_mouseX; };
 
     bool ReadKeyboard();
     bool ReadMouse();

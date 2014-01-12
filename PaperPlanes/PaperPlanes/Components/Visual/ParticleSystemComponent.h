@@ -25,8 +25,94 @@ public:
     explicit ParticleSystemComponent(D3D& d3d);
     ~ParticleSystemComponent(void);
 private:
-    ParticleSystemComponent& operator=(const ParticleSystemComponent& other) {}
-    ParticleSystemComponent(ParticleSystemComponent& other) {}
+    ParticleSystemComponent& operator=(const ParticleSystemComponent& other) 
+    {
+        this->m_engagedParticles        = other.m_engagedParticles;
+        this->m_maxParticleCount        = other.m_maxParticleCount;
+        this->m_currentParticleCount    = 0;
+        this->m_emissionFreq            = other.m_emissionFreq;
+        this->m_timeBetweenEmissions    = other.m_timeBetweenEmissions;
+        this->m_timeSinceLastEmission   = 0.0f;
+        this->m_systemLifetime          = other.m_systemLifetime;
+        this->m_currentLifetime         = other.m_currentLifetime;
+        this->m_startPosition           = other.m_startPosition;
+        this->m_startPositionDeviation  = other.m_startPositionDeviation;
+        this->m_startVelocity           = other.m_startVelocity;
+        this->m_startVelocityDeviation  = other.m_startVelocityDeviation;
+        this->m_startColor              = other.m_startColor;
+        this->m_startColorDeviation     = other.m_startColorDeviation;
+        this->m_colorChangePerSec       = other.m_colorChangePerSec;
+        this->m_startSize               = other.m_startSize;
+        this->m_startSizeDeviation      = other.m_startSizeDeviation;
+        this->m_sizeChangePerSec        = other.m_sizeChangePerSec;
+        this->m_texture                 = other.m_texture;
+        this->m_effectName              = other.m_effectName;
+        this->m_vertexCount             = other.m_vertexCount;
+        this->m_indexCount              = other.m_indexCount;
+        this->m_vertices                = 0;
+        this->m_vertexBuffer            = other.m_vertexBuffer;
+        this->m_indexBuffer             = other.m_indexBuffer;
+        this->m_tweakBarSetup           = this->m_tweakBarSetup;
+        this->m_emitting                = false;
+    }
+
+    ParticleSystemComponent(ParticleSystemComponent& other) 
+    : m_engagedParticles(),
+      m_maxParticleCount(),
+      m_currentParticleCount(),
+      m_emissionFreq(),
+      m_timeBetweenEmissions(),
+      m_timeSinceLastEmission(),
+      m_systemLifetime(),
+      m_currentLifetime(0.0f),
+      m_startPosition(),
+      m_startPositionDeviation(),
+      m_startVelocity(),
+      m_startVelocityDeviation(),
+      m_startColor(),
+      m_startColorDeviation(),
+      m_colorChangePerSec(),
+      m_startSize(),
+      m_startSizeDeviation(),
+      m_sizeChangePerSec(),
+      m_texture(0),
+      m_effectName("NoEffectLoaded"),
+      m_vertexCount(0),
+      m_indexCount(0),
+      m_vertices(0),
+      m_vertexBuffer(0),
+      m_indexBuffer(0),
+      m_tweakBarSetup(false),  
+      m_emitting(false) 
+    { 
+        this->m_engagedParticles        = other.m_engagedParticles;
+        this->m_maxParticleCount        = other.m_maxParticleCount;
+        this->m_currentParticleCount    = 0;
+        this->m_emissionFreq            = other.m_emissionFreq;
+        this->m_timeBetweenEmissions    = other.m_timeBetweenEmissions;
+        this->m_timeSinceLastEmission   = 0.0f;
+        this->m_systemLifetime          = other.m_systemLifetime;
+        this->m_currentLifetime         = other.m_currentLifetime;
+        this->m_startPosition           = other.m_startPosition;
+        this->m_startPositionDeviation  = other.m_startPositionDeviation;
+        this->m_startVelocity           = other.m_startVelocity;
+        this->m_startVelocityDeviation  = other.m_startVelocityDeviation;
+        this->m_startColor              = other.m_startColor;
+        this->m_startColorDeviation     = other.m_startColorDeviation;
+        this->m_colorChangePerSec       = other.m_colorChangePerSec;
+        this->m_startSize               = other.m_startSize;
+        this->m_startSizeDeviation      = other.m_startSizeDeviation;
+        this->m_sizeChangePerSec        = other.m_sizeChangePerSec;
+        this->m_texture                 = other.m_texture;
+        this->m_effectName              = other.m_effectName;
+        this->m_vertexCount             = other.m_vertexCount;
+        this->m_indexCount              = other.m_indexCount;
+        this->m_vertices                = 0;
+        this->m_vertexBuffer            = other.m_vertexBuffer;
+        this->m_indexBuffer             = other.m_indexBuffer;
+        this->m_tweakBarSetup           = this->m_tweakBarSetup;
+        this->m_emitting                = false;
+    }
 
 public:
     virtual void ComponentID(componentId_t& out) const { out = "ParticleSystemComponent"; }

@@ -56,6 +56,13 @@ Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& amb
     return newEntity;
 }
 
+Entity* EntityFactory::CreatePointlightEntity(Scene& scene, const glm::vec4& ambient, 
+                                          const glm::vec4& diffuse, const glm::vec4& specular,
+                                          const std::string& id)
+{
+        return CreatePointlightEntity(scene, ambient, diffuse, specular, glm::vec3(0.0f), id);
+}
+
 
 Entity* EntityFactory::CreateSpotlightEntity(Scene& scene, const glm::vec4& ambient, 
                                               const glm::vec4& diffuse, const glm::vec4& specular,

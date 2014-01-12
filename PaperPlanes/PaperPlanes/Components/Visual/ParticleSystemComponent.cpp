@@ -49,7 +49,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
 {
     LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
     InitBuffers(d3d);
-    m_Shader = G_ShaderManager().GetShader("Particle");
+    SetShader(*G_ShaderManager().GetShader("Particle"));
     //Start();
 }
 
@@ -88,7 +88,7 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
     
     InitBuffers(d3d);
 
-    m_Shader = G_ShaderManager().GetShader("Particle");
+    SetShader(*G_ShaderManager().GetShader("Particle"));
 
 }
 
@@ -103,6 +103,7 @@ ParticleSystemComponent::~ParticleSystemComponent(void)
     catch(int& e)
     {
     }
+    delete[] m_vertices;
 }
 
 
@@ -334,7 +335,7 @@ void ParticleSystemComponent::Draw(D3D& d3d)
         glm::transpose(GetParent().GetParent().GetActiveCamera()->GetProjMatrix())
     };
 
-    m_Shader->VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer, 
+    GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&matBuffer, 
                                    sizeof(matBuffer), 0);
 
     // Set texture.
@@ -352,7 +353,7 @@ void ParticleSystemComponent::Draw(D3D& d3d)
 
     d3d.EnableAlphaBlending();
     //d3d.TurnZBufferOff();
-    m_Shader->RenderShader(d3d, m_indexCount);
+    GetShader().RenderShader(d3d, m_indexCount);
     d3d.DisableAlphaBlending();
     //d3d.TurnZBufferOn();
 }
@@ -360,6 +361,9 @@ void ParticleSystemComponent::Draw(D3D& d3d)
 
 void ParticleSystemComponent::RemoveParticles(float time)
 {
+    // Need time in the future to check life times of particles. Do this to stop parasoft
+    // whining.
+    time;
     // Currently, for testing, remove all particles which go so far away from the start. (3.0).
     for(auto it = m_engagedParticles.begin(); it != m_engagedParticles.end(); )
     {
