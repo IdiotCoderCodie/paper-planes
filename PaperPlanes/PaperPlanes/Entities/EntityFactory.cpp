@@ -12,7 +12,7 @@
 #include "../Components/BehaviourControllers/PaperPlaneBC.h"
 
 
-extern TextureManager G_TextureManager;
+//extern TextureManager G_TextureManager;
 Entity* EntityFactory::CreatePerspectiveFpCameraEntity(Scene& scene, float fov, float aspect, 
                                                      float pNear, float pFar, const std::string& id)
 {
@@ -89,11 +89,11 @@ Entity* EntityFactory::CreateMeshEntity(Scene& scene, D3D& d3d, const std::strin
     std::string  ssTexName(ws.begin(), ws.end());
 
     // Check if texture is already loaded...
-    Texture* tex = G_TextureManager.GetTexture(ssTexName);
+    Texture* tex = G_TextureManager().GetTexture(ssTexName);
     if(!tex)
     {
         // It's not, so load it.
-        tex = G_TextureManager.LoadTexture(d3d, textureName, ssTexName);
+        tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
     }
 
     // Create the mesh component, enable shadows (both cast and recieve).
@@ -133,21 +133,21 @@ Entity* EntityFactory::CreateBumpMappedMeshEntity(Scene& scene, D3D& d3d, const 
     std::string  ssTexName(ws.begin(), ws.end());
 
     // Check if texture is already loaded.
-    Texture* tex = G_TextureManager.GetTexture(ssTexName);
+    Texture* tex = G_TextureManager().GetTexture(ssTexName);
     if(!tex)
     {
         // It's not, so load it.
-        tex = G_TextureManager.LoadTexture(d3d, textureName, ssTexName);
+        tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
     }
 
     // Attempt to load the bump map texture.
     std::wstring wsBump(bmpMapTextureName);
     std::string  ssBump(wsBump.begin(), wsBump.end());
 
-    Texture* bumpTex = G_TextureManager.GetTexture(ssBump);
+    Texture* bumpTex = G_TextureManager().GetTexture(ssBump);
     if(!bumpTex)
     {
-        bumpTex = G_TextureManager.LoadTexture(d3d, bmpMapTextureName, ssBump);
+        bumpTex = G_TextureManager().LoadTexture(d3d, bmpMapTextureName, ssBump);
     }
 
     
@@ -234,10 +234,10 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
     //newEntity->SetComponent(new ParticleSystemComponent(d3d, "flameParticleEffect.txt"));
 
     // Load texture.
-    Texture* tex = G_TextureManager.GetTexture("crumpledPaper1024.dds");
+    Texture* tex = G_TextureManager().GetTexture("crumpledPaper1024.dds");
     if(!tex)
     {
-        tex = G_TextureManager.LoadTexture(d3d, L"crumpledPaper1024.dds", "crumpledPaper1024.dds");
+        tex = G_TextureManager().LoadTexture(d3d, L"crumpledPaper1024.dds", "crumpledPaper1024.dds");
     }
 
     const std::string plane1 = "Assets\\Models\\plane.obj";
@@ -245,7 +245,7 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, glm::vec3&
 
     // Create the mesh component.
     VisualMeshComponent* mesh = new VisualMeshComponent(d3d, 
-                                                (numPaperPlanes % 2 ? plane1 : plane2), 
+                                                ((numPaperPlanes % 2) == 0 ? plane1 : plane2), 
                                                 *tex, shadowMaps);
     mesh->EnableCastShadows();
     mesh->EnableRecieveShadows();

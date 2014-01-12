@@ -3,7 +3,6 @@
 #include "../../Assets/Shaders/Shader.h"
 #include "../../Assets/Shaders/ShaderManager.h"
 
-extern ShaderManager G_ShaderManager;
 
 class VisualComponent : public Component
 {

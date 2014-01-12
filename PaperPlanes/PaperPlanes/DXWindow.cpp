@@ -18,7 +18,7 @@ DXWindow::DXWindow(void) :
     if(InitializeWindow(screenWidth, screenHeight, fullscreen))
     {
         // Initialize input manager.
-        bool result = G_InputManager.Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+        bool result = G_InputManager().Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
         if(!result)
         {
             MessageBox(m_hwnd, L"Could not initialize input manager.", L"Error", MB_OK);
@@ -39,7 +39,13 @@ DXWindow::~DXWindow(void)
         m_Graphics = 0;
     }
 
-    ShutdownWindow();
+    try
+    {
+        ShutdownWindow();
+    }
+    catch(int& e)
+    {
+    }
 }
 
 
@@ -78,7 +84,7 @@ void DXWindow::Run()
             done = !(Frame());
         }
 
-        if(G_InputManager.IsEscapeKeyPressed())
+        if(G_InputManager().IsEscapeKeyPressed())
         {
             done = true;
         }
@@ -88,7 +94,7 @@ void DXWindow::Run()
 
 bool DXWindow::Frame()
 {
-    bool result = G_InputManager.Update();
+    bool result = G_InputManager().Update();
     if(!result)
     {
         return false;

@@ -3,7 +3,7 @@
 #include <cassert>
 
 // Global input manager.
-InputManager G_InputManager;
+//InputManager G_InputManager;
 
 InputManager::InputManager(void)
     : m_directInput(0),
@@ -21,9 +21,15 @@ InputManager::InputManager(void)
 
 InputManager::~InputManager(void)
 {
-    d3d_safe_unacquire_release(m_mouse);
-    d3d_safe_unacquire_release(m_keyboard);
-    d3d_safe_release(m_directInput);
+    try
+    {
+        d3d_safe_unacquire_release(m_mouse);
+        d3d_safe_unacquire_release(m_keyboard);
+        d3d_safe_release(m_directInput);
+    }
+    catch(int& e)
+    {
+    }
 }
 
 
@@ -215,4 +221,10 @@ void InputManager::ProcessInput()
 bool InputManager::IsKeyPressed(unsigned char key)
 {
 	return m_keyboardState[key] & 0x80;
+}
+
+InputManager& G_InputManager()
+{
+    static InputManager inputManager;
+    return inputManager;
 }

@@ -55,7 +55,7 @@ void PaperPlaneBC::UpdateFire(float time)
             }*/
             // TODO: Get Path component and respawn!
             FollowPathComponent* pathComp = 
-                (FollowPathComponent*)GetParent().GetComponent("PathComponent");
+                static_cast<FollowPathComponent*>(GetParent().GetComponent("PathComponent"));
             if(pathComp)
             {
                 pathComp->Restart();

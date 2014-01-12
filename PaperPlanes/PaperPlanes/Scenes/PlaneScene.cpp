@@ -16,11 +16,13 @@
 #include <sstream>
 
 #include "SceneManager.h"
-extern TextureManager G_TextureManager;
-extern ShaderManager G_ShaderManager;
+//extern TextureManager G_TextureManager;
+//extern ShaderManager G_ShaderManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr),
+    m_drawRenderTargetEntity(0),
+    m_planes(),
     m_camComponent(0),
     m_airfieldCam(0),
     m_planeFollowCam(0),
@@ -226,17 +228,17 @@ void PlaneScene::Update(double time)
 {
     Scene::Update(time);
 
-    if(G_InputManager.IsKeyPressed(DIK_F1))
+    if(G_InputManager().IsKeyPressed(DIK_F1))
     {
-        SetActiveCamera((CameraComponent*)m_camComponent->GetComponent("CameraComponent"));
+        SetActiveCamera(static_cast<CameraComponent*>(m_camComponent->GetComponent("CameraComponent")));
     }
-    if(G_InputManager.IsKeyPressed(DIK_F2))
+    if(G_InputManager().IsKeyPressed(DIK_F2))
     {
-        SetActiveCamera((CameraComponent*)m_airfieldCam->GetComponent("CameraComponent"));
+        SetActiveCamera(static_cast<CameraComponent*>(m_airfieldCam->GetComponent("CameraComponent")));
     } 
-    if(G_InputManager.IsKeyPressed(DIK_F3))
+    if(G_InputManager().IsKeyPressed(DIK_F3))
     {
-        SetActiveCamera((CameraComponent*)m_planeFollowCam->GetComponent("CameraComponent"));
+        SetActiveCamera(static_cast<CameraComponent*>(m_planeFollowCam->GetComponent("CameraComponent")));
     }
 
     m_planeFollowCam->SetTransform(m_planes[m_planeToFollow]->GetTransform());
@@ -245,7 +247,7 @@ void PlaneScene::Update(double time)
     m_planeFollowCam->MoveForward(-2.0f);
     m_planeFollowCam->MoveUp(0.5f);
 
-    bool isF4Pressed = G_InputManager.IsKeyPressed(DIK_F4);
+    bool isF4Pressed = G_InputManager().IsKeyPressed(DIK_F4);
     if(isF4Pressed && !m_prevF4Pressed)
     {
         m_planeToFollow++;

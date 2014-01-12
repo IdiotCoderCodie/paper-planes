@@ -2,7 +2,7 @@
 #include "PhysicsComponent.h"
 #include "../../InputManager.h"
 
-extern InputManager G_InputManager;
+//extern InputManager G_InputManager;
 
 class FreeRoamFpComponent : public PhysicsComponent
 {

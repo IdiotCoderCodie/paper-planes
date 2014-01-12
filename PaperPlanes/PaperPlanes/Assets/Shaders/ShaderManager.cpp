@@ -1,9 +1,10 @@
 #include "ShaderManager.h"
 
-ShaderManager G_ShaderManager;
+//ShaderManager G_ShaderManager;
 
 ShaderManager::ShaderManager()
-    :  m_shaders()
+    :  m_loaded(false), 
+       m_shaders()
 {
 }
 
@@ -160,4 +161,10 @@ Shader* ShaderManager::GetShader(const std::string& id)
     }
     
     return 0;
+}
+
+ShaderManager& G_ShaderManager()
+{
+    static ShaderManager shaderManager;
+    return shaderManager;
 }

@@ -14,10 +14,16 @@ Scene::Scene(const std::string& name, SceneManager* sceneMgr)
 
 Scene::~Scene()
 {
-    for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
+    try
     {
-        delete *it;
-        *it = 0;
+        for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
+        {
+            delete *it;
+            *it = 0;
+        }
+    }
+    catch(int& e)
+    {
     }
 
     m_Parent = 0;

@@ -10,12 +10,12 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
     :	VisualComponent(),
         m_bitmap(d3d, srcTexture, width, height, screenWidth, screenHeight)
 {
-    if(!G_ShaderManager.IsLoaded())
+    if(!G_ShaderManager().IsLoaded())
     {
-        G_ShaderManager.LoadShaders(d3d, "placeholder");
+        G_ShaderManager().LoadShaders(d3d, "placeholder");
     }
 
-    m_Shader = G_ShaderManager.GetShader("Bitmap");
+    m_Shader = G_ShaderManager().GetShader("Bitmap");
 }
 
 

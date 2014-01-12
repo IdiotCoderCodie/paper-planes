@@ -22,7 +22,13 @@ Texture::Texture(D3D& d3d, WCHAR* filename)
 
 Texture::~Texture(void)
 {
-	d3d_safe_release(m_texture);
+    try
+    {
+	    d3d_safe_release(m_texture);
+    }
+    catch(int& e)
+    {
+    }
 }
 
 

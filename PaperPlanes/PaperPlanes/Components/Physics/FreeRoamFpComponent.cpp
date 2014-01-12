@@ -5,10 +5,16 @@
 
 FreeRoamFpComponent::FreeRoamFpComponent(void)
     : PhysicsComponent(),
-      m_turnSensitivityX(100.0f), m_turnSensitivityY(10.0f),
-      m_moveAcceleration(0.1f), m_moveDeceleration(0.1f),
-      m_goingForward(false), m_goingBackward(false), m_goingRight(false), m_goingLeft(false),
-      m_goingUp(false), m_goingDown(false)
+      m_turnSensitivityX(100.0f), 
+      m_turnSensitivityY(10.0f),
+      m_moveAcceleration(0.1f), 
+      m_moveDeceleration(0.1f),
+      m_goingForward(false), 
+      m_goingBackward(false), 
+      m_goingRight(false),
+      m_goingLeft(false),
+      m_goingUp(false), 
+      m_goingDown(false)
       
 {
 }
@@ -20,7 +26,13 @@ FreeRoamFpComponent::FreeRoamFpComponent(float moveAccel, float turnSensitivityX
      m_turnSensitivityX(turnSensitivityX),
      m_turnSensitivityY(turnSensitivityY),
      m_moveAcceleration(moveAccel),
-     m_moveDeceleration(moveAccel * 3.0f)
+     m_moveDeceleration(moveAccel * 3.0f),
+     m_goingForward(false), 
+     m_goingBackward(false), 
+     m_goingRight(false),
+     m_goingLeft(false),
+     m_goingUp(false), 
+     m_goingDown(false)
 {
 
 }
@@ -40,7 +52,7 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
 
     // Handle forwards keypress.
-    if(G_InputManager.IsKeyPressed(DIK_UPARROW) && G_InputManager.IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_UPARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingBackward)
     {
         // Set z acceleration.
@@ -62,7 +74,7 @@ void FreeRoamFpComponent::Update(float time)
     }
 
     // Handle backwards key press.
-    if(G_InputManager.IsKeyPressed(DIK_DOWNARROW) && G_InputManager.IsKeyPressed(DIK_LCONTROL)
+    if(G_InputManager().IsKeyPressed(DIK_DOWNARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL)
         && !m_goingForward)
     {
         // Set z acceleration.
@@ -91,7 +103,7 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
 
      // Handle right key press.
-    if(G_InputManager.IsKeyPressed(DIK_RIGHTARROW) && G_InputManager.IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_RIGHTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingLeft)
     {
         // Set x acceleration.
@@ -115,7 +127,7 @@ void FreeRoamFpComponent::Update(float time)
 
 
     // Handle left keypress.
-    if(G_InputManager.IsKeyPressed(DIK_LEFTARROW) && G_InputManager.IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_LEFTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingRight)
     {
         // Set x acceleration.
@@ -143,7 +155,7 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
 
      // Handle PGUP key press.
-    if(G_InputManager.IsKeyPressed(DIK_PGUP) && G_InputManager.IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_PGUP) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingDown)
     {
         // Set y acceleration.
@@ -167,7 +179,7 @@ void FreeRoamFpComponent::Update(float time)
 
 
     // Handle left keypress.
-    if(G_InputManager.IsKeyPressed(DIK_PGDN) && G_InputManager.IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_PGDN) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingUp)
     {
         // Set y acceleration.
@@ -196,19 +208,19 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
     glm::vec3 newAngularVelocity = glm::vec3(0.0f);
 
-    if(G_InputManager.IsKeyPressed(DIK_LEFTARROW) && !G_InputManager.IsKeyPressed(DIK_LCONTROL))
+    if(G_InputManager().IsKeyPressed(DIK_LEFTARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
         newAngularVelocity.y += m_turnSensitivityX;
     }
-    if(G_InputManager.IsKeyPressed(DIK_RIGHTARROW) && !G_InputManager.IsKeyPressed(DIK_LCONTROL))
+    if(G_InputManager().IsKeyPressed(DIK_RIGHTARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
         newAngularVelocity.y -= m_turnSensitivityX;
     }
-    if(G_InputManager.IsKeyPressed(DIK_UPARROW) && !G_InputManager.IsKeyPressed(DIK_LCONTROL))
+    if(G_InputManager().IsKeyPressed(DIK_UPARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
         newAngularVelocity.x -= m_turnSensitivityY;
     }
-    if(G_InputManager.IsKeyPressed(DIK_DOWNARROW) && !G_InputManager.IsKeyPressed(DIK_LCONTROL))
+    if(G_InputManager().IsKeyPressed(DIK_DOWNARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
         newAngularVelocity.x += m_turnSensitivityY;
     }

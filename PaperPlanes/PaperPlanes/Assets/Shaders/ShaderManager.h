@@ -25,3 +25,5 @@ private:
     std::unordered_map<std::string, Shader> m_shaders;
 };
 
+ShaderManager& G_ShaderManager();
+

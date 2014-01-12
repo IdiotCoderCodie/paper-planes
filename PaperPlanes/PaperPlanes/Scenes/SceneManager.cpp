@@ -3,14 +3,13 @@
 #include "SceneManager.h"
 #include "../Assets/Shaders/ShaderManager.h"
 
-extern ShaderManager G_ShaderManager;
 
 SceneManager::SceneManager(D3D& d3d)
     :   m_ActiveScene(0),
         m_Scenes(),
         m_d3d(d3d)
 {
-    G_ShaderManager.LoadShaders(d3d, "");
+    G_ShaderManager().LoadShaders(d3d, "");
 }
 
 
@@ -20,7 +19,7 @@ SceneManager::~SceneManager()
     {
         ClearScenes();
     }
-    catch (int e)
+    catch (int& e)
     {
         assert(false);
     }

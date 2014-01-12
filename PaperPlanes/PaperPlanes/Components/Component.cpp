@@ -2,6 +2,7 @@
 
 
 Component::Component(void)
+    : m_Parent(0)
 {
 }
 

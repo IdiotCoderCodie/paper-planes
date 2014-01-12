@@ -7,7 +7,7 @@ class PhysicsComponent : public Component
 public:
     PhysicsComponent();
 
-    PhysicsComponent(float mass);
+    explicit PhysicsComponent(float mass);
 
     PhysicsComponent(float mass,
                      const glm::vec3& velocity);

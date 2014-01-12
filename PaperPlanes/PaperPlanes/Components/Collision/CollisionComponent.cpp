@@ -4,7 +4,8 @@
 
 CollisionComponent::CollisionComponent(CollisionComponentDesc& desc)
     : m_desc(desc),
-      m_colliding(false)
+      m_colliding(false),
+      m_collidingWith(0)
 {
 }
 

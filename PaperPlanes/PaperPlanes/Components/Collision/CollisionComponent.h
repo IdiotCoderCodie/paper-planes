@@ -20,7 +20,7 @@ struct CollisionComponentDesc
 class CollisionComponent : public Component
 {
 public:
-    CollisionComponent(CollisionComponentDesc& desc);
+    explicit CollisionComponent(CollisionComponentDesc& desc);
     ~CollisionComponent(void);
 
     void FamilyID(componentId_t& id) const            { id = "CollisionComponent"; }

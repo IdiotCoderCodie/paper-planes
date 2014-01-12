@@ -24,26 +24,32 @@ Shader::Shader(void) :
 
 Shader::~Shader(void)
 {
-    d3d_safe_release(m_vertexShader);
-    d3d_safe_release(m_hullShader);
-    d3d_safe_release(m_domainShader);
-    d3d_safe_release(m_geomShader);
-    d3d_safe_release(m_pixelShader);
-    d3d_safe_release(m_inputLayout);
-
-    for(auto samplerState : m_samplerStates)
+    try
     {
-        d3d_safe_release(samplerState.second);
-        samplerState.second = 0;
-    }
-    m_samplerStates.clear();
+        d3d_safe_release(m_vertexShader);
+        d3d_safe_release(m_hullShader);
+        d3d_safe_release(m_domainShader);
+        d3d_safe_release(m_geomShader);
+        d3d_safe_release(m_pixelShader);
+        d3d_safe_release(m_inputLayout);
 
-    for(auto buffer : m_buffers)
-    {
-        d3d_safe_release(buffer.second);
-        buffer.second = 0;
+        for(auto samplerState : m_samplerStates)
+        {
+            d3d_safe_release(samplerState.second);
+            samplerState.second = 0;
+        }
+        m_samplerStates.clear();
+
+        for(auto buffer : m_buffers)
+        {
+            d3d_safe_release(buffer.second);
+            buffer.second = 0;
+        }
+        m_buffers.clear();
     }
-    m_buffers.clear();
+    catch(int& e)
+    {
+    }
 }
 
 

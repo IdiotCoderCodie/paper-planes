@@ -5,7 +5,6 @@
 #include "../../Scenes/Scene.h"
 #include "../Camera/CameraComponent.h"
 
-extern ShaderManager G_ShaderManager;
 
 FollowPathComponent::FollowPathComponent(void)
     : m_nodes(),
@@ -14,7 +13,10 @@ FollowPathComponent::FollowPathComponent(void)
       m_t(0.0f),
       m_delayed(false),
       m_currentDelayTime(0.0f),
-      m_reverse(false)
+      m_reverse(false),
+      m_vertexBuffer(0),
+      m_indexBuffer(0),
+      m_indexNum(0)
 {
 }
 
@@ -294,7 +296,7 @@ void FollowPathComponent::Draw(D3D& d3d)
     d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
     
-    Shader* shader = G_ShaderManager.GetShader("Lines");
+    Shader* shader = G_ShaderManager().GetShader("Lines");
     ConstantBuffers::MVPBuffer matrixBuffer = 
     {
         glm::transpose(glm::mat4(1.0f)),

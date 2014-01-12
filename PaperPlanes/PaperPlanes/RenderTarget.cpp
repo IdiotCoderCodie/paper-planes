@@ -58,9 +58,15 @@ RenderTarget::RenderTarget(ID3D11Device* device, int width, int height)
 
 RenderTarget::~RenderTarget(void)
 {
-    d3d_safe_release(m_shaderResourceView);
-    d3d_safe_release(m_renderTargetView);
-    d3d_safe_release(m_renderTargetTexture);
+    try
+    {
+        d3d_safe_release(m_shaderResourceView);
+        d3d_safe_release(m_renderTargetView);
+        d3d_safe_release(m_renderTargetTexture);
+    }
+    catch(int& e)
+    {
+    }
 }
 
 

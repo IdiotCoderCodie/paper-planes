@@ -34,7 +34,6 @@ private:
     Graphics* m_Graphics;
 };
 
-extern InputManager G_InputManager;
 // Used to redirect windows system messaging.
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
 

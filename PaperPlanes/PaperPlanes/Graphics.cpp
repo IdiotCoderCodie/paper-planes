@@ -10,7 +10,8 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
     :   m_d3d(screenWidth, screenHeight, true, hwnd, fullscreen),
         m_sceneMgr(m_d3d),
         m_timer(),
-        m_statsTweakBar(0)
+        m_statsTweakBar(0),
+        m_fps(0.0f)
 {
     m_sceneMgr.AddScene(new PlaneScene("PlaneName", &m_sceneMgr));
     m_timer.Start();

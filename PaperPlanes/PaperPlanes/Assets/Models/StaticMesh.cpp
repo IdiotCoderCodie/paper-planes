@@ -37,8 +37,14 @@ StaticMesh::StaticMesh(const std::string& filename, D3D& d3d, bool includeTanBin
 
 StaticMesh::~StaticMesh(void)
 {
+    try
+    {
     d3d_safe_release(m_indexBuffer);
     d3d_safe_release(m_vertexBuffer);
+    }
+    catch(int& e)
+    {
+    }
 }
 
 

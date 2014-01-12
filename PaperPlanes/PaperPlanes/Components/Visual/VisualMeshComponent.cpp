@@ -10,8 +10,8 @@
 
 #include "../../glm/gtc/matrix_transform.hpp"
 
-extern ShaderManager G_ShaderManager;
-extern TextureManager G_TextureManager;
+//extern ShaderManager G_ShaderManager();
+//extern TextureManager G_TextureManager;
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
                                          std::vector<RenderTarget*>& shadowMaps)
@@ -23,11 +23,11 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
       m_castShadows(false),
       m_recieveShadows(false)
 {
-    if(!G_ShaderManager.IsLoaded())
+    if(!G_ShaderManager().IsLoaded())
     {
-        G_ShaderManager.LoadShaders(d3d, "configFile");
+        G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows_Test"));
+    m_Shader = (G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -41,11 +41,11 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
       m_castShadows(false),
       m_recieveShadows(false)
 {
-    if(!G_ShaderManager.IsLoaded())
+    if(!G_ShaderManager().IsLoaded())
     {
-        G_ShaderManager.LoadShaders(d3d, "configFile");
+        G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-    m_Shader = (G_ShaderManager.GetShader("Normal_Shadows_Test"));
+    m_Shader = (G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
 
@@ -65,7 +65,7 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
     {
         m_mesh.Render(d3d);
 
-        Shader* shadowShader = G_ShaderManager.GetShader("Depth");
+        Shader* shadowShader = G_ShaderManager().GetShader("Depth");
         // Send data for the matrix buffer to the shader, getting view and proj matrix from light.
 
         const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
@@ -111,7 +111,7 @@ void VisualMeshComponent::Draw(D3D& d3d)
 
 void VisualMeshComponent::DrawNoShadows(D3D& d3d)
 {
-    Shader* noShadowShader = G_ShaderManager.GetShader("Mesh_2L_1T");
+    Shader* noShadowShader = G_ShaderManager().GetShader("Mesh_2L_1T");
     //----------------------------------------------------------------------------------------------
     // Get matrices and put in buffer format.
     ConstantBuffers::MVPBuffer matBuffer;
@@ -200,11 +200,11 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 {
     if(m_mesh.DoesContainTanBin())
     {
-        m_Shader = G_ShaderManager.GetShader("Mesh_Bump_Shadows");
+        m_Shader = G_ShaderManager().GetShader("Mesh_Bump_Shadows");
     }
     else
     {
-        m_Shader = G_ShaderManager.GetShader("Mesh_Shadows");
+        m_Shader = G_ShaderManager().GetShader("Mesh_Shadows");
     }
 
 

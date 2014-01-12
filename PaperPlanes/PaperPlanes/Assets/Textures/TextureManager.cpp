@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 
-TextureManager G_TextureManager;
+//TextureManager G_TextureManager;
 
 TextureManager::TextureManager(void)
 {
@@ -46,4 +46,10 @@ Texture* TextureManager::LoadTexture(D3D& d3d, WCHAR* filename, const std::strin
     m_TextureMap[key] = Texture();
     m_TextureMap[key].Load(d3d, fullWcharFile);
     return &(m_TextureMap.find(key)->second);
+}
+
+TextureManager& G_TextureManager()
+{
+    static TextureManager textureManager;
+    return textureManager;
 }

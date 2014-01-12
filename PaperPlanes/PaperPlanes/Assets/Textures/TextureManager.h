@@ -27,3 +27,4 @@ private:
     std::map<std::string, Texture> m_TextureMap;
 };
 
+TextureManager& G_TextureManager();

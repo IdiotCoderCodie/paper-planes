@@ -16,7 +16,7 @@
 #include <iostream>
 #include <sstream>
 
-extern TextureManager G_TextureManager; 
+//extern TextureManager G_TextureManager; 
 
 ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFile)
     : m_engagedParticles(),
@@ -38,13 +38,18 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d, std::string effectFil
       m_startSizeDeviation(),
       m_sizeChangePerSec(),
       m_texture(0),
-      m_tweakBarSetup(false),
       m_effectName("NoEffectLoaded"),
+      m_vertexCount(0),
+      m_indexCount(0),
+      m_vertices(0),
+      m_vertexBuffer(0),
+      m_indexBuffer(0),
+      m_tweakBarSetup(false),  
       m_emitting(false)
 {
     LoadFromFile("Assets\\ParticleEffects\\" + effectFile, d3d);
     InitBuffers(d3d);
-    m_Shader = G_ShaderManager.GetShader("Particle");
+    m_Shader = G_ShaderManager().GetShader("Particle");
     //Start();
 }
 
@@ -68,24 +73,36 @@ ParticleSystemComponent::ParticleSystemComponent(D3D& d3d)
       m_startSize(0.30f),
       m_startSizeDeviation(0.1f),
       m_sizeChangePerSec(0.05f),
-      m_texture(0),
+      m_texture(0),     
+      m_effectName("NoEffectLoaded"),
+      m_vertexCount(0),
+      m_indexCount(0),
+      m_vertices(0),
+      m_vertexBuffer(0),
+      m_indexBuffer(0),
       m_tweakBarSetup(false),
-      m_effectName("NoEffectLoaded")
+      m_emitting(false)
 {
-    m_texture = G_TextureManager.LoadTexture(d3d, L"flame.dds", "flame.dds");
+    m_texture = G_TextureManager().LoadTexture(d3d, L"flame.dds", "flame.dds");
     //m_texture = G_TextureManager.GetTexture("particle.dds");
     
     InitBuffers(d3d);
 
-    m_Shader = G_ShaderManager.GetShader("Particle");
+    m_Shader = G_ShaderManager().GetShader("Particle");
 
 }
 
 
 ParticleSystemComponent::~ParticleSystemComponent(void)
 {
-    d3d_safe_release(m_vertexBuffer);
-    d3d_safe_release(m_indexBuffer);
+    try
+    {
+        d3d_safe_release(m_vertexBuffer);
+        d3d_safe_release(m_indexBuffer);
+    }
+    catch(int& e)
+    {
+    }
 }
 
 
@@ -165,7 +182,7 @@ bool ParticleSystemComponent::LoadFromFile(const std::string& filename, D3D& d3d
             value_iss >> texStr;
             std::wstring wideStr = std::wstring(texStr.begin(), texStr.end());          
             
-            m_texture = G_TextureManager.LoadTexture(d3d, &wideStr[0], texStr);
+            m_texture = G_TextureManager().LoadTexture(d3d, &wideStr[0], texStr);
         }
     }
 }

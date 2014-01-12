@@ -8,7 +8,7 @@
 class SceneManager
 {
 public:
-    SceneManager(D3D& d3d);
+    explicit SceneManager(D3D& d3d);
     ~SceneManager();
 
     // Sets the active scene with name matching "sceneName". 

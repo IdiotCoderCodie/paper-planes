@@ -7,7 +7,7 @@
 class PaperPlaneBC : public Component
 {
 public:
-    PaperPlaneBC(D3D& d3d);
+    explicit PaperPlaneBC(D3D& d3d);
     ~PaperPlaneBC(void);
 
     void FamilyID(componentId_t& idOut) const    { idOut = "PaperPlaneBC"; }

@@ -18,7 +18,9 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
     m_depthStencilView(0),
     m_rasterState(0),
     m_screenWidth(screenWidth),
-    m_screenHeight(screenHeight)
+    m_screenHeight(screenHeight),
+    m_alphaEnableBlendingState(0),
+    m_alphaDisableBlendingState(0)
 {
     m_initialized = InitializeD3D(screenWidth, screenHeight, vsync, hwnd, fullscreen);
     TwInit(TW_DIRECT3D11, m_device);
@@ -32,7 +34,7 @@ D3D::~D3D(void)
     {
         Shutdown();
     }
-    catch (int)
+    catch (int& e)
     {
         // EXCEPTION THROWN TRYING TO SHUTDOWN
     }

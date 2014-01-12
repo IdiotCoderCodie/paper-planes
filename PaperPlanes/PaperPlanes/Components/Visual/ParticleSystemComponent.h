@@ -22,9 +22,13 @@ private:
 
 public:
     ParticleSystemComponent(D3D& d3d, std::string effectFile);
-    ParticleSystemComponent(D3D& d3d);
+    explicit ParticleSystemComponent(D3D& d3d);
     ~ParticleSystemComponent(void);
+private:
+    ParticleSystemComponent& operator=(const ParticleSystemComponent& other) {}
+    ParticleSystemComponent(ParticleSystemComponent& other) {}
 
+public:
     virtual void ComponentID(componentId_t& out) const { out = "ParticleSystemComponent"; }
 
     virtual void Update(float time);

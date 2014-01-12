@@ -25,9 +25,14 @@ Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int heigh
 
 Bitmap::~Bitmap(void)
 {
-    d3d_safe_release(m_vertexBuffer);
-    d3d_safe_release(m_indexBuffer);
-
+    try
+    {
+        d3d_safe_release(m_vertexBuffer);
+        d3d_safe_release(m_indexBuffer);
+    }
+    catch (int& e)
+    {
+    }
     // Not responsible for deleting the shader resource view. May be being used elsewhere.
     m_texture = 0;
 }
