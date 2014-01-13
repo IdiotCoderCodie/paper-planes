@@ -17,7 +17,7 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
     m_timer.Start();
 
     m_statsTweakBar = TwNewBar("Performance Stats");
-    TwAddVarRO(m_statsTweakBar, "FPS", TW_TYPE_FLOAT, &m_fps, "");
+    TwAddVarRO(m_statsTweakBar, "FPS", TW_TYPE_FLOAT, &m_fps, " precision=2 ");
     
 }
 

@@ -22,4 +22,6 @@ private:
     Entity* m_planeFollowCam;
     int m_planeToFollow;
     bool m_prevF4Pressed;
+    bool m_prevPPressed;
+    bool m_paused;
 };

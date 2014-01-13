@@ -27,7 +27,9 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     m_airfieldCam(0),
     m_planeFollowCam(0),
     m_planeToFollow(0),
-    m_prevF4Pressed(false)
+    m_prevF4Pressed(false),
+    m_prevPPressed(false),
+    m_paused(false)
 {
     D3D& d3d = GetParent().GetD3DInstance();
     // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
@@ -86,17 +88,17 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
                         / (float)GetParent().GetD3DInstance().GetScreenHeight();
 
     m_camComponent = 
-    EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f, "camera1"); 
-
+    EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "camera1"); 
+    m_camComponent->MoveGlobalZ(-130.0f);
     m_airfieldCam =
-        EntityFactory::CreatePerspectiveCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f,
+        EntityFactory::CreatePerspectiveCameraEntity(*this, 90.0f, aspect, 0.1f, 500.0f,
             glm::vec3(-3.0f, 22.0f, 49.0f), "airfieldCam");
 
     m_airfieldCam->RotateGlobalY(180.0f);
     m_airfieldCam->RotateLocalX(85.0f);
 
     m_planeFollowCam = 
-        EntityFactory::CreatePerspectiveCameraEntity(*this, 60.0f, aspect, 0.1f, 1000.0f,
+        EntityFactory::CreatePerspectiveCameraEntity(*this, 75.0f, aspect, 0.1f, 500.0f,
             glm::vec3(0.0f), "followCam");
     //----------------------------------------------------------------------------------------------
 
@@ -107,12 +109,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity
     Entity* redLight =
-    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.0f, 0.0f, 1.0f),   // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.01f, 0.01f, 1.0f),   // ambient.
                                                 glm::vec4(1.0f, 0.0f, 0.0f, 0.2f),     // diffuse.
                                                 glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
                                                 glm::vec3(0.0f, 0.0f, -0.0f),        // position.
                                                 30.0f,
-                                                16.0f,
+                                                2.0f,
                                                 "redLight");
     redLight->RotateLocalY(-45.0f);
     redLight->RotateLocalX(-45.0f);
@@ -125,12 +127,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.2
     Entity* greenLight = 
-    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.0f, 0.02f, 0.0f, 1.0f),   // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.02f, 0.01f, 1.0f),   // ambient.
                                             glm::vec4(0.0f, 0.35f, 0.0f, 0.2f),         // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(0.0f, 0.0f, 0.0f),            // position.
                                             30.0f,
-                                            16.0f,
+                                            2.0f,
                                             "greenLight");
     greenLight->RotateLocalY(135.0f);
     greenLight->RotateLocalX(+45.0f);
@@ -143,12 +145,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.3
     Entity* blueLight = 
-    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.0f, 0.0f, 0.02f, 1.0f), // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.02f, 1.0f), // ambient.
                                             glm::vec4(0.0f, 0.0f, 1.0f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
                                             glm::vec3(0.0f, 0.0f, 0.0f),            // position.
                                             30.0f,
-                                            16.0f,
+                                            2.0f,
                                             "blueLight");
     blueLight->RotateLocalY(-135.0f);
     blueLight->RotateLocalX(+45.0f);
@@ -161,12 +163,12 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     //----------------------------------------------------------------------------------------------
     // Light entity no.4
     Entity* whiteLight = 
-    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), // ambient.
                                             glm::vec4(0.3f, 0.3f, 0.3f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
                                             glm::vec3(0.0f, 0.0f, 0.0f),           // position.
                                             30.0f,
-                                            16.0f,
+                                            2.0f,
                                             "whiteLight");
     whiteLight->RotateLocalY(45.0f);
     whiteLight->RotateLocalX(-45.0f);
@@ -174,6 +176,74 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     whiteLight->MoveGlobalY(-48.0f);
     whiteLight->MoveGlobalZ(-48.0f);
     //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Centre lights
+    //Entity* centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),     // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),              // position.
+    //                                        30.0f,                                    // Spot cutoff.
+    //                                        16.0f,                                    // Spot exponent.
+    //                                        "centreLight1");
+    ////centreLight->RotateLocalY(0.0f);
+
+    //centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+    //                                        30.0f,
+    //                                        16.0f,
+    //                                        "centreLight2");
+
+    //centreLight->RotateLocalY(90.0f);
+
+    //centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+    //                                        30.0f,
+    //                                        16.0f,
+    //                                        "centreLight3");
+
+    //centreLight->RotateLocalY(180.0f);
+
+    //centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+    //                                        30.0f,
+    //                                        16.0f,
+    //                                        "centreLight4");
+    //centreLight->RotateLocalY(-90.0f);
+
+    //centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+    //                                        30.0f,
+    //                                        16.0f,
+    //                                        "centreLight5");
+    //centreLight->RotateLocalX(90.0f);
+
+    //centreLight = 
+    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
+    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
+    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+    //                                        30.0f,
+    //                                        16.0f,
+    //                                        "centreLight6");
+    //centreLight->RotateLocalY(-90.0f);
+    
+    //----------------------------------------------------------------------------------------------
+
+
 
     //----------------------------------------------------------------------------------------------
     // Airport Control Towers
@@ -226,27 +296,30 @@ PlaneScene::~PlaneScene(void)
 
 void PlaneScene::Update(double time)
 {
-    Scene::Update(time);
-
+    //----------------------------------------------------------------------------------------------
+    // Camera updating.
+    // Check which active camera to go to.
     if(G_InputManager().IsKeyPressed(DIK_F1))
     {
-        SetActiveCamera(static_cast<CameraComponent*>(m_camComponent->GetComponent("CameraComponent")));
+        SetActiveCamera(
+            static_cast<CameraComponent*>(m_camComponent->GetComponent("CameraComponent")));
     }
     if(G_InputManager().IsKeyPressed(DIK_F2))
     {
-        SetActiveCamera(static_cast<CameraComponent*>(m_airfieldCam->GetComponent("CameraComponent")));
+        SetActiveCamera(
+            static_cast<CameraComponent*>(m_airfieldCam->GetComponent("CameraComponent")));
     } 
     if(G_InputManager().IsKeyPressed(DIK_F3))
     {
-        SetActiveCamera(static_cast<CameraComponent*>(m_planeFollowCam->GetComponent("CameraComponent")));
+        SetActiveCamera(
+            static_cast<CameraComponent*>(m_planeFollowCam->GetComponent("CameraComponent")));
     }
 
     m_planeFollowCam->SetTransform(m_planes[m_planeToFollow]->GetTransform());
-   /* m_planeFollowCam->SetPos(m_planes[m_planeToFollow]->GetPos());*/
-    //m_planeFollowCam->MoveGlobalY(1.0f);
     m_planeFollowCam->MoveForward(-2.0f);
     m_planeFollowCam->MoveUp(0.5f);
-
+    
+    // Check whether to switch plane to follow.
     bool isF4Pressed = G_InputManager().IsKeyPressed(DIK_F4);
     if(isF4Pressed && !m_prevF4Pressed)
     {
@@ -257,6 +330,32 @@ void PlaneScene::Update(double time)
         }
     }
     m_prevF4Pressed = isF4Pressed;
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    // Pausing.
+    // Check if P is pressed.
+    bool isPausePressed = G_InputManager().IsKeyPressed(DIK_P);
+    if(isPausePressed && !m_prevPPressed)
+    {
+        m_paused = !m_paused;
+    }
+    m_prevPPressed = isPausePressed;
+
+    if(m_paused)
+    {
+        GetActiveCamera()->GetParent().Update(time);
+        // Set follow cam to plane following.
+        
+        return;
+    }
+    //----------------------------------------------------------------------------------------------
+
+    // Now update the scene. This is done last, to ensure all camera stuff above works regardless
+    // of whether or not the scene is paused.
+    Scene::Update(time);
+
+    
 }
 
 void PlaneScene::Draw(D3D& d3d)

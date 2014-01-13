@@ -1,5 +1,6 @@
 #include "PaperPlaneBC.h"
 #include "../../Entities/Entity.h"
+#include "../../InputManager.h"
 
 PaperPlaneBC::PaperPlaneBC(D3D& d3d)
     :   m_onFire(false),             
@@ -36,7 +37,21 @@ void PaperPlaneBC::Update(float time)
 
 void PaperPlaneBC::UpdateFire(float time)
 {
-    //ParticleSystemComponent* fireComp = 0;
+    FollowPathComponent* pathComp = 
+                static_cast<FollowPathComponent*>(GetParent().GetComponent("PathComponent"));
+
+    // Check to reset.
+    if(G_InputManager().IsKeyPressed(DIK_R))
+    {
+        if(pathComp)
+        {
+            pathComp->Restart();
+            m_onFire = false;
+            m_fireSystem.HardStop();
+            m_fireTime = 0.0f;
+        }
+    }
+
     if(!m_onFire)
     {
         CollisionComponent* collisionComp = 
@@ -59,21 +74,19 @@ void PaperPlaneBC::UpdateFire(float time)
             // Turn fire off.
             m_fireTime = 0.0f;
             m_onFire = false;
-            m_fireSystem.Stop();
+            m_fireSystem.HardStop();
             /*if(fireComp)
             {
                 fireComp->Stop();
             }*/
             // TODO: Get Path component and respawn!
-            FollowPathComponent* pathComp = 
-                static_cast<FollowPathComponent*>(GetParent().GetComponent("PathComponent"));
+           
             if(pathComp)
             {
                 pathComp->Restart();
             }
-
         }
-    }
+    }   
 }
 
 void PaperPlaneBC::Draw(D3D& d3d)
