@@ -1,6 +1,5 @@
 #include "Graphics.h"
 
-// TESTING ONLY. SHOULD JUST MAKE A NEW SCENE OR SOMETHING. 
 #include "Scenes\Scene.h"
 #include "Scenes\PlaneScene.h"
 

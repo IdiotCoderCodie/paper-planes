@@ -18,4 +18,3 @@ private:
     float m_near;
     float m_far;
 };
-

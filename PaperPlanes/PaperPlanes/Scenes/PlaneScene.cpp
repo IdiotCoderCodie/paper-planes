@@ -16,8 +16,6 @@
 #include <sstream>
 
 #include "SceneManager.h"
-//extern TextureManager G_TextureManager;
-//extern ShaderManager G_ShaderManager;
 
 PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr),
@@ -32,56 +30,28 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     m_paused(false)
 {
     D3D& d3d = GetParent().GetD3DInstance();
-    // *************** TESTING. ALL THIS IN HERE IS FOR TESTING. *************** 
-
-
-
 
     //----------------------------------------------------------------------------------------------
     // Main inversed cube entity.
     EntityFactory::CreateBumpMappedMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", 
-                                              L"airfields.dds", L"airfieldNormal2.dds",
+                                              L"airfields.dds", L"buttonFabric.dds",
                                               GetShadowMaps(), glm::vec3(0.0f), glm::vec3(50.0f), 
                                               "mainCube");
-
-    //EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInvT.obj", 
-    //                                          L"airfields.dds", /*;L"buttonFabric.dds",*/
-    //                                          GetShadowMaps(), glm::vec3(0.0f), glm::vec3(100.0f), 
-    //                                          "mainCube");
     //----------------------------------------------------------------------------------------------
     
-   
 
-   // //----------------------------------------------------------------------------------------------
-   // // Test Occluding Sphere.
+    //----------------------------------------------------------------------------------------------
+    // Occluding sphere.
     Entity* sphere = 
     EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
                                               L"crumpledPaper1024.dds", 
                                               GetShadowMaps(), glm::vec3(0.0f, 0.0f, -3.0f), 
                                               glm::vec3(2.5f), "sphere");
-   sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
+    sphere->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), 
                                                   glm::vec3(5.0f, 10.0f, 0.0f)));    
-   // CollisionComponentDesc desc =
-   // {
-   //     CollisionType::BoundingSphere,
-   //     2.5f,
-   // };
-   // sphere->SetComponent(new CollisionComponent(desc));
-
-   // Entity* sphere2 = 
-   // EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\sphere.obj", 
-   //                                           L"crumpledPaper1024.dds",
-   //                                           GetShadowMaps(), glm::vec3(7.0f, 0.0f, -3.0f), 
-   //                                           glm::vec3(1.0f), "sphere2");
-   // 
-   // desc.radius = 1.0f;
-
-   // sphere2->SetComponent(new CollisionComponent(desc));
-   // //----------------------------------------------------------------------------------------------      
+    //----------------------------------------------------------------------------------------------      
 
     
-   
-
     //----------------------------------------------------------------------------------------------
     // Cameras.
     float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
@@ -102,26 +72,22 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
             glm::vec3(0.0f), "followCam");
     //----------------------------------------------------------------------------------------------
 
-    
-
-
-
+ 
     //----------------------------------------------------------------------------------------------
-    // Light entity
+    // Light entity 1
     Entity* redLight =
-    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.01f, 0.01f, 1.0f),   // ambient.
-                                                glm::vec4(1.0f, 0.0f, 0.0f, 0.2f),     // diffuse.
-                                                glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),     // specular.
-                                                glm::vec3(0.0f, 0.0f, -0.0f),        // position.
-                                                30.0f,
-                                                2.0f,
+    EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.01f, 0.01f, 1.0f), // ambient.
+                                                glm::vec4(1.0f, 0.0f, 0.0f, 0.2f),    // diffuse.
+                                                glm::vec4(0.9f, 0.7f, 0.7f, 0.5f),    // specular.
+                                                glm::vec3(0.0f, 0.0f, -0.0f),         // position.
+                                                30.0f,                                // cutoff.
+                                                2.0f,                                 // exponent.
                                                 "redLight");
     redLight->RotateLocalY(-45.0f);
     redLight->RotateLocalX(-45.0f);
     redLight->MoveGlobalX(+48.0f);
     redLight->MoveGlobalY(-48.0f);
     redLight->MoveGlobalZ(-48.0f);
-    //redLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f, 90.0f, 0.0f)));
 	//----------------------------------------------------------------------------------------------
     
     //----------------------------------------------------------------------------------------------
@@ -129,8 +95,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* greenLight = 
     EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.02f, 0.01f, 1.0f),   // ambient.
                                             glm::vec4(0.0f, 0.35f, 0.0f, 0.2f),         // diffuse.
-                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, 0.0f, 0.0f),            // position.
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),          // specular.
+                                            glm::vec3(0.0f, 0.0f, 0.0f),                // position.
                                             30.0f,
                                             2.0f,
                                             "greenLight");
@@ -139,7 +105,6 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     greenLight->MoveGlobalX(-48.0f);
     greenLight->MoveGlobalY(+48.0f);
     greenLight->MoveGlobalZ(+48.0f);
-    //greenLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f, -80.0f, 0.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -147,8 +112,8 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     Entity* blueLight = 
     EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.02f, 1.0f), // ambient.
                                             glm::vec4(0.0f, 0.0f, 1.0f, 0.2f),        // diffuse.
-                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),         // specular.
-                                            glm::vec3(0.0f, 0.0f, 0.0f),            // position.
+                                            glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
+                                            glm::vec3(0.0f, 0.0f, 0.0f),              // position.
                                             30.0f,
                                             2.0f,
                                             "blueLight");
@@ -157,7 +122,6 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     blueLight->MoveGlobalX(+48.0f);
     blueLight->MoveGlobalY(+48.0f);
     blueLight->MoveGlobalZ(+48.0f);
-   // blueLight->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(80.0f, 0.0f, 50.0f)));
     //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
@@ -166,7 +130,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.02f, 0.02f, 0.02f, 1.0f), // ambient.
                                             glm::vec4(0.3f, 0.3f, 0.3f, 0.2f),        // diffuse.
                                             glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-                                            glm::vec3(0.0f, 0.0f, 0.0f),           // position.
+                                            glm::vec3(0.0f, 0.0f, 0.0f),              // position.
                                             30.0f,
                                             2.0f,
                                             "whiteLight");
@@ -177,74 +141,7 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
     whiteLight->MoveGlobalZ(-48.0f);
     //----------------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------------------------
-    // Centre lights
-    //Entity* centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),     // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),              // position.
-    //                                        30.0f,                                    // Spot cutoff.
-    //                                        16.0f,                                    // Spot exponent.
-    //                                        "centreLight1");
-    ////centreLight->RotateLocalY(0.0f);
-
-    //centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
-    //                                        30.0f,
-    //                                        16.0f,
-    //                                        "centreLight2");
-
-    //centreLight->RotateLocalY(90.0f);
-
-    //centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
-    //                                        30.0f,
-    //                                        16.0f,
-    //                                        "centreLight3");
-
-    //centreLight->RotateLocalY(180.0f);
-
-    //centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
-    //                                        30.0f,
-    //                                        16.0f,
-    //                                        "centreLight4");
-    //centreLight->RotateLocalY(-90.0f);
-
-    //centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
-    //                                        30.0f,
-    //                                        16.0f,
-    //                                        "centreLight5");
-    //centreLight->RotateLocalX(90.0f);
-
-    //centreLight = 
-    //EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.01f, 1.0f), // ambient.
-    //                                        glm::vec4(0.15f, 0.15f, 0.15f, 0.2f),        // diffuse.
-    //                                        glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),        // specular.
-    //                                        glm::vec3(0.0f, 0.0f, 0.0f),           // position.
-    //                                        30.0f,
-    //                                        16.0f,
-    //                                        "centreLight6");
-    //centreLight->RotateLocalY(-90.0f);
     
-    //----------------------------------------------------------------------------------------------
-
-
-
     //----------------------------------------------------------------------------------------------
     // Airport Control Towers
     Entity* tower = 
@@ -266,23 +163,6 @@ PlaneScene::PlaneScene(const std::string& name, SceneManager* sceneMgr)
         EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"cement.dds",
         GetShadowMaps(), glm::vec3(45.0f, -7.3f, -6.2f), glm::vec3(5.0f, 2.0f, 2.0f), "tower5");
     //----------------------------------------------------------------------------------------------
-
-    
-    ////----------------------------------------------------------------------------------------------
-    //// BITMAP for drawing what is rendered to first light's render target.
-    //EntityFactory::CreateBmpEntity(*this, d3d, GetShadowMaps()[0]->GetShaderResourceView(), 
-    //                               100, 100, GetParent().GetD3DInstance().GetScreenWidth(), 
-    //                               GetParent().GetD3DInstance().GetScreenHeight(),
-    //                               "light1ShadowMapBmp");
-    ////----------------------------------------------------------------------------------------------
-
-    ////----------------------------------------------------------------------------------------------
-    //// Bitmap for drawing what is rendered to the second light's render target.
-    //EntityFactory::CreateBmpEntity(*this, d3d, GetShadowMaps()[1]->GetShaderResourceView(),
-    //                               100, 100, GetParent().GetD3DInstance().GetScreenWidth(),
-    //                               GetParent().GetD3DInstance().GetScreenHeight(), 101, 0,
-    //                               "light2ShadowMapBmp");
-    ////----------------------------------------------------------------------------------------------  
 
     LoadPlanes(d3d);
 }
@@ -409,7 +289,6 @@ void PlaneScene::LoadPlanes(D3D& d3d)
     std::string token;
     std::string value;
     std::istringstream value_iss;
-    //bool readingNodes = false;
     glm::vec3 currPlanePos;
     int planeNum = 0;
     while(input.good())
@@ -431,13 +310,12 @@ void PlaneScene::LoadPlanes(D3D& d3d)
         }
         else if(!strcmp(token.c_str(), "EndPlane"))
         {
-            Entity* plane = EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, GetShadowMaps(),
-                                                      currPlaneNodes, 
-                                                      "Plane" + std::to_string(planeNum));
+            Entity* plane = EntityFactory::CreatePaperPlaneEntity(*this, d3d, currPlanePos, 
+                                            GetShadowMaps(),currPlaneNodes, 
+                                            "Plane" + std::to_string(planeNum));
             planeNum++;
             currPlaneNodes.clear();
             m_planes.push_back(plane);
-               // readingNodes = false;
         }
     }
 }

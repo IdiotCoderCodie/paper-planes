@@ -75,11 +75,6 @@ void PaperPlaneBC::UpdateFire(float time)
             m_fireTime = 0.0f;
             m_onFire = false;
             m_fireSystem.HardStop();
-            /*if(fireComp)
-            {
-                fireComp->Stop();
-            }*/
-            // TODO: Get Path component and respawn!
            
             if(pathComp)
             {
