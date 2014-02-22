@@ -4,6 +4,7 @@
 
 #Visual Studio files
 *.[Oo]bj
+!PaperPlanes/PaperPlanes/Assets/Models/*.obj
 *.user
 *.aps
 *.pch
@@ -20,6 +21,7 @@
 *.ilk
 *.log
 *.lib
+!AntTweakBar*.lib
 *.sbr
 *.sdf
 *.opensdf
@@ -63,4 +65,3 @@ packages/
 #Test files
 *.testsettings
 PaperPlanes/PaperPlanes/shader-error.txt
-*.dds
